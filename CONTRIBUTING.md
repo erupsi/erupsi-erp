@@ -7,16 +7,18 @@ features, or contribute code, this guide will help you get started 🎉.
 
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
-- [Development Guidelines](#development-guidelines)
-- [Commit & Branching](#commit--branching)
-- [Testing & Linting](#testing--linting)
-- [Pull Request Checklist](#pull-request-checklist)
-- [Code of Conduct](#code-of-conduct)
+- [Coding Guidelines](#coding-guidelines)
+    - [General Guidelines](#general-guidelines)
+    - [Branching & Commits](#branching--commits)
+    - [Testing & Linting](#testing--linting)
+    - [Pull Request Checklist](#pull-request-checklist)
+- [How to Contribute](#how-to-contribute)
+- [Need help or have ideas?](#need-help-or-have-ideas)
 
 ## Project Structure 🗂
 
 ```
-erp-app/
+/
 ├── frontend/        # React frontend (static hosting)
 ├── gateway/         # API Gateway (NGINX or Express)
 ├── services/        # Microservices (auth, inventory, etc.)
@@ -27,6 +29,8 @@ erp-app/
 ```
 
 ## Getting Started 🚀
+
+To get started with development, follow these steps:
 
 1. Clone the repository to your local machine (choose HTTPS or SSH):
     - **HTTPS** (recommended for most users):
@@ -47,6 +51,9 @@ erp-app/
 
 ## Coding Guidelines 🛠
 
+To ensure code quality, maintainability, and consistency across the project, please follow these guidelines when
+contributing:
+
 ### General Guidelines 📜
 
 - Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the
@@ -65,12 +72,12 @@ erp-app/
     - Branch names should be descriptive, e.g., `feature/user-authentication`, `bugfix/inventory-update`.
 - Write clear, descriptive commit messages. Follow
   the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard if applicable:
-  - Use `feat:` for new features.
-  - Use `fix:` for bug fixes.
-  - Use `docs:` for documentation changes.
-  - Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
-  - Use `refactor:` for code changes that neither fix a bug nor add a feature.
-  - Use `test:` for adding missing tests or correcting existing tests.
+    - Use `feat:` for new features.
+    - Use `fix:` for bug fixes.
+    - Use `docs:` for documentation changes.
+    - Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
+    - Use `refactor:` for code changes that neither fix a bug nor add a feature.
+    - Use `test:` for adding missing tests or correcting existing tests.
 
 ### Testing & Linting 🧪
 
