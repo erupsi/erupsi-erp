@@ -47,4 +47,9 @@ Thank you for your interest in contributing to the Erupsi project! Whether you w
 
 ## Reporting Issues
 - Use the GitHub Issues tab to report bugs or request features.
-- Provide as much detail as possible, including steps to reproduce, expected behavior, and screenshots if relevant.
+- Check the existing issues first:
+  - If your issue is there, add a comment with any additional information or up-vote.
+  - If your issue is not listed, create a new issue.
+    - Use a clear title and description.
+    - Label the issue appropriately (bug, feature request, etc.).
+    - Provide as much detail as possible, including steps to reproduce, expected behavior, and screenshots if relevant.
