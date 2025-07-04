@@ -1,5 +1,5 @@
 # Contributing to Erupsi Project
-Thank you for your interest in contributing to the Erupsi project! Whether you want to report a bug, suggest new features, or contribute code, this guide will help you get started.
+Thank you for your interest in contributing to the Erupsi project! Whether you want to report a bug, suggest new features, or contribute code, this guide will help you get started 🎉.
 
 ## Development Environment Setup
 1. Clone the repository to your local machine (choose HTTPS or SSH):
