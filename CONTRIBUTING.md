@@ -1,5 +1,7 @@
 # Contributing to Erupsi Project
-Thank you for your interest in contributing to the Erupsi project! Whether you want to report a bug, suggest new features, or contribute code, this guide will help you get started 🎉.
+
+Thank you for your interest in contributing to the Erupsi project! Whether you want to report a bug, suggest new
+features, or contribute code, this guide will help you get started 🎉.
 
 ## Table of Contents 🧭
 
@@ -12,6 +14,7 @@ Thank you for your interest in contributing to the Erupsi project! Whether you w
 - [Code of Conduct](#code-of-conduct)
 
 ## Project Structure 🗂
+
 ```
 erp-app/
 ├── frontend/        # React frontend (static hosting)
@@ -24,17 +27,18 @@ erp-app/
 ```
 
 ## Getting Started 🚀
+
 1. Clone the repository to your local machine (choose HTTPS or SSH):
-   - **HTTPS** (recommended for most users):
-     ```bash
-     git clone https://github.com/erupsi/erupsi-erd.git
-     cd erupsi-erd
-     ```
-   - **SSH** (if you have set up SSH keys with GitHub):
-     ```bash
-     git clone git@github.com:erupsi/erupsi-erd.git
-     cd erupsi-erd
-     ```
+    - **HTTPS** (recommended for most users):
+      ```bash
+      git clone https://github.com/erupsi/erupsi-erd.git
+      cd erupsi-erd
+      ```
+    - **SSH** (if you have set up SSH keys with GitHub):
+      ```bash
+      git clone git@github.com:erupsi/erupsi-erd.git
+      cd erupsi-erd
+      ```
 2. Install dependencies for both the frontend and backend:
    ```bash
    # TODO: Add actual dependency installation commands for frontend and backend
@@ -42,8 +46,12 @@ erp-app/
    ```
 
 ## Coding Guidelines 🛠
+
 ### General Guidelines 📜
-- Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the `.prettierrc` and `.eslintrc.js` files to learn the rules, and see [Prettier](https://prettier.io/docs/index.html) and [ESLint](https://https://eslint.org/docs/latest/use/configure/) docs.
+
+- Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the
+  `.prettierrc` and `.eslintrc.js` files to learn the rules, and see [Prettier](https://prettier.io/docs/index.html)
+  and [ESLint](https://https://eslint.org/docs/latest/use/configure/) docs.
 - Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
 - Keep services modular and loosely coupled.
 - Use environment variables for configuration (`.env`).
@@ -52,17 +60,20 @@ erp-app/
 - Follow the existing folder structure and naming conventions.
 
 ### Branching & Commits 🔀
+
 - Use feature branches for new features or bug fixes:
     - Branch names should be descriptive, e.g., `feature/user-authentication`, `bugfix/inventory-update`.
-- Write clear, descriptive commit messages. Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard if applicable:
-      - Use `feat:` for new features.
-      - Use `fix:` for bug fixes.
-      - Use `docs:` for documentation changes.
-      - Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
-      - Use `refactor:` for code changes that neither fix a bug nor add a feature.
-      - Use `test:` for adding missing tests or correcting existing tests.
- 
+- Write clear, descriptive commit messages. Follow
+  the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard if applicable:
+  - Use `feat:` for new features.
+  - Use `fix:` for bug fixes.
+  - Use `docs:` for documentation changes.
+  - Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
+  - Use `refactor:` for code changes that neither fix a bug nor add a feature.
+  - Use `test:` for adding missing tests or correcting existing tests.
+
 ### Testing & Linting 🧪
+
 - Each service should have its own test under `/tests`.
 - Make sure all tests pass and lint errors are fixed before pushing:
   ```bash
@@ -71,6 +82,7 @@ erp-app/
   ```
 
 ### Pull Request Checklist ✅
+
 - [ ] PR has a clear title and description.
 - [ ] Docs and contracts are updated if applicable.
 - [ ] All new features are covered by tests.
@@ -78,9 +90,14 @@ erp-app/
 - [ ] No console logs or commented-out code.
 
 ## How to Contribute 💻
-If you want to propose changes but don't have write access to the repository, you can still contribute by following these steps:
-1. [Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo#forking-a-repository) the `erupsi/erupsi-erd` repository.
-2. Clone your fork to your local machine using the same commands as [above](#getting-started-), but make sure you clone the forked repository instead the original one:
+
+If you want to propose changes but don't have write access to the repository, you can still contribute by following
+these steps:
+
+1. [Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo#forking-a-repository)
+   the `erupsi/erupsi-erd` repository.
+2. Clone your fork to your local machine using the same commands as [above](#getting-started-), but make sure you clone
+   the forked repository instead the original one:
     ```bash
     # Original repository
     erupsi/erupsi-erd
@@ -105,10 +122,12 @@ If you want to propose changes but don't have write access to the repository, yo
 7. Participate in code review and address any requested changes.
 
 ## Need help or have ideas? 💡
+
 - Use the GitHub Issues tab to report bugs or request features.
 - Check the existing issues first:
-  - If your issue is there, add a comment with any additional information or up-vote.
-  - If your issue is not listed, create a new issue.
-    - Use a clear title and description.
-    - Label the issue appropriately (bug, feature request, etc.).
-    - Provide as much detail as possible, including steps to reproduce, expected behavior, and screenshots if relevant.
+    - If your issue is there, add a comment with any additional information or up-vote.
+    - If your issue is not listed, create a new issue.
+        - Use a clear title and description.
+        - Label the issue appropriately (bug, feature request, etc.).
+        - Provide as much detail as possible, including steps to reproduce, expected behavior, and screenshots if
+          relevant.
