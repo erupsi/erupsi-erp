@@ -22,9 +22,16 @@ Thank you for your interest in contributing to the Erupsi project! Whether you w
    ```
 
 ## Coding Guidelines
-- Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting.
+- Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the `.prettierrc` and `.eslintrc.js` files to learn the rules, and see [Prettier](https://prettier.io/docs/index.html) and [ESLint](https://https://eslint.org/docs/latest/use/configure/) docs.
 - Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
-- Write clear, descriptive commit messages.
+- Write clear, descriptive commit messages. Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard if applicable:
+  - Use `feat:` for new features.
+  - Use `fix:` for bug fixes.
+  - Use `docs:` for documentation changes.
+  - Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
+  - Use `refactor:` for code changes that neither fix a bug nor add a feature.
+  - Use `test:` for adding missing tests or correcting existing tests.
+- Use clear, descriptive names for variables, functions, and components (`startTime`, `employeeId`, etc).
 - Follow the existing folder structure and naming conventions.
 - Add/update tests where appropriate.
 
