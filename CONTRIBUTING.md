@@ -5,15 +5,15 @@ features, or contribute code, this guide will help you get started 🎉.
 
 ## Table of Contents 🧭
 
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Coding Guidelines](#coding-guidelines)
-    - [General Guidelines](#general-guidelines)
-    - [Branching & Commits](#branching--commits)
-    - [Testing & Linting](#testing--linting)
-    - [Pull Request Checklist](#pull-request-checklist)
-- [How to Contribute](#how-to-contribute)
-- [Need help or have ideas?](#need-help-or-have-ideas)
+- [Project Structure](#project-structure-)
+- [Getting Started](#getting-started-)
+- [Coding Guidelines](#coding-guidelines-)
+    - [General Guidelines](#general-guidelines-)
+    - [Branching & Commits](#branching--commits-)
+    - [Testing & Linting](#testing--linting-)
+    - [Pull Request Checklist](#pull-request-checklist-)
+- [How to Contribute](#how-to-contribute-)
+- [Need help or have ideas?](#need-help-or-have-ideas-)
 
 ## Project Structure 🗂
 
