@@ -58,7 +58,7 @@ contributing:
 
 - Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the
   `.prettierrc` and `.eslintrc.js` files to learn the rules, and see [Prettier](https://prettier.io/docs/index.html)
-  and [ESLint](https://https://eslint.org/docs/latest/use/configure/) docs.
+  and [ESLint](https://eslint.org/docs/latest/use/configure/) docs.
 - Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
 - Keep services modular and loosely coupled.
 - Use environment variables for configuration (`.env`).
