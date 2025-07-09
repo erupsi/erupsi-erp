@@ -1,7 +1,7 @@
 ## 📌 Summary
 
 <!-- Describe what your PR does in 1-3 sentences -->
-<!-- Link to related issue if aplicable -->
+<!-- Link to related issue if applicable -->
 This PR implements/fixes/adds [feature/bug] related to [module/service-name].
 
 ## ☑️ Changes Included
