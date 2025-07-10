@@ -1,8 +1,15 @@
 {
-  "name": "auth-service",
+  "name": "erupsi-erd",
   "version": "1.0.0",
-  "description": "Authentication service for login, registration, and token-based auth.",
-  "main": "./src/index.js",
+  "description": "Root package for Erupsi project level package management.",
+  "private": "true",
+  "directories": {
+    "doc": "docs"
+  },
+  "workspaces": [
+    "src/backend/auth-service",
+    "src/backend/user-service"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,22 +17,10 @@
     "type": "git",
     "url": "git+https://github.com/erupsi/erupsi-erd.git"
   },
-  "keywords": [
-    "auth",
-    "authentication",
-    "jwt",
-    "express",
-    "nodejs",
-    "microservice",
-    "erp"
-  ],
   "author": "Andi Naufal Nurfadhil <111062395+andinaufal120@users.noreply.github.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/erupsi/erupsi-erd/issues"
   },
-  "homepage": "https://github.com/erupsi/erupsi-erd#readme",
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+  "homepage": "https://github.com/erupsi/erupsi-erd#readme"
 }
