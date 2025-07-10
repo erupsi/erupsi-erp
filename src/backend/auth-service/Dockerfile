@@ -1,4 +1,26 @@
-FROM ubuntu:latest
-LABEL authors="yamaym"
+# Stage 1: Builder
+FROM node:18-alpine AS builder
 
-ENTRYPOINT ["top", "-b"]
+# Set working directory
+WORKDIR /app
+
+# Copy the entire monorepo (minimized with .dockerignore)
+COPY ../../.. .
+
+# Install only dependencies for this workspace
+RUN npm install --workspace=src/backend/auth-service --production
+
+# Stage 2: Copy only the built node_modules and source to a clean runtime image
+FROM node:18-alpine AS runtime
+
+WORKDIR /app
+
+# Copy installed node_modules from builder stage
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/src/backend/auth-service .
+
+# Set Node.js environment (optional)
+ENV NODE_ENV=production
+
+# Set default command
+CMD ["node", "src/index.js"]
