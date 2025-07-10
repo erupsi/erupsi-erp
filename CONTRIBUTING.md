@@ -138,3 +138,7 @@ these steps:
         - Label the issue appropriately (bug, feature request, etc.).
         - Provide as much detail as possible, including steps to reproduce, expected behavior, and screenshots if
           relevant.
+
+---
+
+🤝 We expect all contributors to follow our [Code of Conduct](/CODE_OF_CONDUCT.md).
