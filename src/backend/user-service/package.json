@@ -1,0 +1,32 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "Service for managing user profiles, roles, and account data.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erupsi/erupsi-erd.git"
+  },
+  "keywords": [
+    "user",
+    "profile",
+    "account",
+    "roles",
+    "permissions",
+    "user-management",
+    "erp",
+    "microservice"
+  ],
+  "author": "Andi Naufal Nurfadhil <111062395+andinaufal120@users.noreply.github.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erupsi/erupsi-erd/issues"
+  },
+  "homepage": "https://github.com/erupsi/erupsi-erd#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
