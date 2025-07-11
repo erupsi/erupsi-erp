@@ -1,5 +1,7 @@
+# Make sure to point docker context to the monorepo root when building this Dockerfile.
+
 # Stage 1: Builder
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -11,7 +13,7 @@ COPY ../../.. .
 RUN npm install --workspace=src/backend/user-service --production
 
 # Stage 2: Copy only the built node_modules and source to a clean runtime image
-FROM node:18-alpine AS runtime
+FROM node:20-alpine AS runtime
 
 WORKDIR /app
 
