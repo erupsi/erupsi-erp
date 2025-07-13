@@ -14,7 +14,7 @@ A modular, containerized ERP system built with modern web technologies.
 | Database     | PostgreSQL         |
 | Containerization | Docker & Docker Compose |
 | Package Manager | npm with workspaces |
-| Dev Tools    | ESLint, Prettier, dotenv, Swagger |
+| Dev Tools    | ESLint, dotenv, Swagger |
 
 ## 📁 Project Structure
 
@@ -41,14 +41,14 @@ A modular, containerized ERP system built with modern web technologies.
         └── src
 ```
 
-Each service contains its own `package.json`, `Dockerfile`, `.env.example`, and source code.
+Each service contains its own `package.json`, `Dockerfile`, `.env.example`, source code `src/`, and unit tests `__test__/`.
 
 ## 🚀 Getting Started
 
 ### 🔧 Prerequisites
 
-- Node.js ≥ 18
-- Docker & Docker Compose
+- Node.js ≥ 20
+- Docker & Docker Compose (Docker Desktop for convenient)
 - Git
 
 ### 🛠️ Setup
@@ -60,17 +60,27 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, and 
     cd erupsi-erp
     ```
 
-2. **Copy the environment template and fill in actual values:**
+2. **Install all dependencies to your local machine:**
+
+    ```bash
+    # Make sure you're at the project root
+    npm init
+    ```
+
+3. **Copy the environment template and fill the in actual values:**
   
     ```bash
     cp .env.example .env
     ```
 
-3. **Start the application stack using Docker Compose:**
+4. **Start the application stack using Docker Compose:**
 
    ```bash
    docker-compose up --build
    ```
+
+> [!TIP]
+> For Unix-like environment, you also can use the Makefile we provide at the project root.
 
 ## 🧪 Testing
 
