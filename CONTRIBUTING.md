@@ -17,15 +17,27 @@ features, or contribute code, this guide will help you get started 🎉.
 
 ## Project Structure 🗂
 
-```
-/
-├── frontend/        # React frontend (static hosting)
-├── gateway/         # API Gateway (NGINX or Express)
-├── services/        # Microservices (auth, inventory, etc.)
-├── contracts/       # OpenAPI (Swagger) specs
-├── deploy/          # Deployment configs (Docker/K8s)
-├── .github/workflows/ # CI/CD pipelines
-└── README.md        # Overview & setup guide
+```bash
+.
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── docker-compose.yml
+├── docs
+│   └── CODEOWNERS
+├── LICENSE
+├── Makefile
+├── package.json               <-- 📦 root package manifest file
+├── package-lock.json          <-- 🔒 root package lockfile
+├── README.md
+├── SECURITY.md
+└── src
+    ├── backend
+    │   └── some-service
+    │       ├── Dockerfile
+    │       ├── package.json   <-- managed using npm workspace
+    │       └── src
+    └── frontend
+        └── src
 ```
 
 ## Getting Started 🚀
@@ -35,18 +47,18 @@ To get started with development, follow these steps:
 1. Clone the repository to your local machine (choose HTTPS or SSH):
     - **HTTPS** (recommended for most users):
       ```bash
-      git clone https://github.com/erupsi/erupsi-erd.git
-      cd erupsi-erd
+      git clone https://github.com/erupsi/erupsi-erp.git
+      cd erupsi-erp
       ```
     - **SSH** (if you have set up SSH keys with GitHub):
       ```bash
-      git clone git@github.com:erupsi/erupsi-erd.git
-      cd erupsi-erd
+      git clone git@github.com:erupsi/erupsi-erp.git
+      cd erupsi-erp
       ```
 2. Install dependencies for both the frontend and backend:
    ```bash
-   # TODO: Add actual dependency installation commands for frontend and backend
-   # <your-install-commands-here>
+   # Make sure you're on the root of the project
+   npm install
    ```
 
 ## Coding Guidelines 🛠
@@ -56,13 +68,11 @@ contributing:
 
 ### General Guidelines 📜
 
-- Use [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) for code formatting and linting. See the
-  `.prettierrc` and `.eslintrc.js` files to learn the rules, and see [Prettier](https://prettier.io/docs/index.html)
-  and [ESLint](https://eslint.org/docs/latest/use/configure/) docs.
+- Use [ESLint](https://eslint.org/) for code linting. See the `.eslintrc.js` files to learn about the rules and [ESLint](https://eslint.org/docs/latest/use/configure/) docs.
 - Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
 - Keep services modular and loosely coupled.
-- Use environment variables for configuration (`.env`).
-- Document API changes in `/contracts`.
+- Use environment variables for configuration (`.env`) and **DO NOT** commit it.
+- Document API changes in _TBD_.
 - Use clear, descriptive names for variables, functions, and components (`startTime`, `employeeId`, etc).
 - Follow the existing folder structure and naming conventions.
 
@@ -81,7 +91,7 @@ contributing:
 
 ### Testing & Linting 🧪
 
-- Each service should have its own test under `/tests`.
+- Each service should have its own test under `__test__`.
 - Make sure all tests pass and lint errors are fixed before pushing:
   ```bash
   npm run test
@@ -102,12 +112,12 @@ If you want to propose changes but don't have write access to the repository, yo
 these steps:
 
 1. [Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo#forking-a-repository)
-   the `erupsi/erupsi-erd` repository.
+   the `erupsi/erupsi-erp` repository.
 2. Clone your fork to your local machine using the same commands as [above](#getting-started-), but make sure you clone
    the forked repository instead the original one:
     ```bash
     # Original repository
-    erupsi/erupsi-erd
+    erupsi/erupsi-erp
    
     # Your forked repository
     your-username/your-forked-repo-name
@@ -130,7 +140,7 @@ these steps:
 
 ## Need help or have ideas? 💡
 
-- Use the GitHub Issues tab to report bugs or request features.
+- Use the GitHub Issues tab to report bugs or request features, or if you have something to ask.
 - Check the existing issues first:
     - If your issue is there, add a comment with any additional information or up-vote.
     - If your issue is not listed, create a new issue.
