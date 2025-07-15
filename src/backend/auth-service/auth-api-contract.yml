@@ -1,6 +1,7 @@
 # Authentication and Authorization API Contract 
 # urm_api_contract.yaml
 # auth_api_contract.yaml
+# auth_api_contract.yaml
 openapi: 3.0.0
 info:
   title: API Authentication Service
@@ -92,7 +93,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /auth/change-password:
+  /auth/change-password/{employeeId}:
     post:
       summary: Mengubah kata sandi pengguna
       description: Mengubah kata sandi pengguna yang sedang login. Membutuhkan otentikasi.
@@ -105,6 +106,14 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ChangePasswordRequest'
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID unik pengguna.
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Kata sandi berhasil diubah.
@@ -141,7 +150,7 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                employeeId:
                   type: string
                   format: uuid
                   description: ID unik pengguna.
@@ -149,7 +158,7 @@ paths:
                   type: string
                   description: Kata sandi awal yang di-generate.
               required:
-                - userId
+                - employeeId
                 - initialPassword
       responses:
         '200':
@@ -249,6 +258,7 @@ components:
           type: string
           description: Kata sandi baru yang diinginkan.
       required:
+        - employeeId
         - oldPassword
         - newPassword
     ErrorResponse:
