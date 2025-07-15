@@ -1,0 +1,267 @@
+# Authentication and Authorization API Contract 
+# urm_api_contract.yaml
+# auth_api_contract.yaml
+openapi: 3.0.0
+info:
+  title: API Authentication Service
+  version: 1.0.0
+  description: Mikroservis untuk otentikasi pengguna, manajemen token, dan kredensial.
+servers:
+  - url: https://auth.your-erp.com/v1
+    description: Server produksi Mikroservis Autentikasi
+
+paths:
+  /auth/login:
+    post:
+      summary: Login pengguna
+      description: Memverifikasi kredensial pengguna dan mengembalikan token akses (JWT).
+      requestBody:
+        description: Kredensial pengguna untuk login.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login berhasil, token akses diberikan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Input tidak valid #(misal: format email salah).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Kredensial tidak valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Akun tidak aktif atau terkunci.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh-token:
+    post:
+      summary: Memperbarui token akses
+      description: Menggunakan refresh token untuk mendapatkan token akses baru tanpa perlu login ulang.
+      requestBody:
+        description: Refresh token yang valid.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Token refresh yang diberikan saat login.
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+              required:
+                - refreshToken
+      responses:
+        '200':
+          description: Token berhasil diperbarui.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Refresh token tidak valid atau kadaluarsa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/change-password:
+    post:
+      summary: Mengubah kata sandi pengguna
+      description: Mengubah kata sandi pengguna yang sedang login. Membutuhkan otentikasi.
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Kata sandi lama dan baru.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Kata sandi berhasil diubah.
+        '400':
+          description: Input tidak valid #(misal: kata sandi lama salah, kata sandi baru tidak memenuhi kriteria).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terotentikasi (token tidak ada atau tidak valid).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/initial-password-set:
+    post:
+      summary: Menyetel kata sandi awal pengguna baru (internal)
+      description: Endpoint internal untuk mengatur kata sandi awal yang di-hash untuk pengguna baru yang dibuat oleh URM. TIDAK UNTUK AKSES PUBLIK.
+      security:
+        - InternalAuth: [] # Contoh: kunci API internal atau otorisasi antar mikroservis
+      requestBody:
+        description: ID pengguna dan kata sandi awal yang di-generate.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                  description: ID unik pengguna.
+                initialPassword:
+                  type: string
+                  description: Kata sandi awal yang di-generate.
+              required:
+                - userId
+                - initialPassword
+      responses:
+        '200':
+          description: Kata sandi awal berhasil disetel.
+        '400':
+          description: Input tidak valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pengguna tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Akses ditolak (bukan dari mikroservis internal yang sah).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    InternalAuth:
+      type: apiKey
+      in: header
+      name: X-Internal-API-Key # Atau mekanisme otorisasi antar-service lainnya
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username pengguna.
+          example: "john_doe"
+        password:
+          type: string
+          description: Kata sandi pengguna.
+          example: "MySuperStrongPassword123!"
+      required:
+        - username
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: Token akses JWT yang digunakan untuk otorisasi permintaan API selanjutnya.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlcyI6WyJzeXN0ZW1fYWRtaW4iXX0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        refreshToken:
+          type: string
+          description: Token refresh yang digunakan untuk mendapatkan token akses baru.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE2MTYyMzk0MjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        expiresIn:
+          type: integer
+          description: Durasi validitas access token dalam detik.
+          example: 3600
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID unik pengguna.
+            username:
+              type: string
+            fullName:
+              type: string
+            roles:
+              type: array
+              items:
+                type: string
+              description: Daftar peran yang dimiliki pengguna.
+      required:
+        - accessToken
+        - expiresIn
+        - user
+    ChangePasswordRequest:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+          description: Kata sandi pengguna saat ini.
+        newPassword:
+          type: string
+          description: Kata sandi baru yang diinginkan.
+      required:
+        - oldPassword
+        - newPassword
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Kode error unik.
+          example: "AUTH_FAILED"
+        message:
+          type: string
+          description: Pesan error yang menjelaskan masalah.
+          example: "username atau kata sandi salah."
+      required:
+        - code
+        - message
