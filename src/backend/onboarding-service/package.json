@@ -1,0 +1,23 @@
+{
+  "name": "onboarding-service",
+  "version": "1.0.0",
+  "description": "Service made to help developers to onboard.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erupsi/erupsi-erp.git"
+  },
+  "author": "Andi Naufal Nurfadhil <111062395+andinaufal120@users.noreply.github.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erupsi/erupsi-erp/issues"
+  },
+  "homepage": "https://github.com/erupsi/erupsi-erp#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "onboarding-service": "^1.0.0"
+  }
+}

@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/erupsi/erupsi-erd#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "onboarding-service": "^1.0.0"
   }
 }
