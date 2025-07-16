@@ -105,7 +105,7 @@ contributing:
 ### Testing & Linting 🧪
 
 - Each service should have its own test under `__test__`.
-- Make sure all tests pass and there's no lint errors before pushing:
+- Make sure all tests pass and there are no lint errors before pushing:
   ```bash
   # Run unit test for all workspaces
   npm run test --workspaces
