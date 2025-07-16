@@ -125,7 +125,7 @@ contributing:
   npm run lint:fix-es
   # Fix markdown linting
   npm run lint:fix-md
-  
+
   # Recheck again until all linting errors are resolved
   npm run lint
   ```

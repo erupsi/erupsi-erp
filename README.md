@@ -17,6 +17,7 @@ A modular, containerized ERP system built with modern web technologies.
 | Dev Tools    | ESLint, remark, dotenv, Swagger |
 
 ## 📁 Project Structure
+
 ```bash
 .
 ├── .env.example
@@ -74,10 +75,10 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
 
 2. **Install all dependencies to your local machine:**
 
-    ```bash
-    # Make sure you're at the project root
-    npm install
-    ```
+   ```bash
+   # Make sure you're at the project root
+   npm install
+   ```
 
 3. **Copy the environment template and fill the in actual values:**
 
