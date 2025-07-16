@@ -118,7 +118,7 @@ contributing:
   # Check markdown linting
   npm run lint:md
   ```
-- Fix linting which are fixable:
+- Fix all fixable linting errors:
   ```bash
   # Fix all linting
   npm run lint:fix
