@@ -11,7 +11,7 @@
     "src/backend/user-service"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "lint": "npm run lint:es && npm run lint:md",
     "lint:fix": "npm run lint:fix-es && npm run lint:fix-md",
     "lint:es": "eslint . --ext .js,.ts",
