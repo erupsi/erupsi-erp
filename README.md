@@ -59,18 +59,18 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
 
 ### 🔧 Prerequisites
 
-- Node.js ≥ 20
-- Docker & Docker Compose (Docker Desktop for convenient)
-- Git
+* Node.js ≥ 20
+* Docker & Docker Compose (Docker Desktop for convenient)
+* Git
 
 ### 🛠️ Setup
 
 1. **Clone the repository:**
 
-    ```bash
-    git clone https://github.com/erupsi/erupsi-erp
-    cd erupsi-erp
-    ```
+   ```bash
+   git clone https://github.com/erupsi/erupsi-erp
+   cd erupsi-erp
+   ```
 
 2. **Install all dependencies to your local machine:**
 
@@ -80,10 +80,10 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
     ```
 
 3. **Copy the environment template and fill the in actual values:**
-  
-    ```bash
-    cp .env.example .env
-    ```
+
+   ```bash
+   cp .env.example .env
+   ```
 
 4. **Start the application stack using Docker Compose:**
 
@@ -91,12 +91,13 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
    docker-compose up --build
    ```
 
-> [!TIP]
+> \[!TIP]
 > For Unix-like environment, you also can use the Makefile we provide at the project root.
 
 ## 🧪 Testing
 
 Each service has its own test.
+
 ```bash
 # Example for auth-service
 npm install
@@ -120,13 +121,14 @@ See `.env.example` file we provide for required environment variables. Each serv
 Each service includes Swagger (OpenAPI) contract file.
 
 To view:
-- Visit `/docs` endpoint if available
-- Or open the raw `swagger.json` file in Swagger editor
+
+* Visit `/docs` endpoint if available
+* Or open the raw `swagger.json` file in Swagger editor
 
 ## ⚖️ License
 
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
 
----
+***
 
 🤝 We expect all contributors to follow our [Code of Conduct](CODE_OF_CONDUCT.md).

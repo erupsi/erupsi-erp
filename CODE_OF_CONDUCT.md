@@ -1,6 +1,6 @@
 # 📜 Contributor Code of Conduct
 
-Welcome to the Erupsi project!  
+Welcome to the Erupsi project!\
 We’re building this to learn, grow, and contribute to something useful — together.
 
 To ensure a safe and respectful space for everyone, we ask all contributors to follow this Code of Conduct.
@@ -13,19 +13,19 @@ We, as contributors and maintainers, pledge to make participation in our project
 
 Examples of behavior that contributes to a positive environment:
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the project
-- Showing empathy toward other community members
+* Using welcoming and inclusive language
+* Being respectful of differing viewpoints and experiences
+* Gracefully accepting constructive criticism
+* Focusing on what is best for the project
+* Showing empathy toward other community members
 
 Examples of unacceptable behavior include:
 
-- Trolling, insulting or derogatory comments, and personal attacks
-- Public or private harassment
-- Publishing others’ private information without explicit permission
-- Deliberate intimidation or exclusion
-- Repeated disruptive behavior
+* Trolling, insulting or derogatory comments, and personal attacks
+* Public or private harassment
+* Publishing others’ private information without explicit permission
+* Deliberate intimidation or exclusion
+* Repeated disruptive behavior
 
 ## 📢 Our Responsibilities
 
