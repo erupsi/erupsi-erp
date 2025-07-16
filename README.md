@@ -14,34 +14,46 @@ A modular, containerized ERP system built with modern web technologies.
 | Database     | PostgreSQL         |
 | Containerization | Docker & Docker Compose |
 | Package Manager | npm with workspaces |
-| Dev Tools    | ESLint, dotenv, Swagger |
+| Dev Tools    | ESLint, remark, dotenv, Swagger |
 
 ## 📁 Project Structure
-
 ```bash
 .
+├── .env.example
+├── .eslintrc.json
+├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── docker-compose.yml
 ├── docs
-│   └── CODEOWNERS
+│   └── CODEOWNERS
 ├── LICENSE
 ├── Makefile
-├── package.json               <-- 📦 root package manifest file
-├── package-lock.json          <-- 🔒 root package lockfile
 ├── README.md
 ├── SECURITY.md
+├── package.json                     <-- 📦 root package manifest file
+├── package-lock.json                <-- 🔒 root package lockfile
 └── src
     ├── backend
-    │   └── some-service
-    │       ├── Dockerfile
-    │       ├── package.json   <-- managed using npm workspace
-    │       └── src
+    │   └── some-service
+    │       ├── .dockerignore
+    │       ├── .env.example
+    │       ├── Dockerfile
+    │       ├── openapi.yaml
+    │       ├── package.json         <-- managed using npm workspace from project root
+    │       ├── README.md
+    │       ├── __test__
+    │           └── some.test.js     <-- 🧪 Jest unit test file
+    │       └── src
+    │           └── index.js         <-- 🚪 service entry point
     └── frontend
+        ├── package.json
+        ├── README.md
         └── src
+            └── index.js
 ```
 
-Each service contains its own `package.json`, `Dockerfile`, `.env.example`, source code `src/`, and unit tests `__test__/`.
+Each service contains its own `package.json`, `Dockerfile`, `.env.example`, source code `src/`, and unit tests `__test__/*.test.js`.
 
 ## 🚀 Getting Started
 
