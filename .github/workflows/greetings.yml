@@ -1,5 +1,5 @@
 name: Greetings
-run-name: ${{ github.actors }} first contribution
+run-name: ${{ github.actor }} first contribution
 
 on: [pull_request_target, issues]
 
