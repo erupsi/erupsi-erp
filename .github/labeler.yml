@@ -30,7 +30,7 @@ package:
 docs:
   - any:
     - changed-files:
-      -any-glob-to-any-file: ['docs/**', '**/*.md', '**/*.markdown', '**/openapi.*', '**/swagger.*', 'LICENSE']
+      - any-glob-to-any-file: ['docs/**', '**/*.md', '**/*.markdown', '**/openapi.*', '**/swagger.*', 'LICENSE']
 
 workflow:
   - any:
