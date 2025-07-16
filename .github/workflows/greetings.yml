@@ -14,4 +14,4 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: "Hi there! Thanks for contributing through issue. We will check this issue soon. Make sure you've included everything needed to help us resolve this issue."
-        pr-message: "First time openning a PR? Make sure to pass all checks so the merge button isn't blocked, and you've assign people who've contributed in this PR. You also can ask others to review this PR."
+        pr-message: "First time opening a PR? Make sure to pass all checks so the merge button isn't blocked, and you've assigned people who've contributed in this PR. You also can ask others to review this PR."
