@@ -76,7 +76,7 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
 
     ```bash
     # Make sure you're at the project root
-    npm init
+    npm install
     ```
 
 3. **Copy the environment template and fill the in actual values:**
