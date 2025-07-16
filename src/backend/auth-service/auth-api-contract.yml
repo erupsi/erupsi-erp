@@ -1,6 +1,3 @@
-# Authentication and Authorization API Contract 
-# urm_api_contract.yaml
-# auth_api_contract.yaml
 # auth_api_contract.yaml
 openapi: 3.0.0
 info:
@@ -31,7 +28,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
         '400':
-          description: Input tidak valid #(misal: format email salah).
+          description: Input tidak valid #(misal: format username salah).
           content:
             application/json:
               schema:
@@ -93,10 +90,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /auth/change-password/{employeeId}:
+  /auth/change-password: 
     post:
       summary: Mengubah kata sandi pengguna
-      description: Mengubah kata sandi pengguna yang sedang login. Membutuhkan otentikasi.
+      description: Mengubah kata sandi pengguna yang sedang login. Identitas pengguna diambil dari token.
       security:
         - BearerAuth: []
       requestBody:
@@ -106,14 +103,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ChangePasswordRequest'
-      parameters:
-        - name: employeeId
-          in: path
-          description: ID unik pengguna.
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Kata sandi berhasil diubah.
@@ -136,47 +125,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /auth/initial-password-set:
+  /auth/register: # Nama endpoint diubah dari /auth/initial-password-set
     post:
-      summary: Menyetel kata sandi awal pengguna baru (internal)
-      description: Endpoint internal untuk mengatur kata sandi awal yang di-hash untuk pengguna baru yang dibuat oleh URM. TIDAK UNTUK AKSES PUBLIK.
+      summary: Mendaftarkan pengguna baru (oleh admin)
+      description: Endpoint untuk System Admin mendaftarkan akun login pengguna baru. Ini akan membuat kredensial login di Auth Service. TIDAK UNTUK AKSES PUBLIK.
       security:
-        - InternalAuth: [] # Contoh: kunci API internal atau otorisasi antar mikroservis
+        - InternalAuth: [] # Hanya bisa diakses oleh mikroservis internal seperti URM
       requestBody:
-        description: ID pengguna dan kata sandi awal yang di-generate.
+        description: ID pengguna, username, dan kata sandi awal yang di-generate.
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                employeeId:
-                  type: string
-                  format: uuid
-                  description: ID unik pengguna.
-                initialPassword:
-                  type: string
-                  description: Kata sandi awal yang di-generate.
-              required:
-                - employeeId
-                - initialPassword
+              $ref: '#/components/schemas/AdminRegisterRequest' # Schema baru
       responses:
-        '200':
-          description: Kata sandi awal berhasil disetel.
+        '201':
+          description: Pengguna berhasil didaftarkan di Auth Service.
         '400':
-          description: Input tidak valid.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Pengguna tidak ditemukan.
+          description: Input tidak valid #(misal: username sudah ada atau tidak memenuhi kriteria).
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
           description: Akses ditolak (bukan dari mikroservis internal yang sah).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Username sudah terdaftar.
           content:
             application/json:
               schema:
@@ -202,7 +180,7 @@ components:
     LoginRequest:
       type: object
       properties:
-        username:
+        username: # Menggunakan username sesuai permintaan Anda
           type: string
           description: Username pengguna.
           example: "john_doe"
@@ -234,7 +212,7 @@ components:
             id:
               type: string
               format: uuid
-              description: ID unik pengguna.
+              description: ID unik pengguna (ini bisa employeeId jika itu ID universal).
             username:
               type: string
             fullName:
@@ -244,6 +222,9 @@ components:
               items:
                 type: string
               description: Daftar peran yang dimiliki pengguna.
+          required:
+            - id
+            - username
       required:
         - accessToken
         - expiresIn
@@ -258,9 +239,31 @@ components:
           type: string
           description: Kata sandi baru yang diinginkan.
       required:
-        - employeeId
         - oldPassword
-        - newPassword
+        - newPassword # employeeId dihapus dari required karena diambil dari token
+    AdminRegisterRequest: # Schema baru untuk pendaftaran admin
+      type: object
+      properties:
+        employeeId:
+          type: string
+          format: uuid
+          description: ID unik pengguna dari URM Service. Akan digunakan sebagai ID utama akun Auth.
+        username:
+          type: string
+          description: Username yang akan digunakan pengguna untuk login.
+          example: "new_employee"
+        initialPassword:
+          type: string
+          description: Kata sandi awal yang di-generate.
+          example: "Generated@Password123"
+        forcePasswordChange:
+          type: boolean
+          description: Menentukan apakah pengguna harus mengubah kata sandi pada login pertama.
+          default: true
+      required:
+        - employeeId
+        - username
+        - initialPassword
     ErrorResponse:
       type: object
       properties:
@@ -271,7 +274,7 @@ components:
         message:
           type: string
           description: Pesan error yang menjelaskan masalah.
-          example: "username atau kata sandi salah."
+          example: "Username atau kata sandi salah."
       required:
         - code
         - message
