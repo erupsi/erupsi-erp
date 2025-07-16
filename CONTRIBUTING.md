@@ -19,25 +19,38 @@ features, or contribute code, this guide will help you get started 🎉.
 
 ```bash
 .
+├── .env.example
+├── .eslintrc.json
+├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── docker-compose.yml
 ├── docs
-│   └── CODEOWNERS
+│   └── CODEOWNERS
 ├── LICENSE
 ├── Makefile
-├── package.json               <-- 📦 root package manifest file
-├── package-lock.json          <-- 🔒 root package lockfile
 ├── README.md
 ├── SECURITY.md
+├── package.json                     <-- 📦 root package manifest file
+├── package-lock.json                <-- 🔒 root package lockfile
 └── src
     ├── backend
-    │   └── some-service
-    │       ├── Dockerfile
-    │       ├── package.json   <-- managed using npm workspace
-    │       └── src
+    │   └── some-service
+    │       ├── .dockerignore
+    │       ├── .env.example
+    │       ├── Dockerfile
+    │       ├── openapi.yaml
+    │       ├── package.json         <-- managed using npm workspace from project root
+    │       ├── README.md
+    │       ├── __test__
+    │           └── some.test.js     <-- 🧪 Jest unit test file
+    │       └── src
+    │           └── index.js         <-- 🚪 service entry point
     └── frontend
+        ├── package.json
+        ├── README.md
         └── src
+            └── index.js
 ```
 
 ## Getting Started 🚀
@@ -72,14 +85,14 @@ contributing:
 - Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
 - Keep services modular and loosely coupled.
 - Use environment variables for configuration (`.env`) and **DO NOT** commit it.
-- Document API changes in _TBD_.
+- Document API endpoints in each service's `openapi.yaml`.
 - Use clear, descriptive names for variables, functions, and components (`startTime`, `employeeId`, etc).
 - Follow the existing folder structure and naming conventions.
 
 ### Branching & Commits 🔀
 
 - Use feature branches for new features or bug fixes:
-    - Branch names should be descriptive, e.g., `feature/user-authentication`, `bugfix/inventory-update`.
+    - Branch names should be descriptive, e.g., `feature/user-authentication`, `fix/inventory-update`, `hotfix/auth-crash`, `docs/financial-service-api-contract`.
 - Write clear, descriptive commit messages. Follow
   the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard if applicable:
     - Use `feat:` for new features.
@@ -92,9 +105,29 @@ contributing:
 ### Testing & Linting 🧪
 
 - Each service should have its own test under `__test__`.
-- Make sure all tests pass and lint errors are fixed before pushing:
+- Make sure all tests pass and there's no lint errors before pushing:
   ```bash
-  npm run test
+  # Run unit test for all workspaces
+  npm run test --workspaces
+  # Run unit test for auth-service workspace
+  npm run test --workspace=auth-service
+  # Check all linting
+  npm run lint
+  # Check ESLint linting
+  npm run lint:es
+  # Check markdown linting
+  npm run lint:md
+  ```
+- Fix linting which are fixable:
+  ```bash
+  # Fix all linting
+  npm run lint:fix
+  # Fix ESLint linting
+  npm run lint:fix-es
+  # Fix markdown linting
+  npm run lint:fix-md
+  
+  # Recheck again until all linting errors are resolved
   npm run lint
   ```
 
