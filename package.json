@@ -12,8 +12,12 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.ts",
-    "lint:fix": "eslint . --ext .js,.ts --fix"
+    "lint": "npm run lint:es && npm run lint:md",
+    "lint:fix": "npm run lint:fix-es && npm run lint:fix-md",
+    "lint:es": "eslint . --ext .js,.ts",
+    "lint:fix-es": "eslint . --ext .js,.ts --fix",
+    "lint:md": "remark . --quiet --frail",
+    "lint:fix-md": "remark . --quiet --frail --output"
   },
   "repository": {
     "type": "git",
