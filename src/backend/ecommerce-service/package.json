@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Ecomerce is a feature to abduct andi naufal",
   "main": "./src/index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "jest"
   },
@@ -16,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/erupsi/erupsi-erp/issues"
   },
-  "homepage": "https://github.com/erupsi/erupsi-erp#readme"
+  "homepage": "https://github.com/erupsi/erupsi-erp#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.4"
+  }
 }
