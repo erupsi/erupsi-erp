@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-service",
+  "version": "1.0.0",
+  "description": "Ecomerce is a feature to abduct andi naufal",
+  "main": "./src/index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erupsi/erupsi-erp.git"
+  },
+  "author": "Zharif Aziz Zulkarnain Widodo <clawsrage27@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erupsi/erupsi-erp/issues"
+  },
+  "homepage": "https://github.com/erupsi/erupsi-erp#readme"
+}
