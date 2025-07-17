@@ -37,5 +37,5 @@ jobs:
     - name: Check markdown linting
       run: npm run lint:md
 
-    - name: Run unit tests 
+    - name: Run unit tests and check coverage
       run: npm test
