@@ -10,7 +10,7 @@ WORKDIR /app
 COPY ../../.. .
 
 # Install only dependencies for this workspace
-RUN npm install --workspace=src/backend/user-service --production
+RUN npm install --workspace=src/backend/ecommerce-service --production
 
 # Stage 2: Copy only the built node_modules and source to a clean runtime image
 FROM node:20-alpine AS runtime
@@ -19,7 +19,7 @@ WORKDIR /app
 
 # Copy installed node_modules from builder stage
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/src/backend/user-service .
+COPY --from=builder /app/src/backend/ecommerce-service .
 
 # Set Node.js environment (optional)
 ENV NODE_ENV=production
