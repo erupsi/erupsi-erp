@@ -8,7 +8,8 @@
   },
   "workspaces": [
     "src/backend/auth-service",
-    "src/backend/user-service"
+    "src/backend/user-service",
+    "src/backend/financial-service"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
