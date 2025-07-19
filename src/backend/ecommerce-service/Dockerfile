@@ -1,28 +1,15 @@
-# Make sure to point docker context to the monorepo root when building this Dockerfile.
-
-# Stage 1: Builder
-FROM node:20-alpine AS builder
-
-# Set working directory
-WORKDIR /app
-
-# Copy the entire monorepo (minimized with .dockerignore)
-COPY ../../.. .
-
-# Install only dependencies for this workspace
-RUN npm install --workspace=src/backend/ecommerce-service --production
-
-# Stage 2: Copy only the built node_modules and source to a clean runtime image
-FROM node:20-alpine AS runtime
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy installed node_modules from builder stage
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/src/backend/ecommerce-service .
+# Salin hanya yang diperlukan untuk install
+COPY src/backend/ecommerce-service/package*.json ./
+RUN npm install
 
-# Set Node.js environment (optional)
-ENV NODE_ENV=production
+# Install nodemon secara global (atau lokal dan pakai npx)
+RUN npm install -g nodemon
 
-# Set default command
-CMD ["node", "src/index.js"]
+# Salin seluruh service folder (khusus ecommerce-service aja)
+COPY src/backend/ecommerce-service .
+
+CMD ["nodemon", "src/index.js"]
