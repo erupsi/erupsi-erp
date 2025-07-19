@@ -11,8 +11,7 @@ dan penerapan independen.
 - Basis Data: PostgreSQL
 - Frontend (Konseptual): Terintegrasi melalui API REST (kemungkinan aplikasi frontend terpisah, mis. React dengan Tailwind CSS)
 - Otentikasi/Otorisasi: JSON Web Tokens (JWT) melalui Layanan Otentikasi (Auth Service)
-
-Alat Pengembangan: ESLint, Docker, Jest, OpenAPI (Swagger) untuk dokumentasi API.
+- Alat Pengembangan: ESLint, Docker, Jest, OpenAPI (Swagger) untuk dokumentasi API.
 
 ## B. Fungsionalitas Service
 Layanan ini menyediakan fungsionalitas penting yang diperlukan akuntansi keuangan dalam ERP.
