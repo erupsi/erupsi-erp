@@ -1,13 +1,97 @@
-# Financial Service
+# Spesifikasi Kebutuhan Perangkat Lunak (SKPL) Mini - Layanan Finansial
 
-## A. Project Overview
+## 1. Pendahuluan
+### 1.1 Tujuan
+Dokumen ini menjelaskan kebutuhan untuk Layanan Finansial sebagai mikroservis yang mengelola seluruh operasi keuangan internal perusahaan, termasuk buku besar umum, hutang/piutang usaha, perhitungan pajak, dan pelaporan keuangan.
+
+### 1.2 Ruang Lingkup
+Layanan Finansial adalah mikroservis backend dalam ekosistem ERP, bertanggung jawab atas data dan proses keuangan inti. Layanan ini menyediakan API REST untuk integrasi dengan aplikasi frontend dan layanan backend lainnya.
+
+## 2. Deskripsi Umum
+### 2.1 Konteks Sistem
+- Bagian dari sistem ERP berbasis mikroservis
+- Berkomunikasi dengan layanan lain (Auth, Procurement, Order Management, HRM) melalui API REST
+- Menyediakan data keuangan ke aplikasi frontend melalui API REST
+
+### 2.2 Modul
+- Bagan Akun (Chart of Accounts/COA)
+- Jurnal Umum
+- Buku Besar Umum
+- Pelaporan Keuangan
+- Hutang Usaha
+- Piutang Usaha
+- Agregasi Penggajian (dari HRM)
+- Perhitungan & Pelaporan Pajak
+
+### 2.3 Titik Integrasi
+- Layanan Auth: Validasi JWT untuk otentikasi/otorisasi
+- Layanan Pengadaan: Mengambil faktur vendor untuk hutang dan pajak
+- Manajemen Pesanan: Mengambil faktur pelanggan untuk piutang dan pajak
+- Layanan HRM: Mengambil ringkasan penggajian untuk jurnal dan pajak
+- Frontend: Mengekspos API REST untuk data dan pelaporan keuangan
+
+## 3. Kebutuhan Fungsional
+### 3.1 Bagan Akun
+- Operasi CRUD untuk akun (aset, kewajiban, ekuitas, pendapatan, beban)
+- Mendukung struktur akun hierarkis
+
+### 3.2 Jurnal Umum
+- Mencatat dan mengelola transaksi pembukuan berpasangan
+- Memvalidasi bahwa debit sama dengan kredit
+
+### 3.3 Buku Besar Umum
+- Memelihara catatan transaksi rinci per akun
+- Melihat saldo dan riwayat akun per periode
+
+### 3.4 Pelaporan Keuangan
+- Menghasilkan neraca, laporan laba rugi, neraca saldo
+
+### 3.5 Hutang Usaha
+- Memproses dan melacak faktur vendor
+- Mengelola kewajiban yang belum dibayar
+- Mencatat pembayaran keluar
+
+### 3.6 Piutang Usaha
+- Memproses dan melacak faktur pelanggan
+- Mengelola piutang yang belum tertagih
+- Mencatat penerimaan kas masuk
+
+### 3.7 Agregasi Penggajian
+- Mencatat ringkasan penggajian dari HRM (bukan penggajian individu)
+
+### 3.8 Perhitungan & Pelaporan Pajak
+- Mengelola tarif pajak
+- Mengotomatiskan perhitungan pajak pada transaksi
+- Mencatat kewajiban pajak
+- Menghasilkan laporan pajak internal
+
+## 4. Kebutuhan Non-Fungsional
+- **Kinerja:** Harus menangani hingga 10.000 transaksi/hari dengan waktu respons API <500ms
+- **Skalabilitas:** Mendukung penskalaan horizontal melalui Docker dan API stateless
+- **Keamanan:** Otentikasi berbasis JWT, otorisasi berbasis peran, endpoint API yang aman
+- **Keandalan:** Waktu aktif 99,9%, cadangan otomatis
+- **Pemeliharaan:** Basis kode modular, dokumentasi API melalui OpenAPI/Swagger
+- **Auditabilitas:** Semua transaksi keuangan harus dicatat dan dapat dilacak
+
+## 5. Antarmuka Sistem
+- **API REST:** Untuk komunikasi frontend dan antar layanan
+- **Basis Data:** PostgreSQL untuk penyimpanan permanen
+- **Layanan Eksternal:** Auth, Procurement, Order Management, HRM melalui REST
+
+## 6. Kendala & Ruang Lingkup yang Tidak Termasuk
+- Hanya operasi keuangan inti yang termasuk dalam ruang lingkup
+- Manajemen aset lanjutan, akuntansi biaya, penganggaran, manajemen treasury tidak termasuk dalam ruang lingkup
+
+# Layanan Finansial
+
+## A. Gambaran Proyek
 Layanan ini bertanggung jawab untuk mengelola semua aspek keuangan internal perusahaan,
 mulai dari manajemen buku besar umum, hutang piutang usaha, perhitungan pajak internal, dan laporan keuangan. 
 Layanan ini menganut arsitektur mikroservis yang ketat, memastikan modularitas, skalabilitas,
 dan penerapan independen.
 
 ## Teknologi Utama
-- Backend : Node.js (v20+), Express.js
+- Backend : Node.js (v20+ - Express.js)
 - Basis Data: PostgreSQL
 - Frontend (Konseptual): Terintegrasi melalui API REST (kemungkinan aplikasi frontend terpisah, mis. React dengan 
 Tailwind CSS)
@@ -113,7 +197,7 @@ Akses ke fungsionalitas Layanan Finansial dikontrol secara ketat berdasarkan per
 yang kemudian digunakan oleh Layanan Finansial untuk pemeriksaan otorisasi yang terperinci.
 
 Peran berikut menentukan tingkat akses :\
-**1.** ADMIN ERP :
+1. ADMIN ERP :
    - Akses CRUD Penuh : Bagan akun, Entri Jurnal, Konfigurasi Tarif Pajak.
    - Akses Baca Penuh : Semua Laporan Keuangan, Hutang Usaha, Piutang Usaha, Buku Besar Umum, Laporan Pajak Internal.
    - Manajemen Penuh : Pemrosesan pembayaran, konfigurasi keuangan dan pajak perusahaan lainnya.
