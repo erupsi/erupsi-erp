@@ -6,15 +6,11 @@ require('dotenv').config({ path: '../.env' });
 
 const app = express();
 const PORT = process.env.PORT;
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.PORT;
 
-app.use(express.json())
-app.use("/auth", authRoutes)
+app.use(bodyParser.json())
+app.use("/urm", authRoutes)
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the Auth Service');
-});
-
-app.listen(PORT, () => {
-    console.log(`Example app listening on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
 });

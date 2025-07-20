@@ -2,24 +2,18 @@ const express = require('express');
 const router = express.Router();
 const { registerUser } = require('../services/authService');
 const authenticateAdmin = require('../middlewares/authenticateAdmin')
-const { v4: uuidv4 } = require('uuid');
 
-router.post("/register", authenticateAdmin, async(req, res, next) => {
+router.post("/employee", authenticateAdmin, async(req, res, next) => {
+   
+  const { employeeId, username, initialPassword } = req.body;
 
-  if (req.body === undefined){
-    return res.status(400).json({message: 'Input tidak valid.'})
-  }
-
-  const newEmployeeId = uuidv4();
-
-  const {username, initialPasswordHashed } = req.body;
-
-  if(!username || !initialPasswordHashed) {
-    return res.status(400).json({message: 'Input tidak valid. Username, dan password diperlukan.'})
+  if(!employeeId || !username || !initialPassword) {
+    return res.status(400).json({message: 'Input tidak valid. employeeId, username, dan password diperlukan.'})
   }
 
   try{
-    const result = await registerUser(newEmployeeId, username, initialPasswordHashed)
+    //not fitted with scheme
+    const result = await registerUser(username, password)
     if(result.success){
       res.status(201).json({message: "Pengguna berhasil didaftarkan"})
     }else{

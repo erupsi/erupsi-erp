@@ -1,5 +1,4 @@
-# auth_api_contract.yaml
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: API Authentication Service
   version: 1.0.0
@@ -55,7 +54,7 @@ paths:
   /auth/refresh-token:
     post:
       summary: Memperbarui token akses
-      description: Menggunakan refresh token untuk mendapatkan token akses baru tanpa perlu login ulang.
+      description: Menggunakan refresh token untuk mendapatkan token akses baru tanpa perlu login ulang. Refresh token diverifikasi baik secara kriptografi maupun dicek keberadaannya di database (belum dicabut/diblacklist).
       requestBody:
         description: Refresh token yang valid.
         required: true
@@ -165,6 +164,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /auth/logout:
+    post:
+      summary: Logout pengguna
+      description: Mencabut refresh token pengguna dan mengakhiri sesi.
+      security:
+        - BearerAuth: [] # Membutuhkan access token yang valid untuk mengidentifikasi pengguna
+      requestBody:
+        description: (Opsional) Refresh token yang ingin dicabut. Jika tidak disertakan, akan dicabut berdasarkan token akses.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Refresh token yang akan dicabut. Jika tidak disertakan, sistem akan mencoba mencabut berdasarkan ID pengguna dari access token.
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      responses:
+        '204':
+          description: Logout berhasil. Refresh token dicabut.
+        '401':
+          description: Tidak terotentikasi (token tidak ada atau tidak valid).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   securitySchemes:
@@ -206,29 +238,9 @@ components:
           type: integer
           description: Durasi validitas access token dalam detik.
           example: 3600
-        user:
-          type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              description: ID unik pengguna (ini bisa employeeId jika itu ID universal).
-            username:
-              type: string
-            fullName:
-              type: string
-            roles:
-              type: array
-              items:
-                type: string
-              description: Daftar peran yang dimiliki pengguna.
-          required:
-            - id
-            - username
       required:
         - accessToken
         - expiresIn
-        - user
     ChangePasswordRequest:
       type: object
       properties:
@@ -256,10 +268,6 @@ components:
           type: string
           description: Kata sandi awal yang di-generate.
           example: "Generated@Password123"
-        forcePasswordChange:
-          type: boolean
-          description: Menentukan apakah pengguna harus mengubah kata sandi pada login pertama.
-          default: true
       required:
         - employeeId
         - username

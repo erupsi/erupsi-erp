@@ -1,21 +1,14 @@
-const registerUser = async (employeeId, username, password) => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({success: true, message: "User registered successfully"});
-    }, 500);
-  });
+const pool = require('./db');
+const { v4: uuidv4 } = require('uuid');
+
+const registerUser = async (employeeInitialUuid, username, password) => {
+  try {
+    const query = `INSERT INTO auth_employee(employeeId, username, password) VALUES($1, $2, $3)`;
+    const result = await pool.query(query, [employeeInitialUuid, username, password]);
+    return {success: true}
+  } catch (err) {
+    console.error(err)
+  }
 };
 
-const getEmployeeById = async (employeeId) => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const users = { //inconsistent naming scheme
-        'admin_user_id_123': { id: 'admin_user_id_123', role: 'admin', username: 'adminuser' },
-        'normal_user_id_456': { id: 'normal_user_id_456', role: 'user', username: 'john_doe' }
-      };
-      resolve(users[employeeId])
-    }, 100);
-  });
-};
-
-module.exports = {registerUser, getEmployeeById}
+module.exports = {registerUser}
