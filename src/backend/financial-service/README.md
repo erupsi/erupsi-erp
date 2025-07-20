@@ -1,230 +1,219 @@
-# Spesifikasi Kebutuhan Perangkat Lunak (SKPL) Mini - Layanan Finansial
+# Software Requirements Specification (SRS) Mini - Financial Service
 
-## 1. Pendahuluan
-### 1.1 Tujuan
-Dokumen ini menjelaskan kebutuhan untuk Layanan Finansial sebagai mikroservis yang mengelola seluruh operasi keuangan internal perusahaan, termasuk buku besar umum, hutang/piutang usaha, perhitungan pajak, dan pelaporan keuangan.
+## 1. Introduction
+### 1.1 Purpose
+This document outlines the requirements for the Financial Service as a microservice that manages all internal financial operations of the company, including the general ledger, accounts payable/receivable, tax calculations, and financial reporting.
 
-### 1.2 Ruang Lingkup
-Layanan Finansial adalah mikroservis backend dalam ekosistem ERP, bertanggung jawab atas data dan proses keuangan inti. Layanan ini menyediakan API REST untuk integrasi dengan aplikasi frontend dan layanan backend lainnya.
+### 1.2 Scope
+The Financial Service is a backend microservice within an ERP ecosystem, responsible for core financial data and processes. It provides REST APIs for integration with frontend applications and other backend services.
 
-## 2. Deskripsi Umum
-### 2.1 Konteks Sistem
-- Bagian dari sistem ERP berbasis mikroservis
-- Berkomunikasi dengan layanan lain (Auth, Procurement, Order Management, HRM) melalui API REST
-- Menyediakan data keuangan ke aplikasi frontend melalui API REST
+## 2. General Description
+### 2.1 System Context
+- Part of a microservices-based ERP system
+- Communicates with other services (Auth, Procurement, Order Management, HRM) via REST APIs
+- Provides financial data to frontend applications via REST APIs
 
-### 2.2 Modul
-- Bagan Akun (Chart of Accounts/COA)
-- Jurnal Umum
-- Buku Besar Umum
-- Pelaporan Keuangan
-- Hutang Usaha
-- Piutang Usaha
-- Agregasi Penggajian (dari HRM)
-- Perhitungan & Pelaporan Pajak
+### 2.2 Modules
+- Chart of Accounts (COA)
+- General Journal
+- General Ledger
+- Financial Reporting
+- Accounts Payable
+- Accounts Receivable
+- Payroll Aggregation (from HRM)
+- Tax Calculation & Reporting
 
-### 2.3 Titik Integrasi
-- Layanan Auth: Validasi JWT untuk otentikasi/otorisasi
-- Layanan Pengadaan: Mengambil faktur vendor untuk hutang dan pajak
-- Manajemen Pesanan: Mengambil faktur pelanggan untuk piutang dan pajak
-- Layanan HRM: Mengambil ringkasan penggajian untuk jurnal dan pajak
-- Frontend: Mengekspos API REST untuk data dan pelaporan keuangan
+### 2.3 Integration Points
+- Auth Service: Validates JWT for authentication/authorization
+- Procurement Service: Retrieves vendor invoices for payables and taxes
+- Order Management Service: Retrieves customer invoices for receivables and taxes
+- HRM Service: Retrieves payroll summaries for journal entries and taxes
+- Frontend: Exposes REST APIs for financial data and reporting
 
-## 3. Kebutuhan Fungsional
-### 3.1 Bagan Akun
-- Operasi CRUD untuk akun (aset, kewajiban, ekuitas, pendapatan, beban)
-- Mendukung struktur akun hierarkis
+## 3. Functional Requirements
+### 3.1 Chart of Accounts
+- CRUD operations for accounts (assets, liabilities, equity, revenue, expenses)
+- Supports hierarchical account structures
 
-### 3.2 Jurnal Umum
-- Mencatat dan mengelola transaksi pembukuan berpasangan
-- Memvalidasi bahwa debit sama dengan kredit
+### 3.2 General Journal
+- Records and manages double-entry bookkeeping transactions
+- Validates that debits equal credits
 
-### 3.3 Buku Besar Umum
-- Memelihara catatan transaksi rinci per akun
-- Melihat saldo dan riwayat akun per periode
+### 3.3 General Ledger
+- Maintains detailed transaction records per account
+- Views account balances and history per period
 
-### 3.4 Pelaporan Keuangan
-- Menghasilkan neraca, laporan laba rugi, neraca saldo
+### 3.4 Financial Reporting
+- Generates balance sheets, profit & loss statements, trial balances
 
-### 3.5 Hutang Usaha
-- Memproses dan melacak faktur vendor
-- Mengelola kewajiban yang belum dibayar
-- Mencatat pembayaran keluar
+### 3.5 Accounts Payable
+- Processes and tracks vendor invoices
+- Manages outstanding liabilities
+- Records outgoing payments
 
-### 3.6 Piutang Usaha
-- Memproses dan melacak faktur pelanggan
-- Mengelola piutang yang belum tertagih
-- Mencatat penerimaan kas masuk
+### 3.6 Accounts Receivable
+- Processes and tracks customer invoices
+- Manages uncollected receivables
+- Records incoming cash receipts
 
-### 3.7 Agregasi Penggajian
-- Mencatat ringkasan penggajian dari HRM (bukan penggajian individu)
+### 3.7 Payroll Aggregation
+- Records payroll summaries from HRM (not individual payrolls)
 
-### 3.8 Perhitungan & Pelaporan Pajak
-- Mengelola tarif pajak
-- Mengotomatiskan perhitungan pajak pada transaksi
-- Mencatat kewajiban pajak
-- Menghasilkan laporan pajak internal
+### 3.8 Tax Calculation & Reporting
+- Manages tax rates
+- Automates tax calculation on transactions
+- Records tax liabilities
+- Generates internal tax reports
 
-## 4. Kebutuhan Non-Fungsional
-- **Kinerja:** Harus menangani hingga 10.000 transaksi/hari dengan waktu respons API <500ms
-- **Skalabilitas:** Mendukung penskalaan horizontal melalui Docker dan API stateless
-- **Keamanan:** Otentikasi berbasis JWT, otorisasi berbasis peran, endpoint API yang aman
-- **Keandalan:** Waktu aktif 99,9%, cadangan otomatis
-- **Pemeliharaan:** Basis kode modular, dokumentasi API melalui OpenAPI/Swagger
-- **Auditabilitas:** Semua transaksi keuangan harus dicatat dan dapat dilacak
+## 4. Non-Functional Requirements
+- **Performance:** Must handle up to 10,000 transactions/day with API response times <500ms
+- **Scalability:** Supports horizontal scaling via Docker and stateless APIs
+- **Security:** JWT-based authentication, role-based authorization, secure API endpoints
+- **Reliability:** 99.9% uptime, automatic backups
+- **Maintainability:** Modular codebase, API documentation via OpenAPI/Swagger
+- **Auditability:** All financial transactions must be recorded and traceable
 
-## 5. Antarmuka Sistem
-- **API REST:** Untuk komunikasi frontend dan antar layanan
-- **Basis Data:** PostgreSQL untuk penyimpanan permanen
-- **Layanan Eksternal:** Auth, Procurement, Order Management, HRM melalui REST
+## 5. System Interfaces
+- **REST API:** For frontend and inter-service communication
+- **Database:** PostgreSQL for persistent storage
+- **External Services:** Auth, Procurement, Order Management, HRM via REST
 
-## 6. Kendala & Ruang Lingkup yang Tidak Termasuk
-- Hanya operasi keuangan inti yang termasuk dalam ruang lingkup
-- Manajemen aset lanjutan, akuntansi biaya, penganggaran, manajemen treasury tidak termasuk dalam ruang lingkup
+## 6. Constraints & Out of Scope
+- Only core financial operations are within scope
+- Advanced asset management, cost accounting, budgeting, treasury management are out of scope
 
-# Layanan Finansial
+---
 
-## A. Gambaran Proyek
-Layanan ini bertanggung jawab untuk mengelola semua aspek keuangan internal perusahaan,
-mulai dari manajemen buku besar umum, hutang piutang usaha, perhitungan pajak internal, dan laporan keuangan. 
-Layanan ini menganut arsitektur mikroservis yang ketat, memastikan modularitas, skalabilitas,
-dan penerapan independen.
+# Financial Service
 
-## Teknologi Utama
-- Backend : Node.js (v20+ - Express.js)
-- Basis Data: PostgreSQL
-- Frontend (Konseptual): Terintegrasi melalui API REST (kemungkinan aplikasi frontend terpisah, mis. React dengan 
-Tailwind CSS)
-- Otentikasi/Otorisasi: JSON Web Tokens (JWT) melalui Layanan Otentikasi (Auth Service)
-- Alat Pengembangan: ESLint, Docker, Jest, OpenAPI (Swagger) untuk dokumentasi API
+## A. Project Overview
+This service is responsible for managing all internal financial aspects of the company, from general ledger management, accounts payable and receivable, internal tax calculations, and financial reporting. This service adheres to a strict microservices architecture, ensuring modularity, scalability, and independent deployment.
 
-## B. Fungsionalitas Service
-Layanan ini menyediakan fungsionalitas penting yang diperlukan akuntansi keuangan dalam ERP.
-Fitur Utama : 
+## Key Technologies
+- **Backend:** Node.js (v20+ - Express.js)
+- **Database:** PostgreSQL
+- **Frontend (Conceptual):** Integrated via REST API (likely a separate frontend application, e.g., React with Tailwind CSS)
+- **Authentication/Authorization:** JSON Web Tokens (JWT) via an Authentication Service (Auth Service)
+- **Development Tools:** ESLint, Docker, Jest, OpenAPI (Swagger) for API documentation
 
-### **1. Manajemen Bagan Akun (Chart of Accounts - COA)**
-- Membuat, Membaca, Memperbarui, Menghapus (CRUD) akun (aset, kewajiban, ekuitas, pendapatan, 
-        beban)
-- Mendukung struktur akun hierarkis 
+## B. Service Functionality
+This service provides essential functionalities required for financial accounting within an ERP.
+Key Features:
 
-### **2. Manajemen Jurnal Umum (General Journal)**
-- Mencatat dan mengelola semua transaksi keuangan menggunakan sistem pembukuan berpasangan.
-- Kemampuan untuk membuat, melihat, dan merinci entri jurnal
-- Validasi untuk memastikan debit sama dengan kredit untuk setiap entri jurnal
+### **1. Chart of Accounts (COA) Management**
+- Create, Read, Update, Delete (CRUD) accounts (assets, liabilities, equity, revenue, expenses)
+- Supports hierarchical account structures
 
-### **3. Manajemen Buku Besar Umum (General Ledger)**
-- Memelihara catatan rinci semua transaksi keuangan per akun
-- Kemampuan untuk melihat saldo akun dan riwayat transaksi untuk periode waktu tertentu
+### **2. General Journal Management**
+- Records and manages all financial transactions using a double-entry bookkeeping system.
+- Ability to create, view, and detail journal entries.
+- Validation to ensure debits equal credits for each journal entry.
 
-### **4. Pelaporan Keuangan (Financial Reporting)**
-  Menghasilkan laporan keuangan dasar :
-- Neraca (Balance sheet) : Gambaran aset, kewajiban, dan ekuitas pada titik waktu tertentu
-- Laporan keuntungan kerugian (Profit & Loss) : Ringkasan pendapatan, beban, serta laba/rugi bersih selama periode
-  waktu tertentu
-- Neraca Saldo (Trial Balance): Daftar semua akun buku besar dengan saldo debit dan kreditnya, memastikan keseimbangan
-  
-### **5. Manajemen Hutang Usaha (Accounts Payable)**
-- Memproses dan melacak faktur vendor
-- Mengelola kewajiban yang belum dibayar kepada pemasok
-- Mencatat dan melacak pembayaran keluar
+### **3. General Ledger Management**
+- Maintains detailed records of all financial transactions per account.
+- Ability to view account balances and transaction history for specific time periods.
 
-### **6. Manajemen Piutang Usaha (Acounts Receivable)**
-- Memproses dan melacak faktur pelanggan
-- Mengelola piutang yang belum tertagih dari pelanggan
-- Mencatat dan melacak penerimaan kas masuk
+### **4. Financial Reporting**
+Generates basic financial reports:
+- **Balance Sheet:** An overview of assets, liabilities, and equity at a specific point in time.
+- **Profit & Loss Statement (Income Statement):** A summary of revenues, expenses, and net profit/loss over a specific period.
+- **Trial Balance:** A list of all general ledger accounts with their debit and credit balances, ensuring balance.
 
-### **7. Pencatatan Gaji (Integrasi Agregat)**
-- Kemampuan untuk mencatat ringkasan data penggajian (total beban gaji, total hutang PPh 21, total hutang BPJS, dll.) 
-yang diterima dari Layanan Manajemen Sumber Daya Manusia (HRM Service) ke dalam buku besar umum. 
-**Layanan ini tidak melakukan perhitungan gaji individual atau mengelola rincian potongan karyawan.**
+### **5. Accounts Payable Management**
+- Processes and tracks vendor invoices.
+- Manages unpaid obligations to suppliers.
+- Records and tracks outgoing payments.
 
-### **8. Perhitungan dan Pencatatan Pajak Perusahaan**
-- Konfigurasi Tarif Pajak: Mengelola tarif pajak yang menjadi kewajiban perusahaan (misalnya PPN, PPh Pasal tertentu)
-- Perhitungan Pajak Transaksional: Mengotomatiskan perhitungan PPN Masukan/Keluaran pada faktur pembelian/penjualan yang
-diintegrasikan
-- Pencatatan Hutang Pajak: Secara otomatis mencatat hutang pajak yang timbul dari transaksi dan ringkasan penggajian ke 
-buku besar
-- Laporan Pajak Internal: Menghasilkan laporan ringkasan pajak (misalnya, total PPN Masukan/Keluaran, 
-total PPh yang dipotong oleh perusahaan) untuk tujuan internal atau sebagai dasar konsolidasi data pajak perusahaan
+### **6. Accounts Receivable Management**
+- Processes and tracks customer invoices.
+- Manages uncollected receivables from customers.
+- Records and tracks incoming cash receipts.
 
+### **7. Payroll Recording (Aggregate Integration)**
+- Ability to record summarized payroll data (total salary expense, total income tax payable, total BPJS contributions payable, etc.) received from the Human Resources Management Service (HRM Service) into the general ledger. **This service does not perform individual payroll calculations or manage employee deduction details.**
 
-## C. Kebutuhan Interaksi dengan Service Lain
-Sebagai mikroservis, Layanan Finansial berkomunikasi dengan layanan lain dalam ekosistem ERP terutama melalui panggilan API REST,
-memastikan kontrak API yang jelas untuk setiap interaksi.
+### **8. Company Tax Calculation and Recording**
+- **Tax Rate Configuration:** Manages tax rates that are company obligations (e.g., VAT, specific Income Tax articles).
+- **Transactional Tax Calculation:** Automates the calculation of Input/Output VAT on integrated purchase/sales invoices.
+- **Tax Liability Recording:** Automatically records tax liabilities arising from transactions and payroll summaries into the general ledger.
+- **Internal Tax Reports:** Generates summary tax reports (e.g., total Input/Output VAT, total Income Tax withheld by the company) for internal purposes or as a basis for consolidating company tax data.
 
-### 1. Mengonsumsi Data dari Layanan Lain
-Layanan Finansial menarik data yang diperlukan dari layanan lain melalui API REST yang mereka ekspos. 
-Setiap layanan akan memiliki kontrak API-nya sendiri, yang dipatuhi oleh Layanan Finansial.
+## C. Interaction Requirements with Other Services
+As a microservice, the Financial Service communicates with other services in the ERP ecosystem primarily through REST API calls, ensuring clear API contracts for each interaction.
 
-| Layanan (Service)  | Tujuan                                                                                                                                                                         |       Interaksi     |
-| ------------------ |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------------- |
-| Autentikasi (Auth) | Otentikasi dan Otorisasi pengguna.                                                                                                                                             | Layanan Finansial memvalidasi JWT yang masuk yang dikeluarkan oleh Layanan Otentikasi untuk memastikan permintaan yang sah dan menentukan peran/izin pengguna.|
-| Pengadaan (Procurement) | Mengambil detail Pesanan Pembelian (PO) dan Faktur Vendor, termasuk informasi harga dan pajak yang relevan untuk pencatatan hutang usaha dan PPN Masukan.                      | Layanan Finansial akan membuat panggilan API (mis. GET /api/procurement/invoices?status=ready_for_finance) untuk mengambil faktur vendor yang perlu diproses. |
-| Manajemen Pesanan (Order Management) | Mengambil detail Pesanan Penjualan dan Faktur Pelanggan, termasuk informasi harga dan pajak yang relevan untuk pencatatan piutang usaha dan PPN Keluaran.                      | Layanan Finansial akan membuat panggilan API (mis. GET /api/orders/invoices?status=ready_for_finance) untuk mengambil faktur pelanggan yang perlu diproses. |
-| Manajemen SDM (Human Resources Management - HRM) | Mengambil ringkasan data penggajian yang mencakup total beban gaji, total PPh 21 yang dipotong dari karyawan, dan total iuran BPJS yang menjadi kewajiban perusahaan/karyawan. | Layanan Finansial akan membuat panggilan API (mis. GET /api/hrm/payroll/summary?period=2024-06) untuk mengambil angka agregat ini untuk pencatatan jurnal dan perhitungan hutang pajak perusahaan. |
+### 1. Consuming Data from Other Services
+The Financial Service pulls necessary data from other services via the REST APIs they expose. Each service will have its own API contract, which the Financial Service adheres to.
 
-### 2. Menyediakan Data ke Layanan Lain 
-Layanan Finansial menyediakan data keuangan ke layanan lain melalui API REST yang diekspos, terutama memungkinkan mereka untuk GET informasi.
+| Service                   | Purpose                                                                                                                                                                                          | Interaction                                                                                                                                                                                                                                                                                         |
+| :------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Authentication (Auth)     | User authentication and authorization.                                                                                                                                                           | The Financial Service validates incoming JWTs issued by the Authentication Service to ensure legitimate requests and determine user roles/permissions.                                                                                                                                             |
+| Procurement               | Retrieves Purchase Order (PO) details and Vendor Invoices, including relevant pricing and tax information for accounts payable and Input VAT recording.                                             | The Financial Service will make API calls (e.g., `GET /api/procurement/invoices?status=ready_for_finance`) to retrieve vendor invoices that need processing.                                                                                                                                         |
+| Order Management          | Retrieves Sales Order details and Customer Invoices, including relevant pricing and tax information for accounts receivable and Output VAT recording.                                              | The Financial Service will make API calls (e.g., `GET /api/orders/invoices?status=ready_for_finance`) to retrieve customer invoices that need processing.                                                                                                                                             |
+| Human Resources Management (HRM) | Retrieves summarized payroll data covering total salary expense, total PPh 21 (Income Tax Article 21) withheld from employees, and total BPJS contributions that are company/employee obligations. | The Financial Service will make API calls (e.g., `GET /api/hrm/payroll/summary?period=2024-06`) to fetch these aggregate figures for journal entries and company tax liability calculations.                                                                                                            |
 
-| Layanan (Service) | Tujuan                                                                                                   |        Interaksi       |
-| ----------------- |----------------------------------------------------------------------------------------------------------| ---------------------- |
-| Pengadaan (Procurement) | Menyediakan status pembayaran faktur vendor.                                                             |  Layanan Pengadaan dapat membuat panggilan API (mis. GET /api/finance/ap-status/{invoiceId}) untuk menanyakan status pembayaran faktur vendor tertentu yang dikelola oleh Layanan Finansial. |
-| Manajement Pesanan (Order Management) | Menyediakan status pembayaran faktur pelanggan.                                                          | Layanan Manajemen Pesanan dapat membuat panggilan API (mis. GET /api/finance/ar-status/{invoiceId}) untuk menanyakan status pembayaran faktur pelanggan tertentu. |
+### 2. Providing Data to Other Services
+The Financial Service provides financial data to other services through exposed REST APIs, primarily allowing them to GET information.
 
-    
-## D. Batasan Service
-Layanan Finansial mematuhi batasan yang jelas untuk mempertahankan fokusnya dan mencegah perluasan ruang lingkup yang tidak semestinya, sesuai dengan prinsip mikroservis.
+| Service                   | Purpose                                                                          | Interaction                                                                                                                                                                                 |
+| :------------------------ | :------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Procurement               | Provides vendor invoice payment status.                                          | The Procurement Service can make API calls (e.g., `GET /api/finance/ap-status/{invoiceId}`) to query the payment status of specific vendor invoices managed by the Financial Service.        |
+| Order Management          | Provides customer invoice payment status.                                        | The Order Management Service can make API calls (e.g., `GET /api/finance/ar-status/{invoiceId}`) to query the payment status of specific customer invoices.                                  |
 
-***Dalam Cakupan (Dicakup/Direncanakan dalam waktu dekat)***
-- Manajemen Bagan Akun
-- Manajemen Jurnal Umum & Buku Besar Umum
-- Laporan Keuangan Inti (Neraca, Laporan Laba Rugi, Neraca Saldo)
-- Manajemen Hutang Usaha (Pemrosesan Faktur Vendor, Pembayaran Keluar)
-- Manajemen Piutang Usaha (Pemrosesan Faktur Pelanggan, Penerimaan Kas Masuk)
-- Pencatatan Data Gaji Dasar (integrasi dengan Layanan HRM)
-- Rekonsiliasi Kas dan Bank Dasar (mungkin manual)
-- Manajemen Pajak Internal (Perhitungan PPN Transaksional, PPh 21 dari Gaji, Pencatatan Hutang Pajak, Laporan Pajak Ringkas Internal)
+## D. Service Boundaries
+The Financial Service adheres to clear boundaries to maintain its focus and prevent undue scope creep, in line with microservices principles.
 
-***Diluar Cakupan (Akan ditangani oleh Layanan Terpisah atau Fase Mendatang)***
-- Manajemen Aset yang Kompleks: Pelacakan rinci, jadwal depresiasi, dan manajemen siklus hidup aset tetap.
-- Akuntansi Biaya (Cost Accounting): Analisis biaya lanjutan, analisis varian, dan perhitungan biaya pekerjaan.
-- Penganggaran & Peramalan (Budgeting & Forecasting): Alat untuk membuat, mengelola, dan melacak anggaran dan perkiraan keuangan.
-- Manajemen Keuangan (Treasury Management): Manajemen kas yang canggih, investasi, dan lindung nilai valuta asing (FX).
-- Pengarsipan Pajak/Pelaporan Kepatuhan Eksternal: Pembuatan laporan pajak resmi yang spesifik dalam format yang disyaratkan untuk pengajuan langsung ke badan pemerintah (mis. e-SPT, e-Faktur dalam format XML/CSV yang siap diunggah). Layanan ini akan menyediakan data dasar, tetapi generasi file pelaporan akhir di luar lingkup.
+***In Scope (Covered/Planned in the near future)***
+- Chart of Accounts Management
+- General Journal & General Ledger Management
+- Core Financial Reports (Balance Sheet, Profit & Loss Statement, Trial Balance)
+- Accounts Payable Management (Vendor Invoice Processing, Outgoing Payments)
+- Accounts Receivable Management (Customer Invoice Processing, Incoming Cash Receipts)
+- Basic Payroll Data Recording (integration with HRM Service)
+- Basic Cash and Bank Reconciliation (potentially manual)
+- Internal Tax Management (Transactional VAT Calculation, PPh 21 from Payroll, Tax Liability Recording, Internal Summary Tax Reports)
 
-## E. Peran Akses ke Fitur Layanan Finansial
-Akses ke fungsionalitas Layanan Finansial dikontrol secara ketat berdasarkan peran pengguna yang telah ditentukan, divalidasi melalui token JWT yang dikeluarkan oleh Layanan Otentikasi. Setiap permintaan masuk menyertakan payload JWT yang berisi informasi pengguna dan peran yang ditugaskan kepada mereka, 
-yang kemudian digunakan oleh Layanan Finansial untuk pemeriksaan otorisasi yang terperinci.
+***Out of Scope (To be handled by Separate Services or Future Phases)***
+- **Complex Asset Management:** Detailed tracking, depreciation schedules, and fixed asset lifecycle management.
+- **Cost Accounting:** Advanced cost analysis, variance analysis, and job costing.
+- **Budgeting & Forecasting:** Tools for creating, managing, and tracking budgets and financial forecasts.
+- **Treasury Management:** Sophisticated cash management, investments, and foreign exchange (FX) hedging.
+- **External Tax Filing/Compliance Reporting:** Generation of official tax reports in specific formats required for direct submission to government bodies (e.g., e-SPT, e-Faktur in upload-ready XML/CSV formats). This service will provide the underlying data, but final reporting file generation is out of scope.
 
-Peran berikut menentukan tingkat akses :\
-1. ADMIN ERP :
-   - Akses CRUD Penuh : Bagan akun, Entri Jurnal, Konfigurasi Tarif Pajak.
-   - Akses Baca Penuh : Semua Laporan Keuangan, Hutang Usaha, Piutang Usaha, Buku Besar Umum, Laporan Pajak Internal.
-   - Manajemen Penuh : Pemrosesan pembayaran, konfigurasi keuangan dan pajak perusahaan lainnya.
+## E. Access Roles to Financial Service Features
+Access to Financial Service functionality is strictly controlled based on predefined user roles, validated via JWT tokens issued by the Authentication Service. Each incoming request includes a JWT payload containing user information and their assigned roles, which is then used by the Financial Service for granular authorization checks.
 
-2. FINANCE MANAGER :
-    - Akses Baca : Bagan Akun, Entri Jurnal, Buku Besar Umum, Konfigurasi Tarif Pajak.
-    - Akses Persetujuan/Update : Entri Jurnal yang memerlukan persetujuan, Hutang Usaha (persetujuan pembayaran), Piutang Usaha (persetujuan penerimaan kas), Validasi & Persetujuan Laporan Pajak Internal.
-    - Akses Baca Penuh : Semua Laporan Keuangan, Laporan Pajak Internal.
-   
-3. ACCOUNTING STAFF :
-    - Akses Baca : Bagan Akun, Buku Besar Umum, Laporan Keuangan dasar, Laporan Pajak Internal.
-    - Akses Buat/Perbarui/Hapus: Entri Jurnal (subjek persetujuan manajer).
-    - Akses Terkait Pajak: Menginput data yang memicu perhitungan pajak transaksional, melihat ringkasan hutang pajak perusahaan.
-   
-4. ACCOUNTING PAYABLE STAFF :
-    - Akses Buat/Perbarui/Hapus: Faktur Vendor yang masuk (sering diintegrasikan dari Pengadaan), Pembayaran Keluar.
-    - Akses Baca: Status faktur pembelian dan pembayaran, informasi pajak pada faktur pembelian.
+The following roles define the access levels:
 
-5. ACCOUNTING RECEIVABLE STAFF :
-    - Akses Buat/Perbarui/Hapus: Faktur Pelanggan yang masuk (sering diintegrasikan dari Manajemen Pesanan), Penerimaan Kas Masuk.
-    - Akses Baca: Status faktur penjualan dan penerimaan kas, informasi pajak pada faktur penjualan.
+1.  **ERP ADMIN:**
+   -   **Full CRUD Access:** Chart of Accounts, Journal Entries, Tax Rate Configuration.
+   -   **Full Read Access:** All Financial Reports, Accounts Payable, Accounts Receivable, General Ledger, Internal Tax Reports.
+   -   **Full Management:** Payment processing, other company financial and tax configurations.
 
-6. AUDITOR : 
-    - Akses Hanya Baca: Semua data keuangan dan pajak perusahaan (COA, Entri Jurnal, Buku Besar Umum, Laporan Pajak Internal) dan Laporan Keuangan. Tidak ada kemampuan modifikasi.
-   
-7. PROCUREMENT OFFICER :
-    - Akses Baca Terbatas: Status pembayaran faktur pembelian yang mereka inisiasi, detail pajak terkait faktur pembelian.
-   
-8. SALES OFFICER :
-   - Akses Baca Terbatas: Status penerimaan kas dari faktur penjualan yang mereka inisiasi, detail pajak terkait faktur penjualan.
+2.  **FINANCE MANAGER:**
+   -   **Read Access:** Chart of Accounts, Journal Entries, General Ledger, Tax Rate Configuration.
+   -   **Approval/Update Access:** Journal entries requiring approval, Accounts Payable (payment approval), Accounts Receivable (cash receipt approval), Validation & Approval of Internal Tax Reports.
+   -   **Full Read Access:** All Financial Reports, Internal Tax Reports.
+
+3.  **ACCOUNTING STAFF:**
+   -   **Read Access:** Chart of Accounts, General Ledger, basic Financial Reports, Internal Tax Reports.
+   -   **Create/Update/Delete Access:** Journal Entries (subject to manager approval).
+   -   **Tax-Related Access:** Input data that triggers transactional tax calculations, view company tax liability summaries.
+
+4.  **ACCOUNTS PAYABLE STAFF:**
+   -   **Create/Update/Delete Access:** Incoming Vendor Invoices (often integrated from Procurement), Outgoing Payments.
+   -   **Read Access:** Purchase invoice and payment status, tax information on purchase invoices.
+
+5.  **ACCOUNTS RECEIVABLE STAFF:**
+   -   **Create/Update/Delete Access:** Incoming Customer Invoices (often integrated from Order Management), Incoming Cash Receipts.
+   -   **Read Access:** Sales invoice and cash receipt status, tax information on sales invoices.
+
+6.  **AUDITOR:**
+   -   **Read-Only Access:** All company financial and tax data (COA, Journal Entries, General Ledger, Internal Tax Reports) and Financial Reports. No modification capabilities.
+
+7.  **PROCUREMENT OFFICER:**
+   -   **Limited Read Access:** Payment status of purchase invoices they initiated, tax details related to purchase invoices.
+
+8.  **SALES OFFICER:**
+   -   **Limited Read Access:** Cash receipt status of sales invoices they initiated, tax details related to sales invoices.
+
+---
