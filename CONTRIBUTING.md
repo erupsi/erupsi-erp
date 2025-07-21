@@ -43,7 +43,7 @@ features, or contribute code, this guide will help you get started 🎉.
     │       ├── package.json         <-- managed using npm workspace from project root
     │       ├── README.md
     │       ├── __test__
-    │           └── some.test.js     <-- 🧪 Jest unit test file
+    │       │   └── some.test.js     <-- 🧪 Jest unit test file
     │       └── src
     │           └── index.js         <-- 🚪 service entry point
     └── frontend
