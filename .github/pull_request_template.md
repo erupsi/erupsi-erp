@@ -14,16 +14,6 @@ This PR implements/fixes/adds \[feature/bug] related to \[module/service-name].
 * `style.css`: Changed the background color from red to blue.
 * `main.js`: Fixed issue when invoking registerUser() that caused deletion of admin accounts.
 
-## 📂 Affected Components
-
-<!-- Tick what parts of the project are affected by your PR -->
-
-* \[x] Frontend (`/src/frontend`)
-* \[x] Backend microservice (`/src/services/user-service`)
-* \[ ] Deployment (`/deploy`)
-* \[ ] Docs (`/docs`, `/docs/contracts`, `README.md`, `CONTRIBUTING.md`, etc.)
-* \[ ] CI/CD (`.github`)
-
 ## 📋 Checklist
 
 <!-- You must have done this before opening a PR -->
