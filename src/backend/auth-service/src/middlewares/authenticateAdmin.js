@@ -1,6 +1,6 @@
 require('dotenv').config({ path: __dirname + '/../../.env' })
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET
+const PUBLIC_KEY = process.env.PUBLIC_KEY_FROM_REQUEST.replace(/\\n/g, '\n');
 
 
 const authenticateAdmin = async (req, res, next) => {
@@ -16,12 +16,13 @@ const authenticateAdmin = async (req, res, next) => {
   }
 
   try{
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded
+    const decoded = jwt.verify(token, PUBLIC_KEY,{
+      algorithms: ['RS256'],
+      audience: 'auth-service',
+      issuer: 'auth-service'
+    });
 
-    const requesterActor = req.user;
-
-    if(!requesterActor || !requesterActor.role.includes("SYSTEM_ADMIN")) {
+    if(!decoded || !decoded.role.includes("SYSTEM_ADMIN")) {
       return res.status(403).json({message: "Access denied: Admin privileges required"})
     }
 

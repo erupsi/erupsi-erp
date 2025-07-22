@@ -18,6 +18,7 @@ build/
 
 # Environment files
 *.env
+.env.keys
 .env.local
 .env.development
 .env.production

@@ -1,4 +1,5 @@
-const Pool = require('pg');
+const {Pool} = require('pg');
+require('dotenv').config({ path: __dirname + '/../../.env' })
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -7,13 +8,5 @@ const pool = new Pool({
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
 });
-// const pool = new Pool({
-//   user: "urmuser",
-//   host: "localhost",
-//   database: "urm_db",
-//   password: "urmpass",
-//   port: 5437,
-// });
-
 
 module.exports = pool;

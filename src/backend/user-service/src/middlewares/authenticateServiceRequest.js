@@ -1,9 +1,9 @@
-require('dotenv').config({ path: __dirname + '/../../.env' })
+require('dotenv').config({ path: __dirname + '/../../.env' });
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET
+const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 
 
-const authenticateAdmin = async (req, res, next) => {
+const authenticateServiceRequest = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
 
   if(!authHeader) {
@@ -11,19 +11,17 @@ const authenticateAdmin = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
+  
   if(!token) {
     return res.status(401).json({message: "Token format is 'Bearer <token>"});
   }
 
   try{
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded
-
-    const requesterActor = req.user;
-
-    if(!requesterActor || !requesterActor.role.includes("SYSTEM_ADMIN")) {
-      return res.status(403).json({message: "Access denied: Admin privileges required"})
-    }
+    jwt.verify(token, PUBLIC_KEY,{
+      algorithms: ['RS256'],
+      audience: 'urm-service',
+      issuer: 'auth-service'
+    });
 
     next();
   } catch(error){
@@ -35,4 +33,4 @@ const authenticateAdmin = async (req, res, next) => {
   }
 }
 
-module.exports = authenticateAdmin;
+module.exports = {authenticateServiceRequest};
