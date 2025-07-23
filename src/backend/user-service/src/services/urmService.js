@@ -1,6 +1,6 @@
 const pool = require('./db');
 
-const getEmployeeDetailByFullName = async (fullName) => {
+const getEmployeeDetailByEmployeeId = async (employeeId) => {
   try {
     const query = `SELECT 
         employees.full_name,
@@ -11,9 +11,9 @@ const getEmployeeDetailByFullName = async (fullName) => {
       FROM employees
       JOIN employee_roles ON employees.employeeId = employee_roles.employee_id
       JOIN roles ON employee_roles.role_id = roles.roleId
-      WHERE employees.full_name = $1
+      WHERE employees.employeeId = $1
       GROUP BY employees.full_name, employees.email, employees.department, employees.position;`;
-    const result = await pool.query(query, [fullName]);
+    const result = await pool.query(query, [employeeId]);
 
     if (result.rows.length == 0) {
       return undefined;
@@ -69,6 +69,6 @@ const insertEmployeeDetailsToDb = async (employeeId, fullName, email, department
 }
 
 
-module.exports = {getEmployeeDetailByFullName, insertEmployeeDetailsToDb}
+module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb}
 
 
