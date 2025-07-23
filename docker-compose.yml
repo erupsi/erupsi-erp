@@ -74,7 +74,7 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@auth-db:5432/${POSTGRES_DB}
     depends_on:
       - auth-db
     networks:
@@ -110,9 +110,9 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@user-db:5432/${POSTGRES_DB}
     depends_on:
-      - postgres
+      - user-db
     networks:
       - erupsi-erp-network
     labels:
