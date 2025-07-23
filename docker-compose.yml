@@ -60,14 +60,16 @@ services:
       # - "traefik.http.middlewares.dashboard-auth.basicauth.users=<PASTE_HASH_HERE>"
       # - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
 
-  postgres:
+
+# === Auth Services ===
+  auth-db:
     image: postgres:17
-    container_name: erupsi-postgres
+    container_name: erupsi-auth-db
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - auth_db_data:/var/lib/postgresql/data
     networks:
       - erupsi-erp-network
 
@@ -85,10 +87,17 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:
-      - postgres
+      - auth-db
     networks:
       - erupsi-erp-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=Host(`auth.docker.localhost`)"
+      - "traefik.http.routers.auth.entrypoints=websecure"
+      - "traefik.http.routers.auth.tls=true"
 
+
+# === User Services ===
   user-service:
     build:
       context: .
