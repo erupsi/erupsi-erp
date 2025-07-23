@@ -35,7 +35,7 @@ services:
       # Providers 
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=proxy"
+      - "--providers.docker.network=erupsi-erp-network"
 
       # API & Dashboard 
       - "--api.dashboard=true"
