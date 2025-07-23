@@ -1,9 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const {authenticateServiceRequest} = require('../middlewares/authenticateServiceRequest');
-const { getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially} = require('../services/urmService');
+const { getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, getAllEmployeeDetails} = require('../services/urmService');
 const patchBodyValidator = require('../middlewares/patchBodyValidator')
 const validator = require('validator');
+const { check } = require('express-validator');
+
+router.get("/employee", authenticateServiceRequest({useRole: true}), async (req, res, next) => {
+  try{
+    const result = await getAllEmployeeDetails();
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "No employees found." });
+    }
+    
+    // Return the list of employees
+    return res.status(200).json({ success: true, data: result.rows });
+  } catch (error) {
+    console.error("Error retrieving employees:", error); // Log the error for debugging
+    return res.status(500).json({ success: false, message: "Internal server error.", error: error.message });
+  }
+})
 
 router.post("/employee", authenticateServiceRequest(), async(req, res) => {
 
@@ -61,16 +78,16 @@ router.patch("/employee/:employeeId", authenticateServiceRequest({useRole: true}
     // Cek apakah user ada (opsional, tapi disarankan untuk respons 404 yang akurat)
     const checkUserResult = await checkEmployeeById(employeeId);
     if (checkUserResult.success == false) {
-      return res.status(404).json({ message: 'Pengguna tidak ditemukan.' });
+      return res.status(404).json({ message: 'Pegawai tidak ditemukan.' });
     }
 
     const updatedEmployee = await updateEmployeePartially(employeeId, updates, ALLOWED_USER_PATCH_FIELDS)
 
-    if (!updatedEmployee) {
+    if (!updatedEmployee.success) {
       return res.status(400).json({ message: 'Tidak ada properti yang valid untuk diupdate atau pengguna tidak ditemukan.' });
     }
 
-    res.status(200).json({ message: 'Data pengguna berhasil diupdate' });
+    res.status(200).json({ message: 'Data Pegawai berhasil diupdate' });
 
   } catch (error) {
     console.error('Error updating user in PostgreSQL:', error);
@@ -78,5 +95,28 @@ router.patch("/employee/:employeeId", authenticateServiceRequest({useRole: true}
   }
 })
   
+router.delete("/employee/:employeeId", authenticateServiceRequest({useRole: true}), async(req, res) => {
+  const {employeeId} = req.params;
+  if(!validator.isUUID(employeeId)){
+    return res.status(400).json({error: "Invalid employee ID format"})
+  }
+    
+  try{
+    const checkUserResult = await checkEmployeeById(employeeId);
+    if(!checkUserResult.success){
+      return res.status(404).json({ message: 'Pegawai tidak ditemukan.' });
+    }
 
+    const deletedUser = await deleteEmployeeBasedOnId(employeeId)
+    if(!deletedUser.success) {
+      return res.status(400).json({message: "Pegawai tidak dapat dihapus"})
+    }
+    return res.status(200).json({message: "Pegawai berhasil dihapus"})
+
+  } catch(error){
+    console.error(error)
+    return res.status(500).json({error: "Terjadi kesalahan server internal"})
+  }
+
+})
 module.exports = router;

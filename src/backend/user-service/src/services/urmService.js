@@ -59,10 +59,12 @@ const insertEmployeeDetailsToDb = async (employeeId, fullName, email, department
 
     await client.query('COMMIT'); // Commit transaction
     return { success: true, message: 'Employee details inserted successfully' };
+  
   } catch (err) {
     await client.query('ROLLBACK'); // Rollback transaction on error
     console.error('Error inserting employee details:', err);
     return { success: false, message: 'Failed to insert employee details' };
+  
   } finally {
     client.release(); // Release the client back to the pool
   }
@@ -109,14 +111,56 @@ const updateEmployeePartially = async (employeeId, updates, allowedFields) => {
     await client.query(sql, queryParams)
     await client.query('COMMIT');
     return {success: true, message: "Data pegawai berhasil diupdate"}
+  
   } catch(error){
     await client.query('ROLLBACK');
     console.error('Error in updatePartialUser service:', error);
     return {success: false, message: "Data pegawai gagal diupdate"}
+  } finally{
+    client.release();
   }
 }
 
+const deleteEmployeeBasedOnId = async (employeeId) => {
+  const client = await pool.connect()
 
-module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially}
+  const sql = `DELETE FROM employees WHERE employeeId=$1`
+  
+  try{
+    await client.query('BEGIN')
+    await client.query(sql, [employeeId])
+    await client.query('COMMIT')
+    return {success: true}
+
+  }catch(error){
+    await client.query('ROLLBACK')
+    console.error(error)
+    return {success: false, message: "Tidak dapat menghapus pegawai"}
+  }finally{
+    client.release();
+  }
+}
+
+const getAllEmployeeDetails = async () => {
+  const sql = `SELECT 
+      employees.employeeId,
+      employees.full_name,
+      employees.email,
+      employees.department,
+      employees.position,
+      employees.is_active,
+      ARRAY_AGG(roles.name) AS roles
+    FROM employees
+    LEFT JOIN employee_roles ON employees.employeeId = employee_roles.employee_id
+    LEFT JOIN roles ON employee_roles.role_id = roles.roleId
+    GROUP BY employees.employeeId, employees.full_name, employees.email, employees.department, employees.position, employees.is_active;`
+
+  const result = await pool.query(sql)
+  return result
+}
+
+
+
+module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, getAllEmployeeDetails}
 
 
