@@ -106,3 +106,29 @@ services:
       - postgres
     networks:
       - erupsi-erp-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user.rule=Host(`user.docker.localhost`)"
+      - "traefik.http.routers.user.entrypoints=websecure"
+      - "traefik.http.routers.user.tls=true"
+  
+  user-db:
+    image: postgres:17
+    container_name: erupsi-user-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - erupsi-erp-network
+
+
+# === Networks and Volumes Definition ===
+networks:
+  erupsi-erp-network:
+      driver: bridge
+
+volumes:
+  - auth_db_data
+  - user_db_data
