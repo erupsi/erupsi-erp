@@ -62,17 +62,6 @@ services:
 
 
 # === Auth Services ===
-  auth-db:
-    image: postgres:17
-    container_name: erupsi-auth-db
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - auth_db_data:/var/lib/postgresql/data
-    networks:
-      - erupsi-erp-network
-
   auth-service:
     build:
       context: .
@@ -95,6 +84,17 @@ services:
       - "traefik.http.routers.auth.rule=Host(`auth.docker.localhost`)"
       - "traefik.http.routers.auth.entrypoints=websecure"
       - "traefik.http.routers.auth.tls=true"
+
+  auth-db:
+    image: postgres:17
+    container_name: erupsi-auth-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    networks:
+      - erupsi-erp-network
 
 
 # === User Services ===
