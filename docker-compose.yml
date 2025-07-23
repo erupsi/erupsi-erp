@@ -139,5 +139,7 @@ networks:
       driver: bridge
 
 volumes:
-  - auth_db_data
-  - user_db_data
+  auth_db_data:
+    driver: local
+  user_db_data:
+    driver: local
