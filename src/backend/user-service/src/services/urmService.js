@@ -68,7 +68,55 @@ const insertEmployeeDetailsToDb = async (employeeId, fullName, email, department
   }
 }
 
+const checkEmployeeById = async (employeeId) => {
+  const checkUserResult = await pool.query('SELECT * FROM employees WHERE employeeId = $1', [employeeId]);
+  if (checkUserResult.rows.length === 0) {
+    return {success: false, message: 'pegawai tidak ditemukan.'}
+  }
+  return {success: true}
+}
 
-module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb}
+const updateEmployeePartially = async (employeeId, updates, allowedFields) => {
+  const queryParams = [];
+  const setClauses = [];
+  let paramIndex = 1;
+  
+  for (const key in updates) {
+    if (allowedFields.includes(key)) {
+      setClauses.push(`${key} = $${paramIndex}`);
+      queryParams.push(updates[key]);
+      paramIndex++;
+    }
+      // Properti lain yang tidak diizinkan akan diabaikan
+  }
+
+  if (setClauses.length === 0) {
+    throw new Error('Tidak ada properti yang valid untuk diupdate.');
+  }
+  setClauses.push(`updated_at = NOW()`);
+
+  const sql = `
+    UPDATE employees
+    SET ${setClauses.join(', ')}
+    WHERE employeeId = $${paramIndex}
+    RETURNING *
+  `;
+  queryParams.push(employeeId);
+  const client = await pool.connect(); // Get a client from the pool
+  
+  try{
+    await client.query('BEGIN');
+    await client.query(sql, queryParams)
+    await client.query('COMMIT');
+    return {success: true, message: "Data pegawai berhasil diupdate"}
+  } catch(error){
+    await client.query('ROLLBACK');
+    console.error('Error in updatePartialUser service:', error);
+    return {success: false, message: "Data pegawai gagal diupdate"}
+  }
+}
+
+
+module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially}
 
 
