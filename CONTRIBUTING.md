@@ -65,7 +65,8 @@ features, or contribute code, this guide will help you get started 🎉.
 
 To get started with development, follow these steps:
 
-1. Clone the repository to your local machine (choose HTTPS or SSH):
+1. Make sure you have Node.js, Docker Desktop/Engine with Docker Compose, and your choosen API client installed.
+2. Clone the repository to your local machine (choose HTTPS or SSH):
    * **HTTPS** (recommended for most users):
      ```bash
      git clone https://github.com/erupsi/erupsi-erp.git
@@ -76,11 +77,17 @@ To get started with development, follow these steps:
      git clone git@github.com:erupsi/erupsi-erp.git
      cd erupsi-erp
      ```
-2. Install dependencies for both the frontend and backend:
+3. Install current dependencies for both the frontend and backend:
    ```bash
    # Make sure you're on the root of the project
    npm install
    ```
+4. Checkout to a new branch by following our [branching and commit guideline](#branching--commits-).
+5. Setup your service directory by following the [project structure](#project-structure-) above.
+6. Code and document your changes while following our [coding guidelines](#coding-guidelines-).
+7. [Test and lint](#testing--linting-) your code.
+8. Commit your changes by following our [branching and commit guideline](#branching--commits-).
+9. Once you're done making changes, open a [Pull Request](https://github.com/erupsi/erupsi-erp/pulls).
 
 ## Coding Guidelines 🛠
 
