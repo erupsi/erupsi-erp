@@ -234,7 +234,7 @@ contributing:
   CMD ["node", "src/index.js"]
 
   ```
-* Make sure you've already copied the `.dockerignore` file from another service aswell.
+* Make sure you've already copied the `.dockerignore` file from another service as well.
 * Ensure Docker Engine in your machine is running.
 * Build your container and tag it as "auth-service:latest":
   ```bash
