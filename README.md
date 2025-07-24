@@ -9,8 +9,8 @@ A modular, containerized ERP system built with modern web technologies.
 | Layer        | Technology         |
 |--------------|--------------------|
 | Backend      | Node.js (Express.js) |
-| API Gateway  | TBD (e.g. Express, NGINX, or custom) |
-| Frontend     | React (static site, hosted separately) |
+| API Gateway  | Traefik |
+| Frontend     | React, Tailwind CSS |
 | Database     | PostgreSQL         |
 | Containerization | Docker & Docker Compose |
 | Package Manager | npm with workspaces |
