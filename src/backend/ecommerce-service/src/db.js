@@ -3,9 +3,9 @@ const {Pool} = require('pg');
 const pool = new Pool({
     user: 'ecomuser',
     host: 'localhost',
-    database: "ecom_db",
+    database: "ecomdb",
     password: 'ecompass',
-    port: 5437
+    port: 5436
 });
 
 module.exports = pool;
