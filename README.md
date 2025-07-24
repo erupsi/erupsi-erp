@@ -142,8 +142,7 @@ Each service includes Swagger (OpenAPI) contract file.
 
 To view:
 
-* Visit `/docs` endpoint if available
-* Or open the raw `swagger.json` file in Swagger editor
+* Open the `openapi.yaml` file in [Swagger Editor](https://editor.swagger.io).
 
 ## ⚖️ License
 
