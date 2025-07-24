@@ -177,7 +177,7 @@ contributing:
   # Recheck again until all linting errors are resolved
   npm run lint
   ```
-* Ensure your tests cover atleast 80% of your code:
+* Ensure your tests cover at least 80% of your code:
   ```bash
   $ npm test
   
