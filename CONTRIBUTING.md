@@ -13,6 +13,7 @@ features, or contribute code, this guide will help you get started 🎉.
   * [Installing Dependencies](#installing-dependencies-)
   * [Testing & Linting](#testing--linting-)
   * [Building Docker Container](#building-docker-container-)
+  * [Running All Containers as a Whole](#running-all-containers-as-a-whole-)
   * [Pull Request Checklist](#pull-request-checklist-)
 * [How to Contribute](#how-to-contribute-)
 * [Need help or have ideas?](#need-help-or-have-ideas-)
@@ -255,6 +256,54 @@ contributing:
   ```bash
   # The container name is nifty_burnell as seen in the docker ps output
   docker stop nifty_burnell
+  ```
+
+### Running All Containers as a Whole 🌐
+
+* Make sure you've already add your service (and db if needed) in the `compose.yaml` file at the project's root. Here's our template that should fit most situation:
+  ```yaml
+  # === Your Service Name ===
+  <your-service-name>:
+    build:
+      context: .
+      dockerfile: src/backend/<your-service-name>/Dockerfile
+    container_name: erupsi-<your-service-name>
+    restart: unless-stopped
+    ports:
+      - "3001:3000" # Expose port 3000 of the service on host port 3001
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@<your-service-name>-db:5432/${POSTGRES_<YOUR_SERVICE_NAME>_DB}
+    depends_on:
+      - <your-service-name>-db
+    networks:
+      - erupsi-erp-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.<your-service-name>.rule=Host(`erupsi.docker.localhost`)"
+      - "traefik.http.routers.<your-service-name>.entrypoints=websecure"
+      - "traefik.http.routers.<your-service-name>.tls=true"
+
+  <your-service-name>-db:
+    image: postgres:17
+    container_name: erupsi-<your-service-name>-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - <your-service-name>_db_data:/var/lib/postgresql/data
+    networks:
+      - erupsi-erp-network
+  ```
+* Run all containers in background using Docker Compose:
+  ```bash
+  docker compose up -d
+  ```
+* Stop all running containers:
+  ```bash
+  docker compose down
   ```
 
 ### Pull Request Checklist ✅
