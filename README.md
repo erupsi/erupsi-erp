@@ -16,6 +16,17 @@ A modular, containerized ERP system built with modern web technologies.
 | Package Manager | npm with workspaces |
 | Dev Tools    | ESLint, remark, dotenv, Swagger, Jest |
 
+## 🧩 Architecture Diagram
+
+### Erupsi's Microservice Architecture
+
+<img width="2430" height="1734" alt="image" src="https://github.com/user-attachments/assets/841ff1dc-2762-4545-a1a0-7158a27435d2" />
+
+### Erupsi's Docker Compose
+
+<img width="1443" height="1648" alt="image" src="https://github.com/user-attachments/assets/c1438054-3eb9-4996-8a91-8b7704144af2" />
+
+
 ## 📁 Project Structure
 
 ```bash
