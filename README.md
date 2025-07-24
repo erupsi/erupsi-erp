@@ -97,7 +97,7 @@ Each service contains its own `README`, `package.json`, `Dockerfile`, .`.dockeri
 4. **Start the application stack using Docker Compose:**
 
    ```bash
-   docker-compose up --build
+   docker compose up -d
    ```
 
 > \[!TIP]
