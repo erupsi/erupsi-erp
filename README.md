@@ -65,7 +65,7 @@ A modular, containerized ERP system built with modern web technologies.
     │       └── src
     │           ├── index.js         <-- 🚪 service entry point
     │           └── routes           <-- 🚩 put your service routes here
-    │           
+    │
     └── frontend
         ├── package.json
         ├── README.md
