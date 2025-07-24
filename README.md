@@ -9,12 +9,23 @@ A modular, containerized ERP system built with modern web technologies.
 | Layer        | Technology         |
 |--------------|--------------------|
 | Backend      | Node.js (Express.js) |
-| API Gateway  | TBD (e.g. Express, NGINX, or custom) |
-| Frontend     | React (static site, hosted separately) |
+| API Gateway  | Traefik |
+| Frontend     | React, Tailwind CSS |
 | Database     | PostgreSQL         |
 | Containerization | Docker & Docker Compose |
 | Package Manager | npm with workspaces |
-| Dev Tools    | ESLint, remark, dotenv, Swagger |
+| Dev Tools    | ESLint, remark, dotenv, Swagger, Jest |
+
+## 🧩 Architecture Diagram
+
+### Erupsi's Microservice Architecture
+
+<img width="2430" height="1734" alt="image" src="https://github.com/user-attachments/assets/841ff1dc-2762-4545-a1a0-7158a27435d2" />
+
+### Erupsi's Docker Compose
+
+<img width="1443" height="1648" alt="image" src="https://github.com/user-attachments/assets/c1438054-3eb9-4996-8a91-8b7704144af2" />
+
 
 ## 📁 Project Structure
 
@@ -23,11 +34,17 @@ A modular, containerized ERP system built with modern web technologies.
 ├── .env.example
 ├── .eslintrc.json
 ├── .gitignore
+├── certs                            <-- 🔑 put your local environment (self-signed) certs here
+│   ├── local.crt
+│   └── local.key
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
-├── docker-compose.yml
+├── compose.yaml
 ├── docs
 │   └── CODEOWNERS
+├── dynamic
+│   └── tls.yaml
+├── jest.config.js
 ├── LICENSE
 ├── Makefile
 ├── README.md
@@ -44,9 +61,11 @@ A modular, containerized ERP system built with modern web technologies.
     │       ├── package.json         <-- managed using npm workspace from project root
     │       ├── README.md
     │       ├── __test__
-    │           └── some.test.js     <-- 🧪 Jest unit test file
+    │       │   └── some.test.js     <-- 🧪 Jest unit test file
     │       └── src
-    │           └── index.js         <-- 🚪 service entry point
+    │           ├── index.js         <-- 🚪 service entry point
+    │           └── routes           <-- 🚩 put your service routes here
+    │
     └── frontend
         ├── package.json
         ├── README.md
@@ -54,7 +73,7 @@ A modular, containerized ERP system built with modern web technologies.
             └── index.js
 ```
 
-Each service contains its own `package.json`, `Dockerfile`, `.env.example`, source code `src/`, and unit tests `__test__/*.test.js`.
+Each service contains its own `README`, `package.json`, `Dockerfile`, `.dockerignore`, `.env.example`, source code `src/`, and unit tests `__test__/*.test.js` (also an `openapi.yaml` for backend services).
 
 ## 🚀 Getting Started
 
@@ -89,7 +108,7 @@ Each service contains its own `package.json`, `Dockerfile`, `.env.example`, sour
 4. **Start the application stack using Docker Compose:**
 
    ```bash
-   docker-compose up --build
+   docker compose up -d
    ```
 
 > \[!TIP]
@@ -123,8 +142,7 @@ Each service includes Swagger (OpenAPI) contract file.
 
 To view:
 
-* Visit `/docs` endpoint if available
-* Or open the raw `swagger.json` file in Swagger editor
+* Open the `openapi.yaml` file in [Swagger Editor](https://editor.swagger.io).
 
 ## ⚖️ License
 
