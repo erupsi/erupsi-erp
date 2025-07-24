@@ -69,7 +69,7 @@ features, or contribute code, this guide will help you get started 🎉.
 To get started with development, follow these steps:
 
 1. Ensure you've become a collaborator for this repository. If you haven't become a collaborator for this repo and want to contribute, see [How to Contribute](#how-to-contribute-) section below.
-2. Make sure you have Node.js, Docker Desktop/Engine with Docker Compose, and your choosen API client installed.
+2. Make sure you have Node.js, Docker Desktop/Engine with Docker Compose, and your chosen API client installed.
 3. Clone the repository to your local machine (choose HTTPS or SSH):
    * **HTTPS** (recommended for most users):
      ```bash
