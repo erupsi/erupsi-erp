@@ -1,0 +1,43 @@
+# Ignore version control
+.git
+.gitignore
+
+# Ignore logs and temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.swp
+*.swo
+
+# Ignore dependency folders (will be reinstalled)
+node_modules/
+
+# Ignore env and secret files
+.env
+.env.*
+
+# Ignore tests and coverage (not needed in production image)
+test/
+__tests__/
+coverage/
+
+# Ignore documentation and markdown files
+docs/
+*.md
+*.markdown
+
+# Ignore Docker Compose and config files not needed in container
+docker-compose.*
+*.local.*
+*.dev.*
+
+# Optional: Ignore unrelated services if you copy the full repo
+# (adjust to match your monorepo layout)
+src/backend/workforce-management-service/
+src/frontend/
+
+# Optional: Ignore editor/IDE metadata
+.vscode/
+.idea/
+.DS_Store
