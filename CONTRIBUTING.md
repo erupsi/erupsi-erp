@@ -120,12 +120,12 @@ contributing:
 
 ### Testing & Linting 🧪
 
-* Each service should have its own test under `__test__`.
+* Each service should have its own tests under `__test__`.
 * Make sure all tests pass and there are no lint errors before pushing:
   ```bash
   # Run unit test for all workspaces
   npm run test --workspaces
-  # Run unit test for auth-service workspace
+  # Run unit test for your service only (e.g. auth-service)
   npm run test --workspace=auth-service
   # Check all linting
   npm run lint
@@ -145,6 +145,28 @@ contributing:
 
   # Recheck again until all linting errors are resolved
   npm run lint
+  ```
+* Ensure your tests cover atleast 80% of your code:
+  ```bash
+  $ npm test
+  
+  > erupsi-erd@1.0.0 test
+  > jest
+  
+   PASS  src/backend/user-service/__tests__/sum.test.js
+    ✓ adds 1 + 2 to equal 3 (4 ms)
+  
+  ----------|---------|----------|---------|---------|-------------------
+  File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+  ----------|---------|----------|---------|---------|-------------------
+  All files |     100 |      100 |     100 |     100 |                   
+   sum.js   |     100 |      100 |     100 |     100 |                   
+  ----------|---------|----------|---------|---------|-------------------
+  Test Suites: 1 passed, 1 total
+  Tests:       1 passed, 1 total
+  Snapshots:   0 total
+  Time:        1.105 s
+  Ran all test suites.
   ```
 
 ### Pull Request Checklist ✅
