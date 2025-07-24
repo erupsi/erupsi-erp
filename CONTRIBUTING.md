@@ -102,7 +102,7 @@ contributing:
 
 * Use [ESLint](https://eslint.org/) for code linting. See the `.eslintrc.json` files to learn about the rules used for this project and the [ESLint](https://eslint.org/docs/latest/use/configure/) docs.
 * Use [Tailwind CSS](https://tailwindcss.com/docs/utility-first) utility classes for styling in React components.
-* Keep services modular and loosely coupled. One service focus on doing good at it's job.
+* Keep services modular and loosely coupled. One service focuses on doing good at its job.
 * Use environment variables for configuration (`.env`) and **DO NOT** commit it. You may use either project-level or service-level env file, or both.
 * Document API endpoints in each service's `openapi.yaml`.
 * Use clear, descriptive names for variables, functions, and components (`startTime`, `employeeId`, etc).
