@@ -62,7 +62,7 @@ A modular, containerized ERP system built with modern web technologies.
             └── index.js
 ```
 
-Each service contains its own `README`, `package.json`, `Dockerfile`, .`.dockerignore`, `.env.example`, source code `src/`, and unit tests `__test__/*.test.js` (also an `openapi.yaml` for backend services.
+Each service contains its own `README`, `package.json`, `Dockerfile`, .`.dockerignore`, `.env.example`, source code `src/`, and unit tests `__test__/*.test.js` (also an `openapi.yaml` for backend services).
 
 ## 🚀 Getting Started
 
