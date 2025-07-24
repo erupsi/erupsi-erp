@@ -22,11 +22,17 @@ features, or contribute code, this guide will help you get started 🎉.
 ├── .env.example
 ├── .eslintrc.json
 ├── .gitignore
+├── certs                            <-- 🔑 put your local environment (self-signed) certs here
+│   ├── local.crt
+│   └── local.key
 ├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
-├── docker-compose.yml
+├── compose.yaml
 ├── docs
 │   └── CODEOWNERS
+├── dynamic
+│   └── tls.yaml
+├── jest.config.js
 ├── LICENSE
 ├── Makefile
 ├── README.md
@@ -43,9 +49,11 @@ features, or contribute code, this guide will help you get started 🎉.
     │       ├── package.json         <-- managed using npm workspace from project root
     │       ├── README.md
     │       ├── __test__
-    │           └── some.test.js     <-- 🧪 Jest unit test file
+    │       │   └── some.test.js     <-- 🧪 Jest unit test file
     │       └── src
-    │           └── index.js         <-- 🚪 service entry point
+    │           ├── index.js         <-- 🚪 service entry point
+    │           └── routes           <-- 🚩 put your service routes here
+    │           
     └── frontend
         ├── package.json
         ├── README.md
