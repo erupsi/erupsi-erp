@@ -14,7 +14,7 @@ A modular, containerized ERP system built with modern web technologies.
 | Database     | PostgreSQL         |
 | Containerization | Docker & Docker Compose |
 | Package Manager | npm with workspaces |
-| Dev Tools    | ESLint, remark, dotenv, Swagger |
+| Dev Tools    | ESLint, remark, dotenv, Swagger, Jest |
 
 ## 📁 Project Structure
 
