@@ -159,8 +159,66 @@ const getAllEmployeeDetails = async () => {
   return result
 }
 
+const assignEmployeeWithRoles = async (employeeId, rolesPayload = {}) => {
+  const client = await pool.connect(); // Get a client from the pool
+
+  try {
+    await client.query('BEGIN'); // Start transaction
+    
+    const roles = rolesPayload.roles;
+
+    // Validate roles input
+    if (!Array.isArray(roles) || !roles.every(role => typeof role === 'string')) {
+      throw new Error('Properti "roles" harus berupa array dengan elemen string.');
+    }
+
+    // Fetch role IDs for the given roles
+    const roleIds = [];
+
+    if (roles.length > 0) { // Hanya proses jika ada peran yang diminta
+      // Menggunakan klausa ANY untuk mengambil semua roleid dalam satu query
+      const roleQuery = `SELECT roleid, name FROM roles WHERE name = ANY($1)`;
+      const roleResult = await client.query(roleQuery, [roles]);
+
+      if (roleResult.rows.length !== roles.length) {
+        // Identifikasi peran mana yang tidak ditemukan
+        const foundRoleNames = roleResult.rows.map(row => row.name);
+        const notFoundRoles = roles.filter(roleName => !foundRoleNames.includes(roleName));
+        return{ success: false, message: `Beberapa peran tidak ditemukan: ${notFoundRoles.join(', ')}.`};
+      }
+      roleIds.push(...roleResult.rows.map(row => row.roleid));
+    }
+
+    await client.query(`DELETE FROM employee_roles WHERE employee_id = $1`, [employeeId])
+
+    // Insert employeeId and roleId into employee_roles table
+    if (roleIds.length > 0) { // Hanya sisipkan jika ada roleId yang valid
+        const valuesPlaceholder = roleIds.map((_, index) => `($1, $${index + 2})`).join(', ');
+        const insertParams = [employeeId, ...roleIds];
+
+        const employeeRoleQuery = `
+            INSERT INTO employee_roles (employee_id, role_id)
+            VALUES ${valuesPlaceholder}
+            ON CONFLICT (employee_id, role_id) DO NOTHING; -- Menghindari duplikat jika ada race condition
+        `;
+        await client.query(employeeRoleQuery, insertParams);
+    }
+
+    await client.query('COMMIT'); // Commit transaction
+    return { success: true, message: 'Roles pegawai berhasil diubah.' };
+
+  } catch (err) {
+    await client.query('ROLLBACK'); // Rollback transaction on error
+    console.error('Error assigning roles to employee:', err);
+    return { success: false, message: 'Gagal mengubah roles ke pegawai.' };
+
+  } finally {
+    client.release(); // Release the client back to the pool
+  }
+}
 
 
-module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, getAllEmployeeDetails}
+
+module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, getAllEmployeeDetails, assignEmployeeWithRoles}
 
 
