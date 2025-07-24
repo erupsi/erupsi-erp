@@ -4,16 +4,12 @@ const pool = require("../db");
 
 router.get("/", async (req, res) => {
     try {
-        const result = await pool.query("SELECT * FROM products");
+        const result = await pool.query("SELECT * FROM consumers");
         res.json(result.rows);
     } catch (err) {
         console.error(err);
         res.status(500).send("Server Error");
     }
-});
-
-router.get("/add", async (req, res) => {
-    res.send("hello mother!")
 });
 
 module.exports = router;
