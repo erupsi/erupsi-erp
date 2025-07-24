@@ -12,6 +12,7 @@ features, or contribute code, this guide will help you get started 🎉.
   * [Branching & Commits](#branching--commits-)
   * [Installing Dependencies](#installing-dependencies-)
   * [Testing & Linting](#testing--linting-)
+  * [Building Docker Container](#building-docker-container-)
   * [Pull Request Checklist](#pull-request-checklist-)
 * [How to Contribute](#how-to-contribute-)
 * [Need help or have ideas?](#need-help-or-have-ideas-)
@@ -196,6 +197,33 @@ contributing:
   Snapshots:   0 total
   Time:        1.105 s
   Ran all test suites.
+  ```
+
+### Building Docker Container 🐋
+
+* Make sure your service have a `Dockerfile`. You can copy it from another service and change the paths inside it.
+* Make sure you've already copied the `.dockerignore` file from another service aswell.
+* Ensure Docker Engine in your machine is running.
+* Build your container and tag it as "auth-service:latest":
+  ```bash
+  # Example for building auth-service container
+  docker build -f src/backend/auth-service/Dockerfile -t auth-service:latest .
+  ```
+* Run your container and expose it at port 3000:
+  ```bash
+  # --rm option will automatically deletes the container upon the container have been stopped
+  docker run --rm -p 3000:3000 auth-service
+  ```
+* See all running containers in your machine:
+  ```bash
+  $ docker ps
+  CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+  4008ad2fe50c   auth-service   "docker-entrypoint.s…"   27 seconds ago   Up 26 seconds   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   nifty_burnell
+  ```
+* Stop your service's container:
+  ```bash
+  # The container name is nifty_burnell as seen in the docker ps output
+  docker stop nifty_burnell
   ```
 
 ### Pull Request Checklist ✅
