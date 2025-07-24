@@ -201,7 +201,38 @@ contributing:
 
 ### Building Docker Container 🐋
 
-* Make sure your service have a `Dockerfile`. You can copy it from another service and change the paths inside it.
+* Make sure your service have a `Dockerfile`. You can copy it from another service and change the paths inside it. Our Dockerfile template should be sufficient for your need:
+  ```Dockerfile
+  # Make sure to point docker context to the monorepo root when building this Dockerfile.
+
+  # Stage 1: Builder
+  FROM node:20-alpine AS builder
+  
+  # Set working directory
+  WORKDIR /app
+  
+  # Copy the entire monorepo (minimized with .dockerignore)
+  COPY ../../.. .
+  
+  # Install only dependencies for this workspace
+  RUN npm install --workspace=src/backend/<your-service-dir> --production
+  
+  # Stage 2: Copy only the built node_modules and source to a clean runtime image
+  FROM node:20-alpine AS runtime
+  
+  WORKDIR /app
+  
+  # Copy installed node_modules from builder stage
+  COPY --from=builder /app/node_modules ./node_modules
+  COPY --from=builder /app/src/backend/<your-service-dir> .
+  
+  # Set Node.js environment (optional)
+  ENV NODE_ENV=production
+  
+  # Set default command
+  CMD ["node", "src/index.js"]
+
+  ```
 * Make sure you've already copied the `.dockerignore` file from another service aswell.
 * Ensure Docker Engine in your machine is running.
 * Build your container and tag it as "auth-service:latest":
