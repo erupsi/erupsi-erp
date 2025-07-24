@@ -10,6 +10,7 @@ features, or contribute code, this guide will help you get started 🎉.
 * [Coding Guidelines](#coding-guidelines-)
   * [General Guidelines](#general-guidelines-)
   * [Branching & Commits](#branching--commits-)
+  * [Installing Dependencies](#installing-dependencies-)
   * [Testing & Linting](#testing--linting-)
   * [Pull Request Checklist](#pull-request-checklist-)
 * [How to Contribute](#how-to-contribute-)
@@ -117,6 +118,34 @@ contributing:
   * Use `style:` for changes that do not affect the meaning of the code (white-space, formatting, etc.).
   * Use `refactor:` for code changes that neither fix a bug nor add a feature.
   * Use `test:` for adding missing tests or correcting existing tests.
+
+### Installing Dependencies 📦
+
+* All service `package.json` belong to **root** `package.json` as npm workspaces. All package.json share a single `package-lock.json` file.
+* Do all package operations at the project's root.
+* If you need to do package operations only for your service, specify your package name by using `--workspace=<package_name>` option.
+* To install dependencies at the project's root:
+  ```bash
+  npm install
+  ```
+* To install **new** dependencies at the project root:
+  ```bash
+  npm install package1 package2...
+  ```
+* To install new **development** dependencies at the project root:
+  ```bash
+  npm install --save-dev package1 package2
+  ```
+* To initialize a new `package.json` in your service and add it to the npm workspace:
+  ```bash
+  # Example for npm init for auth-service located in src/backend/auth-service
+  npm init --workspace=src/backend/auth-service
+  ```
+* To install new dependencies specific for your service:
+  ```bash
+  # Example for installing deps in auth-service
+  npm install --workspace=auth-service package1 package2
+  ```
 
 ### Testing & Linting 🧪
 
