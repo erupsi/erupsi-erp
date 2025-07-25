@@ -1,7 +1,8 @@
+// src/backend/workforce-management-service/src/models/shift.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const LeaveRequest = sequelize.define('LeaveRequest', {
+const Shift = sequelize.define('Shift', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -11,28 +12,23 @@ const LeaveRequest = sequelize.define('LeaveRequest', {
         type: DataTypes.UUID,
         allowNull: false,
     },
-    start_date: {
-        type: DataTypes.DATEONLY,
+    shift_date: {
+        type: DataTypes.DATEONLY, // Tipe data hanya untuk tanggal
         allowNull: false,
     },
-    end_date: {
-        type: DataTypes.DATEONLY,
+    start_time: {
+        type: DataTypes.TIME, // Tipe data hanya untuk waktu
         allowNull: false,
     },
-    reason: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    status: {
-        type: DataTypes.ENUM('pending', 'approved', 'rejected'),
-        defaultValue: 'pending',
+    end_time: {
+        type: DataTypes.TIME,
         allowNull: false,
     },
 }, {
-    tableName: 'leave_requests',
-    timestamps: true,
+    tableName: 'shifts',
+    timestamps: true, // Otomatis menambahkan kolom createdAt dan updatedAt
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
 
-module.exports = LeaveRequest;
+module.exports = Shift;

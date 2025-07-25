@@ -1,11 +1,31 @@
-class Attendances {
-    constructor(id, employee_id, check_in, check_out, status) {
-        this.id = id;
-        this.employee_id = employee_id;
-        this.check_in = check_in;
-        this.check_out = check_out;
-        this.status = status;
-    }
-}
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-module.exports = Attendances;
+const Attendance = sequelize.define('Attendance', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    employee_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+    },
+    check_in: {
+        type: DataTypes.DATE, // Menggunakan DATE (TIMESTAMP) untuk waktu dan tanggal
+        allowNull: false,
+    },
+    check_out: {
+        type: DataTypes.DATE,
+        allowNull: true, // check_out bisa null saat karyawan baru check-in
+    },
+    status: {
+        type: DataTypes.ENUM('on_time', 'late', 'absent'),
+        allowNull: false,
+    },
+}, {
+    tableName: 'attendances',
+    timestamps: false, // Tabel ini tidak memerlukan created_at/updated_at
+});
+
+module.exports = Attendance;

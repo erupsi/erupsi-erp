@@ -8,8 +8,14 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7"
   },
   "author": "Mochammad Azriel Albian Putra <azrielalbian23@gmail.com>",
-  "license": "-"
+  "license": "-",
+  "devDependencies": {
+    "eslint": "^8.57.1"
+  }
 }

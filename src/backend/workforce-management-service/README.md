@@ -1,8 +1,8 @@
 # Workforce Management Service (WFM)
 
-**Update Terakhir**: 24 Juli 2025
+**Update Terakhir**: 25 Juli 2025
 
-[cite_start]Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan manajemen tenaga kerja, termasuk penjadwalan, absensi, dan pengajuan cuti, sesuai dengan dokumen **SKPL WFM**. [cite: 26, 28, 218, 219, 220] [cite_start]Layanan ini dirancang sebagai sebuah mikroservis backend yang terintegrasi penuh dengan layanan lain seperti *Auth Service* dan *User Service*. [cite: 30]
+Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan manajemen tenaga kerja, termasuk penjadwalan, absensi, dan pengajuan cuti. Layanan ini dirancang sebagai sebuah mikroservis backend yang terintegrasi penuh dengan layanan lain seperti *Auth Service* dan *User Service*.
 
 ---
 
@@ -12,85 +12,127 @@
 2.  [Rencana Pengembangan (Roadmap)](#2-rencana-pengembangan-roadmap)
 3.  [Endpoint API (V1)](#3-endpoint-api-v1)
 4.  [Arsitektur & Teknologi](#4-arsitektur--teknologi)
-5.  [Cara Menjalankan Lokal](#5-cara-menjalankan-lokal)
-6.  [Langkah Selanjutnya](#6-langkah-selanjutnya)
+5.  [Model Data (Struktur Database)](#5-model-data-struktur-database)
+6.  [Interaksi Antar Layanan](#6-interaksi-antar-layanan)
+7.  [Peran dan Hak Akses Pengguna (V1)](#7-peran-dan-hak-akses-pengguna-v1)
+8.  [Cara Menjalankan Lokal](#8-cara-menjalankan-lokal)
+9.  [Langkah Selanjutnya](#9-langkah-selanjutnya)
 
 ---
 
 ## 1. Status Saat Ini
 
-Ini adalah penyiapan awal **(Initial Setup)** untuk layanan WFM (V1). Fondasi dasar telah dibuat, termasuk:
+**Fungsionalitas Inti V1 Selesai.**
+Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
 -   Struktur direktori untuk model, rute, dan *middleware*.
--   Konfigurasi sebagai *workspace* di dalam monorepo.
--   Kerangka dasar server Express.js.
--   [cite_start]*Endpoint* API placeholder untuk fitur-fitur inti V1. [cite: 52, 53, 54, 55, 56]
--   [cite_start]*Middleware* placeholder untuk otentikasi dan otorisasi. [cite: 67]
+-   Koneksi ke database PostgreSQL dengan Sequelize.
+-   Implementasi **CRUD** (Create, Read, Update, Delete) penuh untuk *endpoint* `shifts`.
+-   Implementasi fungsionalitas dasar untuk `leave_requests` dan `attendances`.
+-   Kerangka kerja untuk otentikasi dan otorisasi.
 
 ---
 
 ## 2. Rencana Pengembangan (Roadmap)
 
-[cite_start]Pengembangan layanan ini dibagi menjadi tiga tahap utama: [cite: 32]
-
 -   **✅ V1: Fondasi Inti**
-    -   [cite_start]Integrasi dengan *Auth Service* & *User Service*. [cite: 239]
-    -   [cite_start]Manajemen jadwal kerja (*shifts*) dan absensi dasar. [cite: 241]
-    -   [cite_start]Otorisasi berbasis peran (Manajer, Karyawan, Admin). [cite: 242]
+    -   Integrasi dengan *Auth Service* & *User Service*.
+    -   Manajemen jadwal kerja (*shifts*) dan absensi dasar.
+    -   Otorisasi berbasis peran (Manajer, Karyawan, Admin).
 
 -   **⏳ V2: Peningkatan Nilai Tambah**
-    -   [cite_start]Perencanaan kapasitas. [cite: 246]
-    -   [cite_start]Dasbor visibilitas untuk manajer. [cite: 248]
-    -   [cite_start]Wawasan pribadi untuk karyawan. [cite: 249]
+    -   Perencanaan kapasitas.
+    -   Dasbor visibilitas untuk manajer.
+    -   Wawasan pribadi untuk karyawan.
 
 -   **📅 V3: Fitur Jangka Panjang**
-    -   [cite_start]Pelacakan produktivitas, wawasan lokasi, dan analitik prediktif. [cite: 39, 254, 256, 259]
+    -   Pelacakan produktivitas, wawasan lokasi, dan analitik prediktif.
 
 ---
 
 ## 3. Endpoint API (V1)
 
-Berikut adalah *endpoint* yang telah didefinisikan kerangkanya untuk versi pertama:
-
 #### **Shifts**
--   [cite_start]`POST /shifts` - Membuat jadwal kerja baru. [cite: 52]
--   [cite_start]`GET /shifts` - Mengambil data jadwal berdasarkan filter. [cite: 53, 54]
--   [cite_start]`PUT /shifts/:id` - Memperbarui shift yang sudah ada. [cite: 55]
--   [cite_start]`DELETE /shifts/:id` - Menghapus sebuah shift. [cite: 56]
+-   `POST /shifts` - Membuat jadwal kerja baru.
+-   `GET /shifts` - Mengambil data jadwal.
+-   `PUT /shifts/:id` - Memperbarui shift yang sudah ada.
+-   `DELETE /shifts/:id` - Menghapus sebuah shift.
 
 #### **Leave Requests**
--   [cite_start]`POST /leave-requests` - Mengajukan permintaan cuti/izin. [cite: 176]
--   `GET /leave-requests/team` - Melihat daftar permintaan dari tim (untuk manajer).
+-   `POST /leave-requests` - Mengajukan permintaan cuti/izin.
+-   `GET /leave-requests/team` - Melihat daftar permintaan dari tim.
 -   `PUT /leave-requests/:id/status` - Menyetujui atau menolak permintaan.
 
 #### **Attendances**
--   [cite_start]`POST /attendances/check-in` - Mencatat waktu masuk kerja. [cite: 202]
--   [cite_start]`PUT /attendances/check-out/:id` - Mencatat waktu keluar kerja. [cite: 202]
--   [cite_start]`GET /attendances/history` - Melihat riwayat absensi pribadi. [cite: 249]
+-   `POST /attendances/check-in` - Mencatat waktu masuk kerja.
+-   `PUT /attendances/check-out/:id` - Mencatat waktu keluar kerja.
+-   `GET /attendances/history` - Melihat riwayat absensi pribadi.
 
 ---
 
 ## 4. Arsitektur & Teknologi
 
--   [cite_start]**Arsitektur**: Mikroservis yang berkomunikasi via API REST. [cite: 142, 143]
--   [cite_start]**Backend**: Node.js. [cite: 97]
--   [cite_start]**Database**: PostgreSQL. [cite: 97]
--   [cite_start]**Tools**: Docker & OpenAPI/Swagger. [cite: 97, 98]
+-   **Arsitektur**: Mikroservis yang berkomunikasi via API REST.
+-   **Backend**: Node.js & Express.js.
+-   **Database**: PostgreSQL dengan Sequelize ORM.
+-   **Tools**: Docker & OpenAPI/Swagger.
 
 ---
 
-## 5. Cara Menjalankan Lokal
+## 5. Model Data (Struktur Database)
 
-1.  Pastikan Anda berada di direktori **root** proyek.
-2.  Jalankan perintah berikut di terminal:
+| Tabel | Deskripsi |
+| :--- | :--- |
+| `employees` | Pusat informasi personalia, posisi, dan struktur tim. |
+| `shifts` | Alokasi jadwal kerja spesifik (tanggal & jam) per karyawan. |
+| `attendances`| Catatan `check-in` & `check-out` aktual. |
+| `leave_requests` | Alur pengajuan dan persetujuan cuti/izin. |
+
+---
+
+## 6. Interaksi Antar Layanan
+
+| Layanan | Tujuan | Contoh Interaksi |
+| :--- | :--- | :--- |
+| **Mengonsumsi dari:** | | |
+| Auth Service | Memverifikasi identitas dan hak akses pengguna. | WFM mengirim token ke `POST /auth/validate`. |
+| User Service | Mendapatkan data master karyawan yang akurat. | WFM memanggil `GET /api/users` untuk mengambil daftar staf. |
+| **Menyediakan untuk:** | | |
+| Aplikasi Frontend | Memberdayakan seluruh fungsi pada UI. | Frontend memanggil `GET /api/wfm/shifts` atau `POST /api/wfm/leave-requests`. |
+| Finansial/Payroll| Menyediakan data jam kerja untuk perhitungan gaji. | Payroll memanggil `GET /api/wfm/payroll-summary`. |
+
+---
+
+## 7. Peran dan Hak Akses Pengguna (V1)
+
+- **Manajer / Supervisor 🧑‍💼**: CRUD pada jadwal timnya, Approve/Reject permintaan cuti.
+- **Karyawan (Employee) 👤**: Baca jadwal pribadi, Buat permintaan cuti, Lakukan `check-in/out`.
+- **Admin / HR ⚙️**: Akses global *read-only*, manajemen konfigurasi, dan intervensi manual.
+
+---
+
+## 8. Cara Menjalankan Lokal
+
+1.  Pastikan layanan PostgreSQL berjalan.
+2.  Pastikan file `.env` di direktori root sudah terisi dengan benar.
+3.  Jalankan perintah berikut di terminal dari direktori root proyek:
     ```bash
     npm start --workspace=workforce-management-service
     ```
-3.  Layanan akan berjalan di `http://localhost:3003`.
+4.  Layanan akan berjalan di `http://localhost:3003`.
+
+> **⚠️ DISCLAIMER UNTUK PENGUJIAN LOKAL**
+>
+> Konfigurasi saat ini **hanya untuk pengujian lokal** dan **tidak terhubung** ke layanan lain seperti *Auth Service*.
+>
+> - **Otentikasi Dinonaktifkan**: *Middleware* `authenticateToken` dan `authorizeManager` di semua file rute telah dinonaktifkan sementara (dijadikan komentar atau *commented out*).
+> - **Data Pengguna Statis**: Kode ini menggunakan ID pengguna statis (*hardcoded*) untuk membuat data baru.
+>
+> **Untuk menyambungkan ke API lain:** Anda harus **mengaktifkan kembali** *middleware* tersebut dan menghapus ID statis dari kode *controller*.
 
 ---
 
-## 6. Langkah Selanjutnya
+## 9. Langkah Selanjutnya
 
--   Koneksi ke database PostgreSQL dan implementasi model data.
--   Mengisi logika bisnis di dalam fungsi-fungsi *controller* sesuai spesifikasi.
--   Menulis unit test menggunakan Jest untuk setiap fitur.
+-   Membuat model `Employee` dan mendefinisikan relasi antar tabel.
+-   Mengimplementasikan logika bisnis yang lebih kompleks (contoh: validasi `check-in` terhadap jadwal).
+-   Menulis unit test menggunakan Jest untuk setiap fitur yang telah dibuat.

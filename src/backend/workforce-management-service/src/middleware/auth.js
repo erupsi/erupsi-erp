@@ -9,7 +9,7 @@ function authenticateToken(req, res, next) {
 
     const postData = JSON.stringify({ token });
     const options = { /* ... */ };
-    const authReq = http.request(options, (authRes) => { /* ... */ });
+    const authReq = http.request(options, (authRes) => {/* ... */});
     authReq.on('error', (e) => res.sendStatus(500));
     authReq.write(postData);
     authReq.end();
@@ -26,5 +26,5 @@ function authorizeManager(req, res, next) {
 // Pastikan bagian ini ada dan benar
 module.exports = {
     authenticateToken,
-    authorizeManager
+    authorizeManager,
 };
