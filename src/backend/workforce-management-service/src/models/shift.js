@@ -24,6 +24,11 @@ const Shift = sequelize.define('Shift', {
         type: DataTypes.TIME,
         allowNull: false,
     },
+    status: {
+        type: DataTypes.ENUM('active', 'on_leave'),
+        defaultValue: 'active',
+        allowNull: false,
+    },
 }, {
     tableName: 'shifts',
     timestamps: true, // Otomatis menambahkan kolom createdAt dan updatedAt

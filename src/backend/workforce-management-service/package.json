@@ -16,6 +16,7 @@
   "author": "Mochammad Azriel Albian Putra <azrielalbian23@gmail.com>",
   "license": "-",
   "devDependencies": {
-    "eslint": "^8.57.1"
+    "eslint": "^8.57.1",
+    "supertest": "^7.1.4"
   }
 }

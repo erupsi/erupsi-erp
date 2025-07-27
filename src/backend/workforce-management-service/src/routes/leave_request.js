@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 // const {authenticateToken, authorizeManager} = require("../middleware/auth");
-const LeaveRequest = require('../models/leave_request');
+const { LeaveRequest, Shift } = require('../models'); // <-- Perbarui ini
+const { Op } = require('sequelize');
 
 const leaveRequestController = {
     /**
@@ -43,12 +44,18 @@ const leaveRequestController = {
      * @param {object} req
      * @param {object} res
      */
+
     getTeamLeaveRequests: async (req, res) => {
         try {
-            // TODO: Logika ini memerlukan model Employee untuk mengetahui siapa saja
-            // anggota tim dari manajer (req.user.user_id).
-            // Untuk sekarang, kita kembalikan semua permintaan yang ada.
-            const requests = await LeaveRequest.findAll();
+            const managerId = 'uuid-manajer-statis-untuk-tes';
+            const teamMemberIds = await getTeamMemberIds(managerId);
+
+            const requests = await LeaveRequest.findAll({
+                where: {
+                    employee_id: teamMemberIds,
+                },
+            });
+
             res.status(200).json(requests);
         } catch (error) {
             console.error('Gagal mengambil data pengajuan cuti tim:', error);
@@ -56,7 +63,53 @@ const leaveRequestController = {
                 .json({ error: 'Terjadi kesalahan pada server.' });
         }
     },
+    /**
+     * @param {object} req
+     * @param {object} res
+     */
+    updateLeaveRequestStatus: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
 
+            if (!status || !['approved', 'rejected'].includes(status)) {
+                return res.status(400).json({ error: 'Status tidak valid.' });
+            }
+
+            const requestToUpdate = await LeaveRequest.findByPk(id);
+
+            if (!requestToUpdate) {
+                return res.status(404).json({ error: 'Pengajuan cuti tidak ditemukan.' });
+            }
+
+            requestToUpdate.status = status;
+            await requestToUpdate.save();
+
+            // --- LOGIKA BISNIS BARU DIMULAI DI SINI ---
+            if (status === 'approved') {
+                await Shift.update(
+                    { status: 'on_leave' }, // Data yang diubah
+                    {
+                        where: {
+                            employee_id: requestToUpdate.employee_id,
+                            shift_date: {
+                                [Op.between]: [requestToUpdate.start_date, requestToUpdate.end_date],
+                            },
+                        },
+                    },
+                );
+            }
+            // --- LOGIKA BISNIS SELESAI ---
+
+            res.status(200).json({
+                message: `Status pengajuan cuti berhasil diubah menjadi ${status}`,
+                data: requestToUpdate,
+            });
+        } catch (error) {
+            console.error('Gagal memperbarui status pengajuan cuti:', error);
+            res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
+        }
+    },
     /**
      * @param {object} req
      * @param {object} res

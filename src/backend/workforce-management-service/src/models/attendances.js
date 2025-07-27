@@ -23,6 +23,10 @@ const Attendance = sequelize.define('Attendance', {
         type: DataTypes.ENUM('on_time', 'late', 'absent'),
         allowNull: false,
     },
+    duration_hours: {
+        type: DataTypes.DECIMAL(5, 2), // Precision 5, scale 2 (misal: 123.45 jam)
+        allowNull: true,
+    },
 }, {
     tableName: 'attendances',
     timestamps: false, // Tabel ini tidak memerlukan created_at/updated_at

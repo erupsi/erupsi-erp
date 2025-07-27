@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeManager } = require('../middleware/auth');
-const Shift = require('../models/shift'); // Impor model Shift
+const { Shift } = require('../models'); // Impor model Shift
 
 const shiftController = {
     // FUNGSI YANG HILANG SEBELUMNYA
