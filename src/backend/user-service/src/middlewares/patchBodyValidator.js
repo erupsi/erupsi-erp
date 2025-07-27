@@ -4,7 +4,6 @@ const ALLOWED_USER_PATCH_FIELDS = ['full_name', 'email', 'department', 'position
 const patchBodyValidator = () => {
   return [
     // 1. Validasi ID di URL (gunakan .isInt() jika ID numerik)
-    param('employeeId').isUUID().withMessage('ID employee tidak valid.'),
 
     // 2. Validasi body request
     body().custom(reqBody => {

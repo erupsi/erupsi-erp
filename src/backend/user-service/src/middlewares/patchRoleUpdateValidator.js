@@ -2,7 +2,6 @@ const { body, param, validationResult } = require('express-validator');
 
 const patchRoleValidator = () => {
   return [
-    param('employeeId').isUUID().withMessage('ID employee tidak valid.'),
     body().custom(reqBody => {
     const errors = []; // Deklarasikan errors di sini
       for (const key in reqBody) {

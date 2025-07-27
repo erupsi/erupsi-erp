@@ -41,4 +41,4 @@ const authenticateServiceRequest = (options = {useRole: false}) => {
   }
 }
 
-module.exports = {authenticateServiceRequest};
+module.exports = authenticateServiceRequest;

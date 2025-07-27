@@ -1,14 +1,11 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
 const urmRoutes = require("./routes/urm.routes")
 require('dotenv').config({ path: '../.env' });
 
 const app = express();
 const PORT = process.env.PORT;
-const JWT_SECRET = process.env.PORT;
 
-app.use(bodyParser.json())
+app.use(express.json())
 app.use("/urm", urmRoutes)
 
 app.get('/', (req, res) => {

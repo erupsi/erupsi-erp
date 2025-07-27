@@ -27,9 +27,9 @@ router.post("/register", authenticateAdmin, async(req, res, next) => {
     const register = await registerUser(newEmployeeId, username, initialPasswordHashed)
     
     if(register.success === true){
-      res.status(201).json({message: "Pengguna berhasil didaftarkan"})
+      res.status(201).json({message: "Pegawai berhasil didaftarkan"})
     }else{
-      res.status(400).json({message: result.message || "Gagal mendaftarkan pengguna"})
+      res.status(400).json({message: result.message || "Gagal mendaftarkan pegawai"})
     }
     res.status(200).json({message: "Req success"})
   } catch(error) {

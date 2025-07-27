@@ -1,6 +1,6 @@
 const pool = require('./db');
 
-const getEmployeeDetailByEmployeeId = async (employeeId) => {
+const findEmployeeDetailByEmployeeId = async (employeeId) => {
   try {
     const query = `SELECT 
         employees.full_name,
@@ -65,12 +65,12 @@ const insertEmployeeDetailsToDb = async (employeeId, fullName, email, department
     console.error('Error inserting employee details:', err);
     return { success: false, message: 'Failed to insert employee details' };
   
-  } finally {
-    client.release(); // Release the client back to the pool
+  } finally {  
+    client.release(); // Release the client back to the pool 
   }
 }
 
-const checkEmployeeById = async (employeeId) => {
+const findEmployeeById = async (employeeId) => {
   const checkUserResult = await pool.query('SELECT * FROM employees WHERE employeeId = $1', [employeeId]);
   if (checkUserResult.rows.length === 0) {
     return {success: false, message: 'pegawai tidak ditemukan.'}
@@ -141,7 +141,7 @@ const deleteEmployeeBasedOnId = async (employeeId) => {
   }
 }
 
-const getAllEmployeeDetails = async () => {
+const findAllEmployeeDetails = async () => {
   const sql = `SELECT 
       employees.employeeId,
       employees.full_name,
@@ -159,7 +159,7 @@ const getAllEmployeeDetails = async () => {
   return result
 }
 
-const assignEmployeeWithRoles = async (employeeId, rolesPayload = {}) => {
+const insertRolesToEmployee = async (employeeId, rolesPayload = {}) => {
   const client = await pool.connect(); // Get a client from the pool
 
   try {
@@ -217,8 +217,44 @@ const assignEmployeeWithRoles = async (employeeId, rolesPayload = {}) => {
   }
 }
 
+const findAllRoles = async () => {
+  const sql = 
+  `SELECT
+    roleid,
+    name,
+    display_name,
+    description
+  FROM
+    roles;`;
+  
+  const result = await pool.query(sql);
+  return result.rows;
+}
 
+const findRoleByName = async (name) => {
+  const sql = `SELECT * FROM roles WHERE name = $1;`
 
-module.exports = {getEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, checkEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, getAllEmployeeDetails, assignEmployeeWithRoles}
+  const result = await pool.query(sql, [name])
+
+  return result.rows
+}
+
+const insertRoleToDb = async (newRoleId, name, display_name, description) => {
+  const client = await pool.connect();
+  try{
+    await client.query('BEGIN')
+    const sql = `INSERT INTO roles (roleid, name, display_name, description) VALUES ($1, $2, $3, $4)`
+    const result = await client.query(sql, [newRoleId, name, display_name, description]) 
+    await client.query('COMMIT')
+    return { success: true, message: 'Roles added successfully'};
+    
+  }catch(error){
+    await client.query('ROLLBACK'); // Rollback transaction on error
+    console.error('Error adding roles details:', error);
+    return { success: false, message: 'Failed to add roles' };
+  }
+}
+
+module.exports = {findEmployeeDetailByEmployeeId, insertEmployeeDetailsToDb, findEmployeeById, updateEmployeePartially, deleteEmployeeBasedOnId, findAllEmployeeDetails, insertRolesToEmployee, findAllRoles, insertRoleToDb, findRoleByName}
 
 
