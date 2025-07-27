@@ -25,7 +25,7 @@ const authenticateServiceRequest = (options = {useRole: false}) => {
       });
 
       if(options.useRole == true) {
-        if(!decoded || !decoded.role.includes('SYSTEM_ADMIN')){
+        if(!decoded || !decoded.role || !Array.isArray(decoded.role) || !decoded.role.includes('SYSTEM_ADMIN')){
           return res.status(403).json({message: "Access denied: Admin privileges required"})
         }
       }
