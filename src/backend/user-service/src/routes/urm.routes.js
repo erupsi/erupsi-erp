@@ -14,26 +14,50 @@ const validateRoleCreationReq = require('../middlewares/validateRoleCreationReq'
 const authenticateServiceRequest = require('../middlewares/authenticateServiceRequest');
 const validateEmployeeIdOnParam = require('../middlewares/validateEmployeeIdOnParam');
 
-//get all employee
+/**
+ * @module Routes/URM
+ * @description Defines routes for user and role management (URM) operations.
+ */
+
+/**
+ * @route GET /employee
+ * @description Retrieves a list of all employees.
+ * @access Protected (requires authentication and role-based access)
+ */
 router.get(
   "/employee", 
   authenticateServiceRequest({useRole: true}), 
   getAllEmployee);
 
-//create employee 
+
+/**
+ * @route POST /employee
+ * @description Creates a new employee.
+ * @access Protected (requires authentication)
+ */ 
 router.post(
   "/employee", 
   authenticateServiceRequest(), 
   createEmployee);
 
-//get employee based on id 
+
+/**
+ * @route GET /employee/:employeeId
+ * @description Retrieves details of a specific employee by their ID.
+ * @access Protected (requires authentication)
+ */
 router.get(
   "/employee/:employeeId", 
   authenticateServiceRequest(),
   validateEmployeeIdOnParam, 
   getEmployeeDetail)
 
-//edit employee partially based on req body  
+  
+/**
+ * @route PATCH /employee/:employeeId
+ * @description Partially updates an employee's details based on the request body.
+ * @access Protected (requires authentication and role-based access)
+ */
 router.patch(
   "/employee/:employeeId", 
   authenticateServiceRequest({useRole: true}), 
@@ -41,14 +65,24 @@ router.patch(
   validateEmployeeIdOnParam,
   editEmployeeDetails)
 
-//delete employee based on employeeId
+
+/**
+ * @route DELETE /employee/:employeeId
+ * @description Deletes an employee based on their ID.
+ * @access Protected (requires authentication and role-based access)
+ */
 router.delete(
   "/employee/:employeeId", 
   authenticateServiceRequest({useRole: true}), 
   validateEmployeeIdOnParam,
   deleteEmployee)
 
-//change employee role
+
+/**
+ * @route PUT /employee/:employeeId/roles
+ * @description Updates the roles assigned to a specific employee.
+ * @access Protected (requires authentication and role-based access)
+ */
 router.put(
   "/employee/:employeeId/roles",
   authenticateServiceRequest({useRole: true}),
@@ -56,13 +90,23 @@ router.put(
   validateEmployeeIdOnParam,
   assignRoleToEmployee)
 
-//get all roles
+
+/**
+ * @route GET /roles
+ * @description Retrieves a list of all roles.
+ * @access Protected (requires authentication)
+ */
 router.get(
   "/roles", 
   authenticateServiceRequest(), 
   getAllRoles)
 
-//add roles 
+  
+/**
+ * @route POST /roles
+ * @description Adds a new role to the system.
+ * @access Protected (requires authentication and role-based access)
+ */
 router.post(
   "/roles", 
   authenticateServiceRequest({useRole: true}), 
