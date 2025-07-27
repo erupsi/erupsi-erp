@@ -13,16 +13,16 @@ const patchBodyValidator = () => {
         if (!ALLOWED_USER_PATCH_FIELDS.includes(key)) {
             errors.push(`Properti '${key}' tidak diizinkan untuk diupdate.`);
         }
-        if (key === 'full_name' && reqBody[key] && typeof reqBody[key] !== 'string') {
+        if (key === 'full_name' && key in reqBody && typeof reqBody[key] !== 'string') {
             errors.push('nama lengkap harus berupa string.');
         }
-        if (key === 'email' && reqBody[key] && typeof reqBody[key] !== 'string') {
+        if (key === 'email' && key in reqBody && typeof reqBody[key] !== 'string') {
             errors.push('Email harus berupa string.');
         }
-        if (key === 'department' && reqBody[key] && typeof reqBody[key] !== 'string') {
+        if (key === 'department' && key in reqBody && typeof reqBody[key] !== 'string') {
             errors.push('Department harus berupa string.');
         }
-        if (key === 'position' && reqBody[key] && typeof reqBody[key] !== 'string') {
+        if (key === 'position' && key in reqBody && typeof reqBody[key] !== 'string') {
             errors.push('Position harus berupa string.');
         }
       }
@@ -36,7 +36,8 @@ const patchBodyValidator = () => {
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(error => error.msg);
+        return res.status(400).json({ errors: errorMessages });
       }
       next();
     }

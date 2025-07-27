@@ -15,23 +15,27 @@ const validateRoleCreation = () => {
     }),
     body('name')
       .notEmpty().withMessage('Nama peran tidak boleh kosong.')
+      .bail()
       .isString().withMessage('Nama peran harus berupa string.')
       .trim(), // Opsional: Hapus spasi di awal/akhir
 
     body('display_name')
       .notEmpty().withMessage('Nama tampilan peran tidak boleh kosong.')
+      .bail()
       .isString().withMessage('Nama tampilan harus berupa string.')
       .trim(),
 
     body('description')
       .notEmpty().withMessage('Deskripsi tidak boleh kosong.')
+      .bail()
       .isString().withMessage('Deskripsi harus berupa string.')
       .trim(),
 
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(error => error.msg);
+        return res.status(400).json({ errors: errorMessages });
       }
       next();
     }

@@ -14,7 +14,8 @@ const validateEmployeeIdOnParam = [
     const errors = validationResult(req);
     // Jika ada error validasi, kirim respons 400.
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+      const errorMessages = errors.array().map(error => error.msg);
+      return res.status(400).json({ errors: errorMessages });
     }
     // Jika tidak ada error, lanjutkan ke handler berikutnya.
     next();

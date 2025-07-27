@@ -12,7 +12,7 @@ const patchRoleValidator = () => {
       if ('roles' in reqBody) {
         const roles = reqBody.roles
         if(!Array.isArray(roles)){
-          errors.push('Properti "roles" harus berupa array.');
+          errors.push("Properti 'roles' harus berupa array.");
         } else if (!roles.every(role => typeof role === 'string')) {
           errors.push('Semua elemen dalam "roles" harus berupa string.');
         }
@@ -26,7 +26,8 @@ const patchRoleValidator = () => {
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorMessages = errors.array().map(error => error.msg);
+        return res.status(400).json({ errors: errorMessages });
       }
       next();
     }
