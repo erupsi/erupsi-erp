@@ -9,15 +9,15 @@ const addRole = async(req, res) => {
   //insert roles to db
   const roleData = req.body;
   const {name, display_name, description} = roleData
-  const existingRole = await findRoleByName(name)
-
-  if(existingRole.length > 0) {
-    return res.status(409).json({error: "Role sudah ada"})
-  }
-
-  const newRoleId = uuidv4();
-
+  
   try{
+    const existingRole = await findRoleByName(name)
+    
+    if(existingRole.length > 0) {
+      return res.status(409).json({error: "Role sudah ada"})
+    }
+  
+    const newRoleId = uuidv4();
     const result = await insertRoleToDb(newRoleId, name, display_name, description)
     if(!result.success){
       return res.status(400).json({error: result.message})
