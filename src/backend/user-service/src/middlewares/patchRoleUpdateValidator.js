@@ -1,5 +1,20 @@
 const { body, param, validationResult } = require('express-validator');
 
+/**
+ * A factory function that returns an array of Express-validator middleware.
+ * This middleware is designed to validate the body of a PATCH request for updating an employee's roles.
+ *
+ * The validation checks:
+ * 1. That the request body only contains a 'roles' property.
+ * 2. That the 'roles' property is an array.
+ * 3. That every element within the 'roles' array is a string.
+ *
+ * If validation fails, it sends a 400 response with an array of error messages.
+ *
+ * @function patchRoleValidator
+ * @returns {Array<Function>} An array of Express middleware functions for validation.
+ */
+
 const patchRoleValidator = () => {
   return [
     body().custom(reqBody => {

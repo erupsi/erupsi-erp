@@ -1,5 +1,14 @@
 const { findAllRoles} = require('../services/urmService');
 
+/**
+ * Retrieves a list of all available roles.
+ * @async
+ * @function getAllRoles
+ * @param {import('express').Request} req - The Express request object (not used in this handler).
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>} Sends a JSON response containing the list of roles or an error message.
+ */
+
 const getAllRoles = async (req,res) => {
 
   try{

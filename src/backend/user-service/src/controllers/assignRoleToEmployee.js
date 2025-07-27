@@ -2,6 +2,20 @@
 const {checkEmployeeById, insertRolesToEmployee} = require('../services/urmService');
 const validator = require('validator');
 
+/**
+ * Assigns one or more roles to a specific employee based on their ID.
+ * It validates the employee ID, checks for the employee's existence,
+ * remove existing employee roles, and then inserts the new roles.
+ * @async
+ * @function assignRoleToEmployee
+ * @param {import('express').Request} req - The Express request object.
+ * @param {object} req.params - The route parameters.
+ * @param {string} req.params.employeeId - The UUID of the employee.
+ * @param {Array<string>} req.body - An array of role IDs to assign.
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>} A promise that resolves when the response is sent. Sends a JSON response with a success or error message.
+ */
+
 const assignRoleToEmployee =  async (req, res) => {
   const employeeId = req.params.employeeId;
   const rolesToAssign = req.body;

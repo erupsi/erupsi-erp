@@ -1,8 +1,15 @@
 const { param, validationResult } = require('express-validator');
 
 /**
- * Middleware untuk memvalidasi bahwa 'employeeId' di URL params adalah UUID.
+ * An array of Express-validator middleware functions.
+ * This middleware chain validates that the 'employeeId' route parameter exists and is a valid UUID (version 4).
+ * If the validation fails, it halts the request and responds with a 400 status and a corresponding error message.
+ *
+ * @constant
+ * @type {Array<Function>}
  */
+
+
 const validateEmployeeIdOnParam = [
   // 1. Aturan: Cek 'employeeId' di parameter URL dan pastikan itu adalah UUID.
   param('employeeId')

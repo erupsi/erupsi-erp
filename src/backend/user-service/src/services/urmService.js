@@ -1,5 +1,100 @@
 const pool = require('./db');
 
+/**
+ * Finds detailed information for a single employee by their ID, including their assigned roles.
+ * @async
+ * @function findEmployeeDetailByEmployeeId
+ * @param {string} employeeId - The UUID of the employee to find.
+ * @returns {Promise<object|undefined>} A promise that resolves to an object containing the employee's details (full_name, email, department, position, roles) or undefined if not found or an error occurs.
+ */
+
+/**
+ * Inserts a new employee's details and assigns an initial role in a single transaction.
+ * @async
+ * @function insertEmployeeDetailsToDb
+ * @param {string} employeeId - The new employee's UUID.
+ * @param {string} fullName - The employee's full name.
+ * @param {string} email - The employee's email address.
+ * @param {string} department - The employee's department.
+ * @param {string} position - The employee's position.
+ * @param {string} roleName - The name of the initial role to assign.
+ * @returns {Promise<{success: boolean, message: string}>} A promise that resolves to an object indicating the success or failure of the operation.
+ */
+
+/**
+ * Checks if an employee exists in the database by their ID.
+ * @async
+ * @function findEmployeeById
+ * @param {string} employeeId - The UUID of the employee to check.
+ * @returns {Promise<{success: boolean, message?: string}>} A promise that resolves to an object indicating if the employee was found.
+ */
+
+/**
+ * Partially updates an employee's details in the database.
+ * Only fields specified in `allowedFields` will be updated.
+ * @async
+ * @function updateEmployeePartially
+ * @param {string} employeeId - The UUID of the employee to update.
+ * @param {object} updates - An object with key-value pairs of fields to update.
+ * @param {string[]} allowedFields - An array of strings representing the field names that are permitted to be updated.
+ * @returns {Promise<{success: boolean, message: string}>} A promise that resolves to an object indicating the success or failure of the update operation.
+ */
+
+/**
+ * Deletes an employee from the database based on their ID.
+ * This operation is performed within a transaction.
+ * @async
+ * @function deleteEmployeeBasedOnId
+ * @param {string} employeeId - The UUID of the employee to delete.
+ * @returns {Promise<{success: boolean, message?: string}>} A promise that resolves to an object indicating the success or failure of the deletion.
+ */
+
+/**
+ * Retrieves details for all employees, including their assigned roles.
+ * @async
+ * @function findAllEmployeeDetails
+ * @returns {Promise<object>} A promise that resolves to the raw node-postgres query result object. The employee data is in `result.rows`.
+ */
+
+/**
+ * Assigns a new set of roles to an employee, replacing any existing roles.
+ * This is done in a transaction, first deleting old roles and then inserting new ones.
+ * @async
+ * @function insertRolesToEmployee
+ * @param {string} employeeId - The UUID of the employee to assign roles to.
+ * @param {object} rolesPayload - An object containing the roles to assign.
+ * @param {string[]} rolesPayload.roles - An array of role names to be assigned to the employee.
+ * @returns {Promise<{success: boolean, message: string}>} A promise that resolves to an object indicating the success or failure of the operation.
+ */
+
+/**
+ * Retrieves a list of all available roles from the database.
+ * @async
+ * @function findAllRoles
+ * @returns {Promise<Array<object>>} A promise that resolves to an array of role objects, each containing roleid, name, display_name, and description.
+ */
+
+/**
+ * Finds a specific role by its name.
+ * @async
+ * @function findRoleByName
+ * @param {string} name - The name of the role to find.
+ * @returns {Promise<Array<object>>} A promise that resolves to an array containing the matched role object, or an empty array if not found.
+ */
+
+/**
+ * Inserts a new role into the database.
+ * @async
+ * @function insertRoleToDb
+ * @param {string} newRoleId - The UUID for the new role.
+ * @param {string} name - The unique programmatic name of the role (e.g., 'super_admin').
+ * @param {string} display_name - The human-readable name of the role (e.g., 'Super Admin').
+ * @param {string} description - A description of the role's purpose.
+ * @returns {Promise<{success: boolean, message: string}>} A promise that resolves to an object indicating the success or failure of the operation.
+ */
+
+
+
 const findEmployeeDetailByEmployeeId = async (employeeId) => {
   try {
     const query = `SELECT 

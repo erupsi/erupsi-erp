@@ -1,5 +1,19 @@
 const { body, validationResult } = require('express-validator');
 
+/**
+ * A factory function that returns an array of Express-validator middleware.
+ * This middleware is designed to validate the request body for creating a new role.
+ *
+ * The validation checks:
+ * 1. That the request body only contains the allowed keys: 'name', 'display_name', and 'description'.
+ * 2. That each of these required fields is a non-empty string.
+ *
+ * If validation fails, it sends a 400 response with an array of error messages.
+ *
+ * @function validateRoleCreation
+ * @returns {Array<Function>} An array of Express middleware functions for validation.
+ */
+
 const validateRoleCreation = () => {
   return [
     body().custom((value, { req }) => {

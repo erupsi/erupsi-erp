@@ -1,5 +1,14 @@
 const {findAllEmployeeDetails} = require('../services/urmService');
 
+/**
+ * Retrieves and returns a list of all employees.
+ * @async
+ * @function getAllEmployee
+ * @param {import('express').Request} req - The Express request object (not used in this handler).
+ * @param {import('express').Response} res - The Express response object.
+ * @returns {Promise<void>} Sends a JSON response containing an array of employee objects or an error message.
+ */
+
 const getAllEmployee = async (req, res) => {
   try{
     const result = await findAllEmployeeDetails();

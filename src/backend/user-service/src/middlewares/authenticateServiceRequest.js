@@ -2,6 +2,22 @@ require('dotenv').config({ path: __dirname + '/../../.env' });
 const jwt = require('jsonwebtoken');
 const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 
+/**
+ * A factory function that creates an Express middleware for authenticating service requests using a JWT.
+ * The returned middleware checks for a valid Bearer token in the 'Authorization' header
+ * and verifies it against the public key. It can also optionally enforce role-based access.
+ *
+ * @function authenticateServiceRequest
+ * - Optional configuration for the middleware.
+ * @param {object} [options={useRole: false}] 
+ * - If true, the middleware will also check if the user has the 'SYSTEM_ADMIN' role in the JWT payload.
+ * @param {boolean} [options.useRole=false] 
+ * @returns {
+ *  function(import('express').Request, 
+ *    import('express').Response, 
+ *    import('express').NextFunction): void
+ * } An Express middleware function that authenticates the request.
+ */
 
 const authenticateServiceRequest = (options = {useRole: false}) => {
   return async (req, res, next) => {

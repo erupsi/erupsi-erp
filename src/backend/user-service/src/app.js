@@ -1,3 +1,9 @@
+/**
+ * @file Main server entry point for the URM (User & Role Management) Service.
+ * @description This file initializes and configures the Express application, sets up middleware, mounts the application routes, and starts the server.
+ * @author Your Name
+ */
+
 const express = require("express");
 const urmRoutes = require("./routes/urm.routes")
 require('dotenv').config({ path: '../.env' });
