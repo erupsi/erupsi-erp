@@ -1,8 +1,8 @@
 # Workforce Management Service (WFM)
 
-**Update Terakhir**: 25 Juli 2025
+**Update Terakhir**: 27 Juli 2025
 
-Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan manajemen tenaga kerja, termasuk penjadwalan, absensi, dan pengajuan cuti. Layanan ini dirancang sebagai sebuah mikroservis backend yang terintegrasi penuh dengan layanan lain seperti *Auth Service* dan *User Service*.
+Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan manajemen tenaga kerja, termasuk penjadwalan, absensi, dan pengajuan cuti. Layanan ini dirancang sebagai sebuah **mikroservis backend** yang terintegrasi penuh dengan layanan lain seperti *Auth Service* dan *User Service*.
 
 ---
 
@@ -13,9 +13,9 @@ Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan
 3.  [Endpoint API (V1)](#3-endpoint-api-v1)
 4.  [Arsitektur & Teknologi](#4-arsitektur--teknologi)
 5.  [Model Data (Struktur Database)](#5-model-data-struktur-database)
-6.  [Interaksi Antar Layanan](#6-interaksi-antar-layanan)
-7.  [Peran dan Hak Akses Pengguna (V1)](#7-peran-dan-hak-akses-pengguna-v1)
-8.  [Cara Menjalankan Lokal](#8-cara-menjalankan-lokal)
+6.  [Peran dan Hak Akses Pengguna (V1)](#6-peran-dan-hak-akses-pengguna-v1)
+7.  [Cara Menjalankan Lokal](#7-cara-menjalankan-lokal)
+8.  [Pengujian](#8-pengujian)
 9.  [Langkah Selanjutnya](#9-langkah-selanjutnya)
 
 ---
@@ -23,11 +23,11 @@ Layanan ini bertanggung jawab untuk mengelola semua fungsi yang berkaitan dengan
 ## 1. Status Saat Ini
 
 **Fungsionalitas Inti V1 Selesai.**
-Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
+Fondasi dan logika bisnis dasar untuk layanan WFM telah selesai diimplementasikan, termasuk:
 -   Struktur direktori untuk model, rute, dan *middleware*.
 -   Koneksi ke database PostgreSQL dengan Sequelize.
--   Implementasi **CRUD** (Create, Read, Update, Delete) penuh untuk *endpoint* `shifts`.
--   Implementasi fungsionalitas dasar untuk `leave_requests` dan `attendances`.
+-   Implementasi **CRUD** (Create, Read, Update, Delete) untuk fitur `Shifts`.
+-   Implementasi fungsionalitas dasar untuk `Leave Requests` dan `Attendances`.
 -   Kerangka kerja untuk otentikasi dan otorisasi.
 
 ---
@@ -49,23 +49,40 @@ Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
 
 ---
 
-## 3. Endpoint API (V1)
+## 3. Struktur Komponen dan Endpoint API (V1)
 
-#### **Shifts**
--   `POST /shifts` - Membuat jadwal kerja baru.
--   `GET /shifts` - Mengambil data jadwal.
--   `PUT /shifts/:id` - Memperbarui shift yang sudah ada.
--   `DELETE /shifts/:id` - Menghapus sebuah shift.
+### Endpoint API (V1)
 
-#### **Leave Requests**
--   `POST /leave-requests` - Mengajukan permintaan cuti/izin.
--   `GET /leave-requests/team` - Melihat daftar permintaan dari tim.
--   `PUT /leave-requests/:id/status` - Menyetujui atau menolak permintaan.
+#### **Shifts** (`/shifts`)
+-   `POST /`: Membuat jadwal kerja baru.
+-   `GET /`: Mengambil semua data jadwal.
+-   `PUT /:id`: Memperbarui shift yang sudah ada.
+-   `DELETE /:id`: Menghapus sebuah shift.
 
-#### **Attendances**
--   `POST /attendances/check-in` - Mencatat waktu masuk kerja.
--   `PUT /attendances/check-out/:id` - Mencatat waktu keluar kerja.
--   `GET /attendances/history` - Melihat riwayat absensi pribadi.
+#### **Leave Requests** (`/leave-requests`)
+-   `POST /`: Mengajukan permintaan cuti/izin.
+-   `GET /team`: Melihat daftar permintaan dari tim.
+-   `PUT /:id/status`: Menyetujui atau menolak permintaan.
+
+#### **Attendances** (`/attendances`)
+-   `POST /check-in`: Mencatat waktu masuk kerja.
+-   `PUT /check-out/:id`: Mencatat waktu keluar kerja.
+-   `GET /history`: Melihat riwayat absensi pribadi.
+
+#### **Reports** (`/reports`)
+-   `GET /work-hours-summary`: Mengambil rekapitulasi jam kerja berdasarkan rentang tanggal.
+
+### Struktur Komponen
+
+Layanan ini dibangun dengan struktur yang terorganisir untuk memisahkan tanggung jawab:
+
+-   `src/index.js`: Titik masuk utama aplikasi. Bertugas menginisialisasi server Express, mendaftarkan semua rute, dan menyinkronkan model database.
+-   `/config`: Berisi konfigurasi aplikasi, seperti koneksi database (`database.js`).
+-   `/models`: Mendefinisikan skema tabel database menggunakan Sequelize. File `index.js` di dalam direktori ini bertugas sebagai pusat untuk mengumpulkan semua model.
+-   `/routes`: Mendefinisikan *endpoint* API dan menghubungkannya dengan logika *controller*. Setiap file mewakili satu sumber daya (misalnya, `shifts.js`).
+-   `/middleware`: Berisi fungsi-fungsi perantara yang dijalankan sebelum *controller*, seperti `auth.js` untuk otentikasi dan otorisasi.
+-   `/services`: Berisi logika untuk berkomunikasi dengan layanan eksternal (misalnya, `userService.js` yang akan berinteraksi dengan User Service).
+-   `/__tests__`: Berisi semua file pengujian unit dan integrasi untuk setiap fitur.
 
 ---
 
@@ -76,33 +93,27 @@ Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
 -   **Database**: PostgreSQL dengan Sequelize ORM.
 -   **Tools**: Docker & OpenAPI/Swagger.
 
+#### Dependensi Utama
+-   `express`: Kerangka kerja web untuk membangun API.
+-   `sequelize`: ORM untuk berinteraksi dengan database PostgreSQL.
+-   `pg`: Driver database PostgreSQL untuk Node.js.
+-   `dotenv`: Memuat variabel lingkungan dari file `.env` untuk pengembangan lokal.
+-   `jest` & `supertest`: Kerangka kerja untuk pengujian unit dan API.
+
 ---
 
 ## 5. Model Data (Struktur Database)
 
 | Tabel | Deskripsi |
 | :--- | :--- |
-| `employees` | Pusat informasi personalia, posisi, dan struktur tim. |
+| `employees` | Pusat informasi personalia (dikelola oleh *User Service*). |
 | `shifts` | Alokasi jadwal kerja spesifik (tanggal & jam) per karyawan. |
 | `attendances`| Catatan `check-in` & `check-out` aktual. |
 | `leave_requests` | Alur pengajuan dan persetujuan cuti/izin. |
 
 ---
 
-## 6. Interaksi Antar Layanan
-
-| Layanan | Tujuan | Contoh Interaksi |
-| :--- | :--- | :--- |
-| **Mengonsumsi dari:** | | |
-| Auth Service | Memverifikasi identitas dan hak akses pengguna. | WFM mengirim token ke `POST /auth/validate`. |
-| User Service | Mendapatkan data master karyawan yang akurat. | WFM memanggil `GET /api/users` untuk mengambil daftar staf. |
-| **Menyediakan untuk:** | | |
-| Aplikasi Frontend | Memberdayakan seluruh fungsi pada UI. | Frontend memanggil `GET /api/wfm/shifts` atau `POST /api/wfm/leave-requests`. |
-| Finansial/Payroll| Menyediakan data jam kerja untuk perhitungan gaji. | Payroll memanggil `GET /api/wfm/payroll-summary`. |
-
----
-
-## 7. Peran dan Hak Akses Pengguna (V1)
+## 6. Peran dan Hak Akses Pengguna (V1)
 
 - **Manajer / Supervisor 🧑‍💼**: CRUD pada jadwal timnya, Approve/Reject permintaan cuti.
 - **Karyawan (Employee) 👤**: Baca jadwal pribadi, Buat permintaan cuti, Lakukan `check-in/out`.
@@ -110,11 +121,11 @@ Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
 
 ---
 
-## 8. Cara Menjalankan Lokal
+## 7. Cara Menjalankan Lokal
 
 1.  Pastikan layanan PostgreSQL berjalan.
 2.  Pastikan file `.env` di direktori root sudah terisi dengan benar.
-3.  Jalankan perintah berikut di terminal dari direktori root proyek:
+3.  Jalankan perintah berikut dari direktori root proyek:
     ```bash
     npm start --workspace=workforce-management-service
     ```
@@ -124,15 +135,27 @@ Fondasi dasar layanan telah selesai diimplementasikan, termasuk:
 >
 > Konfigurasi saat ini **hanya untuk pengujian lokal** dan **tidak terhubung** ke layanan lain seperti *Auth Service*.
 >
-> - **Otentikasi Dinonaktifkan**: *Middleware* `authenticateToken` dan `authorizeManager` di semua file rute telah dinonaktifkan sementara (dijadikan komentar atau *commented out*).
+> - **Otentikasi Dinonaktifkan**: *Middleware* `authenticateToken` dan `authorizeManager` di semua file rute telah dinonaktifkan sementara.
 > - **Data Pengguna Statis**: Kode ini menggunakan ID pengguna statis (*hardcoded*) untuk membuat data baru.
 >
-> **Untuk menyambungkan ke API lain:** Anda harus **mengaktifkan kembali** *middleware* tersebut dan menghapus ID statis dari kode *controller*.
+> **Untuk menyambungkan ke API lain:** Anda harus **mengaktifkan kembali** *middleware* tersebut dan mengganti ID statis dari kode *controller*.
+
+---
+
+## 8. Pengujian
+
+Proyek ini menggunakan Jest. Setiap layanan memiliki direktori `__test__` untuk file-file tesnya.
+
+-   **Menjalankan Semua Tes**:
+    Dari direktori root, jalankan:
+    ```bash
+    npm test --workspace=workforce-management-service
+    ```
 
 ---
 
 ## 9. Langkah Selanjutnya
 
--   Membuat model `Employee` dan mendefinisikan relasi antar tabel.
--   Mengimplementasikan logika bisnis yang lebih kompleks (contoh: validasi `check-in` terhadap jadwal).
--   Menulis unit test menggunakan Jest untuk setiap fitur yang telah dibuat.
+-   **Integrasi Penuh**: Mengganti *mock service* dan ID statis dengan panggilan API nyata ke `Auth Service` dan `User Service`.
+-   **Penyempurnaan Logika Bisnis**: Mengimplementasikan logika yang lebih kompleks seperti validasi manajer saat menyetujui cuti.
+-   **Melengkapi Unit Test**: Menambah cakupan tes untuk memastikan semua skenario tertangani.
