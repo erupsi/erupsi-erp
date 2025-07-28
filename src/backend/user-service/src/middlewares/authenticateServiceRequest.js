@@ -36,7 +36,6 @@ const authenticateServiceRequest = (options = {useRole: false}) => {
     try{
       const decoded = jwt.verify(token, PUBLIC_KEY,{
         algorithms: ['RS256'],
-        audience: 'urm-service',
         issuer: 'auth-service'
       });
 
