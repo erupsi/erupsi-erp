@@ -1,0 +1,579 @@
+openapi: 3.0.4
+info:
+  title : Financial Service API
+  version: 1.0.0
+  description: API for managing financial internal operation in a company
+    like chart of accounts, journal, ledger, reports, payroll, and tax
+    within a microservices-based ERP system.
+security:
+  - bearerAuth: []
+paths:
+  /coa:
+    get:
+      summary: Get list of all accounts
+      tags: [Chart of Accounts]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Daftar akun berhasil diambil
+    post:
+      summary: Add new account
+      tags: [Chart of Accounts]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Akun berhasil ditambahkan
+        '400':
+            description: Data pengguna tidak valid, ada kolom yang belum diisi
+        '401':
+            description: Tidak terotentikasi
+        '403':
+            description: Tidak memiliki izin untuk mengakses sumber daya ini
+        '500':
+            description: Terjadi kesalahan pada server
+
+  /coa/tree:
+    get:
+      summary: Get account in hierarcy structure(nested JSON)
+      tags: [Chart of Accounts]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Akun berhasil diambil
+
+  /coa/{id}:
+    get:
+      summary: Get detail account based on ID
+      tags: [Chart of Accounts ID]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detail akun ditemukan
+    put:
+      summary: Update account
+      tags: [ Chart of Accounts ID ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Akun berhasil diperbarui
+    delete:
+      summary: Delete account
+      tags: [Chart of Accounts ID]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Akun berhasil dihapus
+
+  /journal-entries:
+    get:
+      summary: Get all journal entries
+      tags: [General Journal]
+      responses:
+        '200':
+          description: Daftar jurnal berhasil diambil
+    post:
+      summary: Add journal entries
+      tags: [ General Journal ]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntry'
+      responses:
+        '201':
+          description: Entri jurnal berhasil ditambahkan
+        '400':
+            description: Data entri jurnal tidak valid, ada kolom yang belum diisi
+        '401':
+            description: Tidak terotentikasi
+        '403':
+            description: Tidak memiliki izin untuk mengakses sumber daya ini
+        '500':
+            description: Terjadi kesalahan pada server
+
+  /journal-entries/{id}:
+    get:
+      summary: Get details from journal entries
+      tags: [General Journal ID]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detail jurnal ditemukan
+    put:
+      summary: Update journal entry
+      tags: [General Journal ID]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Entri jurnal berhasil diperbarui
+    delete:
+      summary: Delete journal entries
+      tags: [ General Journal ID ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Entri jurnal berhasil dihapus
+
+  /ledger:
+    get:
+      summary: See the transaction of all accounts
+      tags: [General Ledger]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transaksi akun berhasil diambil
+        '404':
+          description: Transaksi tidak ditemukan
+
+  /ledger/{account code}:
+    get:
+      summary: See the transaction in an account
+      tags: [General Ledger]
+      parameters:
+        - name: account code
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Transaksi akun ditemukan dan berhasil diambil
+        '400':
+            description: Kode akun tidak valid
+        '401':
+            description: Tidak terotentikasi
+        '403':
+            description: Tidak memiliki izin untuk mengakses sumber daya ini
+
+  /reports/balance-sheet:
+    get:
+      summary: Get balance reports
+      tags: [ Financial Reports ]
+      parameters:
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+            example: '2025-07'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Laporan neraca berhasil diambil
+        '400':
+          description: Parameter periode tidak valid atau salah
+        '401':
+          description: Tidak terautentikasi
+
+  /reports/pnl:
+    get:
+      summary: Get profit & loss reports
+      tags: [ Financial Reports ]
+      parameters:
+         - name: period
+           in: query
+           required: true
+           schema:
+              type: string
+      responses:
+          '200':
+            description: Laporan laba rugi berhasil diambil
+
+  /reports/trial-balance:
+    get:
+      summary: Get trial balances
+      tags: [ Financial Reports ]
+      parameters:
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Neraca saldo berhasil diambil
+
+  /ap/invoices:
+    get:
+      summary: Retrieve all vendor invoices
+      tags: [ Accounts Payable ]
+      security:
+          - bearerAuth: []
+      responses:
+        '200':
+          description: Faktur vendor berhasil diambil
+    post:
+      summary: Add vendor invoice
+      tags: [ Accounts Payable ]
+      security:
+        -   bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorInvoice'
+            example:
+              vendorId: "vendor123"
+              dueDate: "2025-08-01"
+              amount: 1500.00
+              description: "Pembayaran untuk layanan konsultasi"
+      responses:
+        '201':
+          description: Faktur vendor berhasil ditambahkan
+        '400':
+          description: Data faktur vendor tidak valid, ada kolom yang belum diisi
+        '401':
+          description: Tidak terautentikasi
+
+  /ap/invoices/{id}/payment:
+    post:
+      summary: Process payment vendor
+      tags: [ Accounts Payable ]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pembayaran berhasil diproses
+
+  /ap-status/{invoiceId}:
+    get:
+      summary: Check status of payment vendor
+      tags: [ Accounts Payable ]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+             type: string
+      responses:
+        '200':
+          description: Status pembayaran ditemukan
+
+  /ar/invoices:
+    get:
+      summary: Get all of the customer invoices
+      tags: [Accounts Receivable]
+      responses:
+        '200':
+          description: Faktur customer berhasil diambil
+    post:
+      summary: Add customer invoice
+      tags: [Accounts Receivable]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CustomerInvoice' }
+            example:
+              customerId: "C-2002"
+              amount: 1800000
+              dueDate: "2025-08-10"
+      responses:
+        '201':
+          description: Faktur customer berhasil ditambahkan
+        '400':
+          description: Data tak valid
+
+  /ar/invoices/{id}/receipt:
+    post:
+      summary: Record customer payment receipts
+      tags: [ Accounts Receivable ]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+         description: Pembayaran customer dicatat
+
+  /ar-status/{invoiceId}:
+    get:
+      summary: Check customer invoices payment status
+      tags: [ Accounts Receivable ]
+      security:
+        - bearerAuth: [ ]
+      parameters:
+         - name: invoiceId
+           in: path
+           required: true
+           schema:
+             type: string
+      responses:
+        '200':
+          description: Status pelunasan ditemukan
+
+  /payroll/summary:
+    post:
+      summary: Save payroll summary from HRM
+      tags: [ Payroll Aggregation ]
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PayrollSummary' }
+            example:
+              period: "2025-07"
+              totalSalary: 25000000
+              totalTax: 1500000
+              totalPotongan: 500000
+      responses:
+          '201':
+            description: Ringkasan payroll berhasil disimpan
+    get:
+      summary: Retrieve monthly payroll summary
+      tags: [ Payroll Aggregation ]
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ringkasan payroll berhasil diambil
+
+  /tax/rates:
+    get:
+      summary: Take a list of tax rates
+      tags: [Tax Management]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Tarif pajak berhasil diambil
+    post:
+      summary: Add or set tax rates
+      tags: [Tax Management]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TaxRate' }
+            example:
+              taxType: "PPN"
+              rate: 0.11
+      responses:
+        '201':
+          description: Tarif pajak berhasil disimpan
+
+  /tax/summary:
+    get:
+      summary: Retrieve tax liability summary
+      tags: [Tax Management]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ringkasan pajak berhasil diambil
+
+  /tax/calculate:
+    post:
+      summary: Calculate tax for transaction
+      tags: [Tax Management]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TaxCalculationRequest' }
+            example:
+              transactionType: "penjualan"
+              amount: 1000000
+              taxType: "PPN"
+      responses:
+        '200':
+          description: Pajak berhasil dihitung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxCalculationResult'
+              example:
+                taxAmount: 110000
+                taxRate: 0.11
+        '400':
+          description: Permintaan tidak valid
+        '401':
+          description: Tidak terautentikasi
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Account:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        parentCode:
+          type: string
+          nullable: true
+
+    JournalEntry:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              accountCode:
+                type: string
+              debit:
+                type: number
+              credit:
+                type: number
+
+    VendorInvoice:
+      type: object
+      properties:
+        vendorId:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        description:
+          type: string
+
+    CustomerInvoice:
+      type: object
+      properties:
+        customerId:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        description:
+          type: string
+
+    PayrollSummary:
+      type: object
+      properties:
+        period:
+          type: string
+        totalSalary:
+          type: number
+        totalTax:
+          type: number
+        totalPotongan:
+          type: number
+
+    TaxRate:
+      type: object
+      properties:
+        taxType:
+          type: string
+        rate:
+          type: number
+
+    TaxCalculationRequest:
+      type: object
+      properties:
+        transactionType:
+          type: string
+        amount:
+          type: number
+        taxType:
+          type: string
+
+    TaxCalculationResult:
+      type: object
+      properties:
+        taxAmount:
+          type: number
+        taxRate:
+          type: number
