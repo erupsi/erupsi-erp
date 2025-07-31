@@ -1,0 +1,1 @@
+//mendefinisikan endpoint API dan mengarahkan permintaan ke controller yang sesuai.

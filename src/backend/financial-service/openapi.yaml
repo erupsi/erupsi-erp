@@ -14,9 +14,40 @@ paths:
       tags: [Chart of Accounts]
       security:
         - bearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string }
+          description: Filter berdasarkan jenis akun
+        - name: parentCode
+          in: query
+          schema: { type: string }
+          description: Ambil anak dari akun tertentu
       responses:
         '200':
           description: Daftar akun berhasil diambil
+        '401':
+          description: Tidak terautentikasi
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Token tidak ditemukan atau tidak valid"
+        '403':
+          description: Tidak diizinkan
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Role Anda tidak memiliki akses"
+        '500':
+          description: Kesalahan server
+          content:
+            application/json:
+              example:
+                error: "Internal Error"
+                message: "Terjadi kesalahan pada sistem"
+
     post:
       summary: Add new account
       tags: [Chart of Accounts]
@@ -46,9 +77,39 @@ paths:
       tags: [Chart of Accounts]
       security:
         - bearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string }
+          description: Filter berdasarkan jenis akun
+        - name: parentCode
+          in: query
+          schema: { type: string }
+          description: Ambil anak dari akun tertentu
       responses:
         '200':
           description: Akun berhasil diambil
+        '401':
+          description: Tidak terautentikasi
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Token tidak ditemukan atau tidak valid"
+        '403':
+          description: Tidak diizinkan
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Role Anda tidak memiliki akses"
+        '500':
+          description: Kesalahan server
+          content:
+            application/json:
+              example:
+                error: "InternalError"
+                message: "Terjadi kesalahan pada sistem"
 
   /coa/{id}:
     get:
@@ -65,6 +126,17 @@ paths:
       responses:
         '200':
           description: Detail akun ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Akun tidak ditemukan
+          content:
+            application/json:
+              example:
+                error: "Not Found"
+                message: "Akun dengan ID tersebut tidak ditemukan"
     put:
       summary: Update account
       tags: [ Chart of Accounts ID ]
@@ -77,6 +149,22 @@ paths:
       responses:
         '200':
           description: Akun berhasil diperbarui
+          content:
+            application/json:
+              example:
+                message: "Akun berhasil diperbarui"
+        '400':
+          description: Format input salah
+          content:
+            application/json:
+              example:
+                error: "BadRequest"
+                message: "Kode akun wajib diisi"
+        '404':
+          description: Akun tidak ditemukan
+        '403':
+          description: Akses ditolak
+
     delete:
       summary: Delete account
       tags: [Chart of Accounts ID]
@@ -89,14 +177,47 @@ paths:
       responses:
         '204':
           description: Akun berhasil dihapus
+        '404':
+          description: Akun tidak ditemukan
+          content:
+            application/json:
+              example:
+                error: "Not Found"
+                message: "Akun tidak ditemukan"
+        '403':
+          description: Tidak diizinkan menghapus akun ini
 
   /journal-entries:
     get:
       summary: Get all journal entries
       tags: [General Journal]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Daftar jurnal berhasil diambil
+        '401':
+          description: Token tidak valid
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Missing or invalid token"
+        '403':
+          description: Role tidak diizinkan melihat jurnal
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Access denied"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              example:
+                error: "InternalError"
+                message: "Unexpected server failure"
+
     post:
       summary: Add journal entries
       tags: [ General Journal ]
@@ -135,9 +256,38 @@ paths:
       responses:
         '200':
           description: Detail jurnal ditemukan
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak diizinkan
+        '404':
+          description: Entri jurnal tidak ditemukan
+          content:
+            application/json:
+              example:
+                error: "NotFound"
+                message: "Journal entry not found with ID: JE-001"
+
     put:
       summary: Update journal entry
       tags: [General Journal ID]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/JournalEntry' }
+            example:
+              date: "2025-08-01"
+              description: "Revisi transaksi sebelumnya"
+              lines:
+                - accountCode: "4110"
+                  debit: 0
+                  credit: 1000000
+                - accountCode: "1110"
+                  debit: 1000000
+                  credit: 0
       parameters:
         - name: id
           in: path
@@ -147,9 +297,22 @@ paths:
       responses:
         '200':
           description: Entri jurnal berhasil diperbarui
+        '400':
+          description: Deskripsi atau lines tidak valid
+        '401':
+          description: Token hilang/tidak valid
+        '403':
+          description: Role tidak diizinkan update
+        '404':
+          description: Entri tidak ditemukan
+        '500':
+          description: Error server
+
     delete:
       summary: Delete journal entries
       tags: [ General Journal ID ]
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -159,6 +322,14 @@ paths:
       responses:
         '204':
           description: Entri jurnal berhasil dihapus
+        '401':
+          description: Tidak ada konten
+        '403':
+          description: Role tidak diizinkan menghapus jurnal
+        '404':
+          description: ID tak ditemukan
+        '500':
+          description: Terjadi kesalahan pada server
 
   /ledger:
     get:
@@ -219,29 +390,93 @@ paths:
     get:
       summary: Get profit & loss reports
       tags: [ Financial Reports ]
+      security:
+        - bearerAuth: []
       parameters:
          - name: period
            in: query
            required: true
            schema:
               type: string
+              pattern: '^\d{4}-\d{2}$'
+           description: Periode laporan dalam format YYYY-MM
       responses:
           '200':
             description: Laporan laba rugi berhasil diambil
+          '400':
+            description: Parameter periode tidak valid atau salah
+            content: 
+              application/json:
+                example: 
+                  error: "BadRequest"
+                  message: "Parameter 'period' harus dalam format YYYY-MM"
+          '401':
+            description: Token tidak valid
+            content:
+              application/json:
+                example:
+                  error: "unauthorized"
+                  message: "Token tidak ditemukan atau tidak valid"
+          '403':
+            description: Role tidak punya hak akses
+            content:
+              application/json:
+                example:
+                    "error": "Forbidden",
+                    "message": "Role Anda tidak memiliki akses ke laporan ini"
+          '500':
+            description: Kesalahan sistem atau server
+            content:
+              application/json:
+                example:
+                  "error": "Internal Error",
+                  "message": "Terjadi kesalahan pada sistem saat membuat laporan"
 
   /reports/trial-balance:
     get:
-      summary: Get trial balances
+      summary: Laporan Neraca Saldo
       tags: [ Financial Reports ]
+      security:
+        - bearerAuth: [ ]
       parameters:
         - name: period
           in: query
           required: true
           schema:
             type: string
+            pattern: '^\d{4}-\d{2}$'
+          description: Periode laporan dalam format YYYY-MM
       responses:
         '200':
-          description: Neraca saldo berhasil diambil
+          description: Laporan berhasil ditemukan
+        '400':
+          description: Format periode salah
+          content:
+            application/json:
+              example:
+                error: "BadRequest"
+                message: "Parameter 'period' harus dalam format YYYY-MM"
+        '401':
+          description: Token tidak valid
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Token tidak ditemukan atau tidak valid"
+        '403':
+          description: Akses ditolak
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Anda tidak diizinkan melihat laporan ini"
+        '500':
+          description: Kesalahan sistem
+          content:
+            application/json:
+              example:
+                error: "InternalError"
+                message: "Laporan gagal dibuat karena kesalahan sistem"
 
   /ap/invoices:
     get:
@@ -252,6 +487,14 @@ paths:
       responses:
         '200':
           description: Faktur vendor berhasil diambil
+        '400':
+          description: Status data tidak valid
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak memiliki akses
+        '500':
+          description: Kesalahan server
     post:
       summary: Add vendor invoice
       tags: [ Accounts Payable ]
@@ -275,6 +518,8 @@ paths:
           description: Data faktur vendor tidak valid, ada kolom yang belum diisi
         '401':
           description: Tidak terautentikasi
+        '403':
+          description: Role tidak diizinkan
 
   /ap/invoices/{id}/payment:
     post:
@@ -288,9 +533,41 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [paidDate, method, referenceNo]
+              properties:
+                paidDate:
+                  type: string
+                  format: date
+                method:
+                  type: string
+                example: "Bank Transfer"
+              referenceNo:
+                type: string
+                example: "TRX-20250729-01"
+              amount:
+                type: number
+                example: 1000000
       responses:
-        '200':
+        '201':
           description: Pembayaran berhasil diproses
+        '400':
+          description: Data pembayaran tidak valid
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak memiliki akses untuk memproses pembayaran
+        '404':
+          description: Faktur vendor tidak ditemukan
+        '409':
+          description: Faktur sudah dibayar
+        '500':
+          description: Kesalahan server
 
   /ap-status/{invoiceId}:
     get:
@@ -307,14 +584,54 @@ paths:
       responses:
         '200':
           description: Status pembayaran ditemukan
+        '400':
+          description: Format salah
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak memiliki izin akses
+        '404':
+          description: Faktur tidak ditemukan
+        '500':
+          description: Kesalahan server
 
   /ar/invoices:
     get:
       summary: Get all of the customer invoices
       tags: [Accounts Receivable]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: customerId
+          in: query
+          schema:
+            type: string
+          description: Filter berdasarkan ID customer
+
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ unpaid, paid, overdue ]
+          description: Filter status faktur
+
+        - name: dueBefore
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Tampilkan faktur yang jatuh tempo sebelum tanggal tertentu
       responses:
         '200':
           description: Faktur customer berhasil diambil
+        '400':
+          description: Parameter tidak valid
+        '401':
+            description: Token tidak valid
+        '403':
+            description: Role tidak memiliki akses
+        '500':
+            description: Kesalahan server
     post:
       summary: Add customer invoice
       tags: [Accounts Receivable]
@@ -333,7 +650,17 @@ paths:
         '201':
           description: Faktur customer berhasil ditambahkan
         '400':
-          description: Data tak valid
+          description: Data tidak valid
+        '401':
+          description: Tidak terotentikasi
+        '403':
+          description: Tidak memiliki izin untuk mengakses sumber daya ini
+        '404':
+          description: Customer tidak ditemukan
+        '409':
+          description: Faktur customer sudah lunas
+        '500':
+          description: Terjadi kesalahan pada server
 
   /ar/invoices/{id}/receipt:
     post:
@@ -366,6 +693,16 @@ paths:
       responses:
         '200':
           description: Status pelunasan ditemukan
+        '400':
+          description: Format salah
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak memiliki izin akses
+        '404':
+          description: Faktur tidak ditemukan
+        '500':
+          description: Kesalahan server
 
   /payroll/summary:
     post:
@@ -384,8 +721,44 @@ paths:
               totalTax: 1500000
               totalPotongan: 500000
       responses:
-          '201':
-            description: Ringkasan payroll berhasil disimpan
+        '201':
+          description: Ringkasan payroll berhasil disimpan
+        '400':
+          description: Format periode salah
+          content:
+            application/json:
+              example:
+                error: "BadRequest"
+                message: "Parameter 'period' harus dalam format YYYY-MM"
+        '401':
+          description: Token tidak valid
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Token tidak ditemukan atau tidak valid"
+        '403':
+          description: Role tidak memiliki akses
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Anda tidak diizinkan menyimpan ringkasan payroll"
+        '409':
+          description: Payroll periode ini sudah pernah dicatat
+          content:
+            application/json:
+              example:
+                error: "Conflict"
+                message: "Payroll untuk periode ini sudah pernah dicatat"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              example:
+                error: "InternalError"
+                message: "Terjadi kesalahan pada sistem saat menyimpan ringkasan payroll"
+
     get:
       summary: Retrieve monthly payroll summary
       tags: [ Payroll Aggregation ]
@@ -397,9 +770,21 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^\d{4}-\d{2}$'
+          description: Periode payroll (YYYY-MM)
       responses:
         '200':
           description: Ringkasan payroll berhasil diambil
+        '400':
+          description: Format periode salah
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak bisa mengakses
+        '404':
+          description: Data tidak ditemukan
+        '500':
+          description: Kesalahan server
 
   /tax/rates:
     get:
@@ -410,6 +795,12 @@ paths:
       responses:
         '200':
           description: Tarif pajak berhasil diambil
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak bisa mengakses
+        '500':
+          description: Kesalahan server
     post:
       summary: Add or set tax rates
       tags: [Tax Management]
