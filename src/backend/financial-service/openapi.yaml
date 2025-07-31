@@ -114,7 +114,7 @@ paths:
   /coa/{id}:
     get:
       summary: Get detail account based on ID
-      tags: [Chart of Accounts ID]
+      tags: [Chart of Accounts]
       security:
         - bearerAuth: []
       parameters:
@@ -139,7 +139,7 @@ paths:
                 message: "Akun dengan ID tersebut tidak ditemukan"
     put:
       summary: Update account
-      tags: [ Chart of Accounts ID ]
+      tags: [Chart of Accounts]
       parameters:
         - name: id
           in: path
@@ -167,7 +167,7 @@ paths:
 
     delete:
       summary: Delete account
-      tags: [Chart of Accounts ID]
+      tags: [Chart of Accounts]
       parameters:
         - name: id
           in: path
@@ -196,6 +196,13 @@ paths:
       responses:
         '200':
           description: Daftar jurnal berhasil diambil
+        '400':
+          description: Debit dan kredit tidak seimbang
+          content:
+            application/json:
+              example:
+                error: "BadRequest"
+                message: "Total debit dan kredit harus sama"  
         '401':
           description: Token tidak valid
           content:
@@ -220,7 +227,7 @@ paths:
 
     post:
       summary: Add journal entries
-      tags: [ General Journal ]
+      tags: [General Journal]
       security:
         - bearerAuth: []
       requestBody:
@@ -244,7 +251,7 @@ paths:
   /journal-entries/{id}:
     get:
       summary: Get details from journal entries
-      tags: [General Journal ID]
+      tags: [General Journal]
       security:
         - bearerAuth: []
       parameters:
@@ -270,7 +277,7 @@ paths:
 
     put:
       summary: Update journal entry
-      tags: [General Journal ID]
+      tags: [General Journal]
       security:
         - bearerAuth: []
       requestBody:
@@ -310,7 +317,7 @@ paths:
 
     delete:
       summary: Delete journal entries
-      tags: [ General Journal ID ]
+      tags: [General Journal]
       security:
         - bearerAuth: []
       parameters:
@@ -368,14 +375,14 @@ paths:
   /reports/balance-sheet:
     get:
       summary: Get balance reports
-      tags: [ Financial Reports ]
+      tags: [Financial Reports]
       parameters:
         - name: period
           in: query
-          required: true
           schema:
             type: string
             example: '2025-07'
+          required: true
       security:
         - bearerAuth: []
       responses:
@@ -389,7 +396,7 @@ paths:
   /reports/pnl:
     get:
       summary: Get profit & loss reports
-      tags: [ Financial Reports ]
+      tags: [Financial Reports]
       security:
         - bearerAuth: []
       parameters:
@@ -435,7 +442,7 @@ paths:
   /reports/trial-balance:
     get:
       summary: Laporan Neraca Saldo
-      tags: [ Financial Reports ]
+      tags: [Financial Reports]
       security:
         - bearerAuth: [ ]
       parameters:
@@ -481,7 +488,7 @@ paths:
   /ap/invoices:
     get:
       summary: Retrieve all vendor invoices
-      tags: [ Accounts Payable ]
+      tags: [Accounts Payable]
       security:
           - bearerAuth: []
       responses:
@@ -524,7 +531,7 @@ paths:
   /ap/invoices/{id}/payment:
     post:
       summary: Process payment vendor
-      tags: [ Accounts Payable ]
+      tags: [Accounts Payable]
       security:
         - bearerAuth: []
       parameters:
@@ -572,7 +579,7 @@ paths:
   /ap-status/{invoiceId}:
     get:
       summary: Check status of payment vendor
-      tags: [ Accounts Payable ]
+      tags: [Accounts Payable]
       security:
         - bearerAuth: []
       parameters:
@@ -665,7 +672,7 @@ paths:
   /ar/invoices/{id}/receipt:
     post:
       summary: Record customer payment receipts
-      tags: [ Accounts Receivable ]
+      tags: [Accounts Receivable]
       security:
         - bearerAuth: []
       parameters:
@@ -681,7 +688,7 @@ paths:
   /ar-status/{invoiceId}:
     get:
       summary: Check customer invoices payment status
-      tags: [ Accounts Receivable ]
+      tags: [Accounts Receivable]
       security:
         - bearerAuth: [ ]
       parameters:
@@ -707,7 +714,7 @@ paths:
   /payroll/summary:
     post:
       summary: Save payroll summary from HRM
-      tags: [ Payroll Aggregation ]
+      tags: [Payroll Aggregation]
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -761,7 +768,7 @@ paths:
 
     get:
       summary: Retrieve monthly payroll summary
-      tags: [ Payroll Aggregation ]
+      tags: [Payroll Aggregation]
       security:
         - bearerAuth: [ ]
       parameters:
@@ -791,16 +798,53 @@ paths:
       summary: Take a list of tax rates
       tags: [Tax Management]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
+      parameters:
+        - name: taxType
+          in: query
+          schema:
+            type: string
+          required: false
+          description: "Filter berdasarkan jenis pajak (contoh: PPN, PPh21)"
       responses:
         '200':
           description: Tarif pajak berhasil diambil
+          content:
+            application/json:
+              example:
+                - taxType: "PPN"
+                  rate: 0.11
+                - taxType: "PPh21"
+                  rate: 0.05
+        '400':
+          description: Parameter query tidak valid
+          content:
+            application/json:
+              example:
+                error: "BadRequest"
+                message: "Parameter 'taxType' tidak valid"
         '401':
           description: Token tidak valid
+          content:
+            application/json:
+              example:
+                error: "Unauthorized"
+                message: "Token tidak ditemukan atau tidak valid"
         '403':
           description: Role tidak bisa mengakses
+          content:
+            application/json:
+              example:
+                error: "Forbidden"
+                message: "Role Anda tidak memiliki akses ke tarif pajak"
         '500':
           description: Kesalahan server
+          content:
+            application/json:
+              example:
+                error: "InternalError"
+                message: "Gagal mengambil data tarif pajak"
+
     post:
       summary: Add or set tax rates
       tags: [Tax Management]
@@ -887,6 +931,11 @@ paths:
           description: Role tidak memiliki akses untuk menghitung pajak
         '422':
           description: Pajak tidak dapat dihitung
+          content:
+            application/json:
+              example:
+                error: "UnprocessableEntity"
+                message: "Jenis pajak tidak terdaftar"
         '500':
           description: Terjadi kesalahan pada server
 
@@ -900,6 +949,11 @@ components:
   schemas:
     Account:
       type: object
+      required:
+        - code
+        - name
+        - type
+        - parentCode
       properties:
         code:
           type: string
@@ -913,6 +967,10 @@ components:
 
     JournalEntry:
       type: object
+      required:
+        - date
+        - description
+        - lines
       properties:
         date:
           type: string
@@ -933,6 +991,11 @@ components:
 
     VendorInvoice:
       type: object
+      required:
+        - vendorId
+        - dueDate
+        - amount
+        - description
       properties:
         vendorId:
           type: string
@@ -946,6 +1009,11 @@ components:
 
     CustomerInvoice:
       type: object
+      required:
+        - customerId
+        - dueDate
+        - amount
+        - description
       properties:
         customerId:
           type: string
@@ -959,6 +1027,11 @@ components:
 
     PayrollSummary:
       type: object
+      required:
+        - period
+        - totalSalary
+        - totalTax
+        - totalPotongan
       properties:
         period:
           type: string
@@ -971,6 +1044,9 @@ components:
 
     TaxRate:
       type: object
+      required:
+        - taxType
+        - rate
       properties:
         taxType:
           type: string
@@ -979,6 +1055,10 @@ components:
 
     TaxCalculationRequest:
       type: object
+      required:
+        - transactionType
+        - amount
+        - taxType
       properties:
         transactionType:
           type: string
@@ -989,6 +1069,9 @@ components:
 
     TaxCalculationResult:
       type: object
+      required:
+        - taxAmount
+        - taxRate
       properties:
         taxAmount:
           type: number
