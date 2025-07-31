@@ -817,6 +817,16 @@ paths:
       responses:
         '201':
           description: Tarif pajak berhasil disimpan
+        '400':
+          description: Data tidak valid
+        '401':
+          description: Tidak terautentikasi
+        '403':
+          description: Role tidak memiliki akses untuk mengatur tarif pajak
+        '409':
+          description: Pajak jenis ini sudah ada
+        '500':
+          description: Terjadi kesalahan pada server
 
   /tax/summary:
     get:
@@ -833,6 +843,16 @@ paths:
       responses:
         '200':
           description: Ringkasan pajak berhasil diambil
+        '400':
+          description: Format periode salah
+        '401':
+          description: Token tidak valid
+        '403':
+          description: Role tidak memiliki akses
+        '404':
+          description: Data tidak ditemukan
+        '500':
+          description: Kesalahan server
 
   /tax/calculate:
     post:
@@ -863,6 +883,12 @@ paths:
           description: Permintaan tidak valid
         '401':
           description: Tidak terautentikasi
+        '403':
+          description: Role tidak memiliki akses untuk menghitung pajak
+        '422':
+          description: Pajak tidak dapat dihitung
+        '500':
+          description: Terjadi kesalahan pada server
 
 components:
   securitySchemes:
