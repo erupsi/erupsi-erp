@@ -2,8 +2,10 @@ const pool = require('./db');
 const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: __dirname + '/../../.env' })
+const requestBuilder = require('../utils/requestBuilder');
+const { bcryptSalting } = require('../utils/passwordUtils');
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');;
+const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 
 const registerUser = async (employeeInitialUuid, username, password) => {
   try {
@@ -13,11 +15,14 @@ const registerUser = async (employeeInitialUuid, username, password) => {
       return {success: false, message: "User Already Defined"}
     }
 
+    const hashedPass = await bcryptSalting(password)
+
     const query = `INSERT INTO auth_employee(employeeId, username, password) VALUES($1, $2, $3)`;
-    await pool.query(query, [employeeInitialUuid, username, password]);
+    await pool.query(query, [employeeInitialUuid, username, hashedPass]);
     return {success: true}
   } catch (err) {
-    return {success: false, message: err}
+      console.error(err)
+      return {success: false}
   }
 };
 
@@ -46,29 +51,13 @@ const AddEmployeeRequestToUrm = async (argEmployeeId, argFullName, argEmail, arg
       roleName: argRoleName
     }
 
-    const token = jwt.sign({ service: 'auth-service' }, PRIVATE_KEY, {
-      algorithm: 'RS256',
-      audience: 'urm-service',
-      expiresIn: '1m',
-      issuer: 'auth-service'
-    });
+    const response = await requestBuilder('http://localhost:3001/urm/employee', 'POST', employeeData)
 
-    const response = await fetch('http://localhost:3001/urm/employee', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(employeeData)
-    });
-
-    if (!response.ok) {
+    if (!response.success) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Parse JSON response
-    const data = await response.json();
-    return data;
+    return response;
 
   }catch(error){
     console.error('Error in AddEmployeeRequestToUrm:', error);
@@ -76,4 +65,20 @@ const AddEmployeeRequestToUrm = async (argEmployeeId, argFullName, argEmail, arg
   }
 }
 
-module.exports = {registerUser, AddEmployeeRequestToUrm}
+const getEmployeeDataFromUrm = async(employeeId) => {
+  const response = await requestBuilder(`http://localhost:3001/urm/employee/${employeeId}`, 'GET')
+  return response
+}
+
+const getEmployeeUsername = async (employeeId) => {
+  try {
+    const query = `SELECT * FROM auth_employee WHERE employeeId=$1`;
+    const employeeIdFromQuery = await pool.query(query, [employeeId]);
+    return employeeIdFromQuery.rows[0]
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
+module.exports = {getEmployeeUsername, registerUser, AddEmployeeRequestToUrm, checkEmployeeByUsername, getEmployeeDataFromUrm}

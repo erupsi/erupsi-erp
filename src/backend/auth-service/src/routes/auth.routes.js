@@ -1,40 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser,AddEmployeeRequestToUrm } = require('../services/authService');
-const authenticateAdmin = require('../middlewares/authenticateAdmin')
-const { v4: uuidv4 } = require('uuid');
 
-router.post("/register", authenticateAdmin, async(req, res, next) => {
+const registerEmployee = require('../controllers/registerEmployee')
+const authenticateServiceReq = require('../middlewares/authenticateServiceReq')
+const validateRegisterEmployeeReqBody = require('../validationator/validateRegisterEmployee')
+const validateLoginReq = require('../validationator/validateLoginReq')
+const loginEmployee = require('../controllers/loginEmployee');
+const refreshTokenRenewal = require('../controllers/refreshTokenRenewal');
+const logoutHandler = require('../controllers/logoutHandler');
 
-  if (req.body === undefined){
-    return res.status(400).json({message: 'Input tidak valid.'})
-  }
+router.post("/register", 
+  authenticateServiceReq({useRole:true}), 
+  validateRegisterEmployeeReqBody, 
+  registerEmployee);
 
-  const {username, initialPasswordHashed, fullName, email, department, position, roleName } = req.body;
+router.post("/login",
+  // authenticateServiceReq(),
+  validateLoginReq(),
+  loginEmployee)
 
-  if(!username || !initialPasswordHashed || !fullName || !email || !department || !position || !roleName) {
-    return res.status(400).json({message: 'Input tidak valid. Data yang diberikan tidak lengkap.'})
-  }
+router.post("/refresh-token", 
+  authenticateServiceReq(),
+  refreshTokenRenewal)
 
-  const newEmployeeId = uuidv4();
-  
-  try{
-    const addEmployeeData = await AddEmployeeRequestToUrm(newEmployeeId, fullName, email, department, position, roleName)
-    
-    if(!addEmployeeData.success === true){
-      return res.status(400).json({message: addEmployeeData.message || "Gagal menambah data pegawai ke URM"});
-    }
-    const register = await registerUser(newEmployeeId, username, initialPasswordHashed)
-    
-    if(register.success === true){
-      res.status(201).json({message: "Pegawai berhasil didaftarkan"})
-    }else{
-      res.status(400).json({message: result.message || "Gagal mendaftarkan pegawai"})
-    }
-    res.status(200).json({message: "Req success"})
-  } catch(error) {
-    res.status(500).json({message: "Terjadi kesalahan internal server."})
-  }
-});
-
+router.post("/logout",
+  authenticateServiceReq(),
+  logoutHandler
+)
 module.exports = router

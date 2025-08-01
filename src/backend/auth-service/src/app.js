@@ -1,14 +1,13 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser")
 const authRoutes = require("./routes/auth.routes")
 require('dotenv').config({ path: '../.env' });
 
 const app = express();
 const PORT = process.env.PORT;
-const JWT_SECRET = process.env.JWT_SECRET;
 
 app.use(express.json())
+app.use(cookieParser())
 app.use("/auth", authRoutes)
 
 app.get('/', (req, res) => {
