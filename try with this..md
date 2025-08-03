@@ -93,6 +93,7 @@ The system will be implemented using a modern, decoupled **Client-Server Archite
 
 The database schema is the structural foundation of the application. The design separates distinct business concepts into their own tables and uses foreign keys to establish clear, logical relationships. A key feature is the use of an immutable InventoryTransactions table, which provides a complete, auditable ledger of all stock movements.
 
+#TO BE UPDATED 
 | Table | Column Name | Data Type | Constraints | Description |
 | :---- | :---- | :---- | :---- | :---- |
 | **Products** | id | UUID | Primary Key | Unique identifier for the product master. |
@@ -174,7 +175,8 @@ This section details the specific features and system behaviors.
 
 ### **4.2 API Endpoint Specification**
 
-The following table specifies the contract for key API endpoints. This information will be used to populate the openapi.yaml file.
+The following table specifies the examples of contract for key API endpoints. This information will be used to populate the openapi.yaml file.
+## TO BE UPDATED
 
 | Resource URL | HTTP Method | Description | RBAC | Success Response (2xx) | Error Response (4xx/5xx) |
 | :---- | :---- | :---- | :---- | :---- | :---- |
