@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import './App.css';
 import ShiftManagement from './components/ShiftManagement';
+import LeaveManagement from './components/LeaveManagement';
+import Attendance from './components/Attendance';
+import Reports from './components/Reports';
+import IncidentReports from './components/IncidentReports';
 
 function App() {
     const [activeMenu, setActiveMenu] = useState('shifts');
@@ -10,11 +14,13 @@ function App() {
             case 'shifts':
                 return <ShiftManagement />;
             case 'leave':
-                return <div><h2>Halaman Manajemen Cuti (Segera Hadir)</h2></div>;
+                return <LeaveManagement />;
             case 'attendance':
-                return <div><h2>Halaman Absensi (Segera Hadir)</h2></div>;
+                return <Attendance />;
             case 'reports':
-                return <div><h2>Halaman Laporan (Segera Hadir)</h2></div>;
+                return <Reports />;
+            case 'incidents':
+                return <IncidentReports />;
             default:
                 return <ShiftManagement />;
         }
@@ -36,6 +42,9 @@ function App() {
                     </li>
                     <li className={activeMenu === 'reports' ? 'active' : ''} onClick={() => setActiveMenu('reports')}>
                         Laporan
+                    </li>
+                    <li className={activeMenu === 'incidents' ? 'active' : ''} onClick={() => setActiveMenu('incidents')}>
+                        Laporan Insiden
                     </li>
                 </ul>
             </nav>

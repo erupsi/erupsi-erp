@@ -121,6 +121,30 @@ Layanan ini dibangun dengan struktur yang terorganisir untuk memisahkan tanggung
 
 ---
 
+### Alur Kerja & Logika Bisnis Penting
+
+Berikut adalah beberapa implementasi logika bisnis kunci yang sudah ada di dalam layanan:
+
+-   **Sinkronisasi Status Cuti ke Jadwal**:
+    -   Ketika sebuah `leave_request` diperbarui dengan status `approved` melalui `PUT /leave-requests/:id/status`, layanan akan secara otomatis mencari semua `shifts` milik karyawan tersebut yang berada dalam rentang tanggal cuti.
+    -   Status dari `shifts` yang ditemukan akan diubah menjadi `on_leave`.
+
+-   **Penentuan Status Absensi Otomatis**:
+    -   Saat seorang karyawan melakukan `check-in` melalui `POST /attendances/check-in`, layanan akan mencari jadwal (`shift`) karyawan tersebut untuk hari itu.
+    -   Jika `check_in` dilakukan melewati `start_time` dari jadwal (dengan toleransi 5 menit), status absensi akan otomatis ditandai sebagai `late`. Jika tidak, statusnya adalah `on_time`.
+
+-   **Validasi Manajer (Simulasi)**:
+    -   Saat seorang manajer mencoba menyetujui/menolak cuti, *endpoint* `PUT /leave-requests/:id/status` akan memanggil *mock service* (`userService.js`) untuk memeriksa apakah karyawan yang mengajukan cuti adalah bagian dari tim manajer tersebut.
+    -   Jika tidak, permintaan akan ditolak dengan status `403 Forbidden`.
+
+-   **Kalkulasi Jam Kerja**:
+    -   Ketika seorang karyawan melakukan `check-out`, total durasi jam kerja akan dihitung dan disimpan di dalam data absensi.
+    -   *Endpoint* `GET /reports/work-hours-summary` menggunakan data ini untuk menyediakan rekapitulasi jam kerja.
+
+---
+
+---
+
 ## 7. Cara Menjalankan Lokal
 
 1.  Pastikan layanan PostgreSQL berjalan.

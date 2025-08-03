@@ -48,7 +48,7 @@ const leaveRequestController = {
 
     getTeamLeaveRequests: async (req, res) => {
         try {
-            const managerId = 'uuid-manajer-statis-untuk-tes';
+            const managerId = '4a7c6c4a-8d4e-4b9f-9c7e-2a1b3d5f6a7b';
             const teamMemberIds = await getTeamMemberIds(managerId);
 
             const requests = await LeaveRequest.findAll({
@@ -75,7 +75,7 @@ const leaveRequestController = {
             const { id } = req.params;
             const { status } = req.body;
             // Untuk pengujian lokal, kita asumsikan ID manajer statis
-            const managerIdForTesting = 'uuid-manajer-1';
+            const managerIdForTesting = '4a7c6c4a-8d4e-4b9f-9c7e-2a1b3d5f6a7b';
 
             if (!status || !['approved', 'rejected'].includes(status)) {
                 return res.status(400).json({ error: 'Status tidak valid.' });
@@ -99,6 +99,21 @@ const leaveRequestController = {
             await requestToUpdate.save();
 
             // ... (sisa logika untuk update shift tetap sama)
+
+            if (status === 'approved') {
+                await Shift.update(
+                    { status: 'on_leave' },
+                    {
+                        where: {
+                            employee_id: requestToUpdate.employee_id,
+                            shift_date: {
+                                [Op.between]: [requestToUpdate.start_date, requestToUpdate.end_date],
+                            },
+                        },
+                    },
+                );
+            }
+
 
             res.status(200).json({
                 message: `Status pengajuan cuti berhasil diubah menjadi ${status}`,

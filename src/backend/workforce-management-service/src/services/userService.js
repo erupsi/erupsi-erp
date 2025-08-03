@@ -1,6 +1,9 @@
+const MOCK_MANAGER_ID = '4a7c6c4a-8d4e-4b9f-9c7e-2a1b3d5f6a7b';
+const MOCK_EMPLOYEE_ID_A = 'c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d';
+const MOCK_EMPLOYEE_ID_B = '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed';
+
 const mockTeamDatabase = {
-    'uuid-manajer-1': ['uuid-karyawan-A', 'uuid-karyawan-B'],
-    'uuid-manajer-2': ['uuid-karyawan-C'],
+    [MOCK_MANAGER_ID]: [MOCK_EMPLOYEE_ID_A, MOCK_EMPLOYEE_ID_B],
 };
 
 /**
@@ -21,9 +24,8 @@ async function getTeamMemberIds(managerId) {
 async function getUsersByIds(employeeIds) {
     console.log(`[MOCK] Mengambil detail untuk karyawan: ${employeeIds.join(', ')}`);
     const allUsers = [
-        { id: 'uuid-karyawan-A', full_name: 'Budi Santoso' },
-        { id: 'uuid-karyawan-B', full_name: 'Citra Lestari' },
-        { id: 'uuid-karyawan-C', full_name: 'Agus Setiawan' },
+        { id: 'c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d', full_name: 'Budi (dari Mock)' },
+        { id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', full_name: 'Citra (dari Mock)' }, // <-- Diperbaiki
     ];
     return allUsers.filter((user) => employeeIds.includes(user.id));
 }

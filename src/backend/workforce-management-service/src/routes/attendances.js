@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 // const {authenticateToken} = require("../middleware/auth");
 const { Attendance, Shift } = require('../models');
+const { Op } = require('sequelize');
 
 const attendanceController = {
     // Logika untuk karyawan melakukan check-in
@@ -12,6 +13,19 @@ const attendanceController = {
             const now = new Date();
             const today = now.toISOString().split('T')[0];
 
+            const existingAttendance = await Attendance.findOne({
+                where: {
+                    employee_id: employeeIdForTesting,
+                    check_in: {
+                        [Op.gte]: new Date(today), // Sekarang Op sudah terdefinisi
+                    },
+                },
+            });
+
+            if (existingAttendance) {
+                return res.status(400)
+                    .json({ error: 'Anda sudah melakukan check-in hari ini.' });
+            }
             // 1. Cari jadwal shift karyawan untuk hari ini
             const shift = await Shift.findOne({
                 where: {
@@ -92,6 +106,22 @@ const attendanceController = {
             res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
         }
     },
+
+    getAttendanceHistory: async (req, res) => {
+        try {
+            const employeeIdForTesting = 'c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d';
+            const history = await Attendance.findAll({
+                where: { employee_id: employeeIdForTesting },
+                order: [['check_in', 'DESC']], // Urutkan dari yang terbaru
+                limit: 10, // Batasi 10 entri terakhir
+            });
+            res.status(200).json(history);
+        } catch (error) {
+            console.error('Gagal mengambil riwayat absensi:', error);
+            res.status(500)
+                .json({ error: 'Terjadi kesalahan pada server.' });
+        }
+    },
 };
 
 router.post(
@@ -105,6 +135,8 @@ router.put(
     // authenticateToken,
     attendanceController.checkOut,
 );
+
+router.get('/history', attendanceController.getAttendanceHistory);
 
 
 module.exports = router;
