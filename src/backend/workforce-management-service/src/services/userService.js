@@ -1,24 +1,34 @@
+const mockTeamDatabase = {
+    'uuid-manajer-1': ['uuid-karyawan-A', 'uuid-karyawan-B'],
+    'uuid-manajer-2': ['uuid-karyawan-C'],
+};
+
 /**
- * FUNGSI MOCK/PLACEHOLDER
- * Mensimulasikan pemanggilan API ke User Service untuk mendapatkan
- * ID karyawan yang berada di bawah seorang manajer.
+ * Mensimulasikan pengambilan ID anggota tim dari User Service.
  * @param {string} managerId - UUID dari manajer.
  * @return {Promise<string[]>} - Array berisi UUID anggota tim.
  */
 async function getTeamMemberIds(managerId) {
     console.log(`[MOCK] Mengambil data tim untuk manajer: ${managerId}`);
-    // Di dunia nyata, ini akan menjadi panggilan API:
-    // const response = await fetch(`http://user-service/api/users?manager_id=${managerId}`);
-    // const teamMembers = await response.json();
-    // return teamMembers.map((member) => member.id);
+    return mockTeamDatabase[managerId] || [];
+}
 
-    // Untuk sekarang, kita kembalikan data palsu untuk pengujian.
-    return [
-        'c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d', // Ganti dengan ID statis yang Anda gunakan
-        'another-employee-uuid-for-testing',
+/**
+ * Mensimulasikan pengambilan data detail dari beberapa karyawan.
+ * @param {string[]} employeeIds - Array berisi UUID karyawan.
+ * @return {Promise<object[]>} - Array berisi objek detail karyawan.
+ */
+async function getUsersByIds(employeeIds) {
+    console.log(`[MOCK] Mengambil detail untuk karyawan: ${employeeIds.join(', ')}`);
+    const allUsers = [
+        { id: 'uuid-karyawan-A', full_name: 'Budi Santoso' },
+        { id: 'uuid-karyawan-B', full_name: 'Citra Lestari' },
+        { id: 'uuid-karyawan-C', full_name: 'Agus Setiawan' },
     ];
+    return allUsers.filter((user) => employeeIds.includes(user.id));
 }
 
 module.exports = {
     getTeamMemberIds,
+    getUsersByIds,
 };

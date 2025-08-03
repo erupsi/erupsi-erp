@@ -21,7 +21,7 @@ app.use('/leave-requests', leaveRequestRoutes);
 app.use('/attendances', attendanceRoutes);
 app.use('/reports', reportRoutes); // <-- Baru
 
-sequelize.sync().then(() => {
+sequelize.sync({ alter: true }).then(() => {
     app.listen(port, () => {
         console.log(`Workforce Management service listening on http://localhost:${port}`);
     });
