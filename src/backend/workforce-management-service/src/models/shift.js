@@ -13,11 +13,11 @@ const Shift = sequelize.define('Shift', {
         allowNull: false,
     },
     shift_date: {
-        type: DataTypes.DATEONLY, // Tipe data hanya untuk tanggal
+        type: DataTypes.DATEONLY, 
         allowNull: false,
     },
     start_time: {
-        type: DataTypes.TIME, // Tipe data hanya untuk waktu
+        type: DataTypes.TIME, 
         allowNull: false,
     },
     end_time: {
@@ -31,7 +31,7 @@ const Shift = sequelize.define('Shift', {
     },
 }, {
     tableName: 'shifts',
-    timestamps: true, // Otomatis menambahkan kolom createdAt dan updatedAt
+    timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });

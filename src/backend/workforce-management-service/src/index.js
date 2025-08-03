@@ -1,12 +1,12 @@
 require('dotenv').config({ path: '../../../.env' });
 const express = require('express');
-const { sequelize } = require('./models'); // <-- Diperbarui
+const { sequelize } = require('./models');
 const cors = require('cors');
 
 const shiftsRoutes = require('./routes/shifts');
 const leaveRequestRoutes = require('./routes/leave_request');
 const attendanceRoutes = require('./routes/attendances');
-const reportRoutes = require('./routes/reports'); // <-- Baru
+const reportRoutes = require('./routes/reports');
 const incidentRoutes = require('./routes/incidents');
 
 const app = express();
@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 app.use('/shifts', shiftsRoutes);
 app.use('/leave-requests', leaveRequestRoutes);
 app.use('/attendances', attendanceRoutes);
-app.use('/reports', reportRoutes); // <-- Baru
+app.use('/reports', reportRoutes);
 app.use('/incidents', incidentRoutes);
 
 sequelize.sync({ alter: true }).then(() => {

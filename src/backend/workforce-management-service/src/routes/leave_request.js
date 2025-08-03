@@ -98,8 +98,6 @@ const leaveRequestController = {
             requestToUpdate.status = status;
             await requestToUpdate.save();
 
-            // ... (sisa logika untuk update shift tetap sama)
-
             if (status === 'approved') {
                 await Shift.update(
                     { status: 'on_leave' },

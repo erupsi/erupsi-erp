@@ -4,9 +4,8 @@ const API_URL = 'http://localhost:3003';
 
 function ShiftManagement() {
     const [shifts, setShifts] = useState([]);
-    const [editingShift, setEditingShift] = useState(null); // State untuk menyimpan data shift yang sedang diedit
+    const [editingShift, setEditingShift] = useState(null);
 
-    // --- Fungsi Pengambilan Data ---
     async function fetchShifts() {
         try {
             const response = await fetch(`${API_URL}/shifts`);
@@ -21,9 +20,6 @@ function ShiftManagement() {
         fetchShifts();
     }, []);
 
-    // --- Fungsi CRUD ---
-
-    // CREATE: Menambah shift baru
     const handleAddShift = async (event) => {
         event.preventDefault();
         const form = event.target;
@@ -44,7 +40,6 @@ function ShiftManagement() {
         form.reset();
     };
 
-    // UPDATE: Mengubah shift yang ada
     const handleUpdateShift = async (event) => {
         event.preventDefault();
         const form = event.target;
@@ -62,10 +57,9 @@ function ShiftManagement() {
         });
 
         fetchShifts();
-        setEditingShift(null); // Kembali ke mode "Tambah Baru"
+        setEditingShift(null); 
     };
 
-    // DELETE: Menghapus shift
     const handleDelete = async (id) => {
         if (window.confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
             await fetch(`${API_URL}/shifts/${id}`, {
@@ -75,7 +69,6 @@ function ShiftManagement() {
         }
     };
 
-    // Fungsi untuk memulai mode edit
     const startEdit = (shift) => {
         setEditingShift(shift);
     };

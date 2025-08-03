@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 
 const API_URL = 'http://localhost:3003';
 
-// Fungsi helper untuk memformat tanggal
 const formatDateTime = (isoString) => {
     if (!isoString) return '-';
     return new Date(isoString).toLocaleString('id-ID', {
@@ -39,7 +38,7 @@ function Attendance() {
             if (response.ok) {
                 setMessage(data.message);
                 setLastCheckInId(data.data.id);
-                fetchHistory(); // Muat ulang riwayat setelah check-in
+                fetchHistory();
             } else {
                 setMessage(`Error: ${data.error}`);
             }
@@ -49,7 +48,6 @@ function Attendance() {
     };
 
     const handleCheckOut = async () => {
-        // Gunakan ID dari check-in terakhir, atau dari riwayat jika halaman di-refresh
         const attendanceIdToCheckOut = lastCheckInId || history.find(h => h.check_out === null)?.id;
 
         if (!attendanceIdToCheckOut) {
@@ -62,7 +60,7 @@ function Attendance() {
              if (response.ok) {
                 setMessage(data.message);
                 setLastCheckInId(null);
-                fetchHistory(); // Muat ulang riwayat setelah check-out
+                fetchHistory();
             } else {
                 setMessage(`Error: ${data.error}`);
             }

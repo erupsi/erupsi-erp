@@ -47,7 +47,7 @@ const reportsController = {
             console.error('Gagal mengambil rekapitulasi payroll:', error);
             res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
         }
-    }, // <-- PASTIKAN ADA KOMA DI SINI
+    },
 
     getWorkContextForIncident: async (req, res) => {
         try {

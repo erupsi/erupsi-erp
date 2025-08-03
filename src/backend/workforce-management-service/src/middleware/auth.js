@@ -2,7 +2,6 @@
 const http = require('http');
 
 function authenticateToken(req, res, next) {
-    // ... (Isi fungsi dari jawaban sebelumnya)
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) return res.sendStatus(401);
@@ -23,7 +22,6 @@ function authorizeManager(req, res, next) {
     }
 }
 
-// Pastikan bagian ini ada dan benar
 module.exports = {
     authenticateToken,
     authorizeManager,

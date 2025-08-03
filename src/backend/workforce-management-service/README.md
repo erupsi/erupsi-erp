@@ -189,7 +189,7 @@ Berikut adalah beberapa implementasi logika bisnis kunci yang sudah ada di dalam
 3.  Jalankan perintah berikut dari direktori root proyek:
     ```bash
     npm start --workspace=workforce-management-service
-    ```
+    ``` 
 4.  Layanan akan berjalan di `http://localhost:3003`.
 
 > **⚠️ DISCLAIMER UNTUK PENGUJIAN LOKAL**

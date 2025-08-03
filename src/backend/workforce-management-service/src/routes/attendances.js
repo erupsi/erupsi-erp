@@ -5,7 +5,6 @@ const { Attendance, Shift } = require('../models');
 const { Op } = require('sequelize');
 
 const attendanceController = {
-    // Logika untuk karyawan melakukan check-in
     checkIn: async (req, res) => {
         try {
             // Untuk pengujian lokal, kita gunakan ID statis
@@ -40,7 +39,7 @@ const attendanceController = {
             if (shift) {
                 // Menggabungkan tanggal hari ini dengan waktu mulai shift
                 const shiftStartTime = new Date(`${today}T${shift.start_time}`);
-                // Beri toleransi keterlambatan 5 menit (300,000 milidetik)
+                // Beri toleransi keterlambatan 5 menit
                 const tolerance = 5 * 60 * 1000;
 
                 if (now.getTime() > shiftStartTime.getTime() + tolerance) {
@@ -50,7 +49,6 @@ const attendanceController = {
                 console.log(`Tidak ada shift untuk karyawan ${employeeIdForTesting} hari ini.`);
             }
 
-            // 3. Buat catatan absensi dengan status yang sudah ditentukan
             const newAttendance = await Attendance.create({
                 employee_id: employeeIdForTesting,
                 check_in: now,
@@ -68,7 +66,6 @@ const attendanceController = {
         }
     },
 
-    // Logika untuk karyawan melakukan check-out
     checkOut: async (req, res) => {
         try {
             const { id } = req.params;
@@ -113,7 +110,7 @@ const attendanceController = {
             const history = await Attendance.findAll({
                 where: { employee_id: employeeIdForTesting },
                 order: [['check_in', 'DESC']], // Urutkan dari yang terbaru
-                limit: 10, // Batasi 10 entri terakhir
+                limit: 10, // Batasi 10 entri
             });
             res.status(200).json(history);
         } catch (error) {

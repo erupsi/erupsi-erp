@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeManager } = require('../middleware/auth');
-const { Shift } = require('../models'); // Impor model Shift
+const { Shift } = require('../models'); 
 
 const shiftController = {
-    // FUNGSI YANG HILANG SEBELUMNYA
     createShift: async (req, res) => {
         try {
             const { employee_id, shift_date, start_time, end_time } = req.body;
@@ -25,7 +24,6 @@ const shiftController = {
         }
     },
 
-    // FUNGSI YANG HILANG SEBELUMNYA
     getShifts: async (req, res) => {
         try {
             const shifts = await Shift.findAll();
@@ -36,7 +34,6 @@ const shiftController = {
         }
     },
 
-    // FUNGSI UPDATE ANDA (SUDAH BENAR)
     updateShift: async (req, res) => {
         try {
             const { id } = req.params;
@@ -60,7 +57,6 @@ const shiftController = {
         }
     },
 
-    // FUNGSI DELETE ANDA (SUDAH BENAR)
     deleteShift: async (req, res) => {
         try {
             const { id } = req.params;

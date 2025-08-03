@@ -25,7 +25,7 @@ async function getUsersByIds(employeeIds) {
     console.log(`[MOCK] Mengambil detail untuk karyawan: ${employeeIds.join(', ')}`);
     const allUsers = [
         { id: 'c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d', full_name: 'Budi (dari Mock)' },
-        { id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', full_name: 'Citra (dari Mock)' }, // <-- Diperbaiki
+        { id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', full_name: 'Citra (dari Mock)' },
     ];
     return allUsers.filter((user) => employeeIds.includes(user.id));
 }
