@@ -3,15 +3,17 @@ const router = express.Router();
 
 const registerEmployee = require('../controllers/registerEmployee')
 const authenticateServiceReq = require('../middlewares/authenticateServiceReq')
-const validateRegisterEmployeeReqBody = require('../validationator/validateRegisterEmployee')
 const validateLoginReq = require('../validationator/validateLoginReq')
 const loginEmployee = require('../controllers/loginEmployee');
 const refreshTokenRenewal = require('../controllers/refreshTokenRenewal');
 const logoutHandler = require('../controllers/logoutHandler');
+const validateRegisterReq = require('../validationator/validateRegisterReq');
+const employeeChangePassword = require('../controllers/employeeChangePassword');
+const validateEmployeeChangePassword = require('../validationator/validateEmployeeChangePassword');
 
 router.post("/register", 
   authenticateServiceReq({useRole:true}), 
-  validateRegisterEmployeeReqBody, 
+  validateRegisterReq, 
   registerEmployee);
 
 router.post("/login",
@@ -26,5 +28,11 @@ router.post("/refresh-token",
 router.post("/logout",
   authenticateServiceReq(),
   logoutHandler
+)
+
+router.post("/change-password",
+  authenticateServiceReq(),
+  validateEmployeeChangePassword(),
+  employeeChangePassword
 )
 module.exports = router

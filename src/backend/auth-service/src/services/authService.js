@@ -81,4 +81,15 @@ const getEmployeeUsername = async (employeeId) => {
   }
 }
 
-module.exports = {getEmployeeUsername, registerUser, AddEmployeeRequestToUrm, checkEmployeeByUsername, getEmployeeDataFromUrm}
+const changeEmployeePassword = async(username, password, expiryDate) => {
+  try{
+    const sql = "UPDATE auth_employee SET password = $1, password_expiry = $2 WHERE username = $3;"
+    await pool.query(sql, [password, expiryDate, username])
+    return {success: true}
+} catch(error){
+    console.error(error)
+    return {success: false}
+  }
+}
+
+module.exports = {changeEmployeePassword, getEmployeeUsername, registerUser, AddEmployeeRequestToUrm, checkEmployeeByUsername, getEmployeeDataFromUrm}

@@ -7,7 +7,7 @@ const loginEmployee = async(req, res, next) =>{
   try{
     const {username, password} = req.body
     const employeeData = await checkEmployeeByUsername(username)
-    
+
     if(!employeeData){
       return res.status(401).json("Invalid username or password")
     }
@@ -20,11 +20,33 @@ const loginEmployee = async(req, res, next) =>{
       // return responseSender(res, 401, "Invalid username or password")
       return res.status(401).json("Invalid username or password")
     }
+
     const employeeFromUrm = await getEmployeeDataFromUrm(employeeData.employeeid)
     const employeeRole = employeeFromUrm.data.roles
-    console.log(employeeRole)
+
     const {refreshToken, accessToken} = await tokenBuilderAssigner(res, employeeId, username, employeeRole, {replace_token: true})
     
+    const responseBody = {
+      message: "Login successful",
+      accessToken: accessToken,
+    }
+
+    const passwordExpiry = employeeData.password_expiry
+    const currentDate = new Date()
+
+    const timeLeft = passwordExpiry - currentDate
+    const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
+
+    if(daysLeft <= 3){
+      responseBody.passwordExpiryWarning = 
+      `Your password will expire in ${timeLeft} days. Please change it soon.`
+    }
+
+    if(daysLeft < 0){
+      responseBody.passwordExpired = 
+      `Password is expired. Change it now`
+    }
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', 
@@ -32,10 +54,7 @@ const loginEmployee = async(req, res, next) =>{
       maxAge: 8 * 60 * 60 * 1000 
     });
 
-    res.json({
-      message: "Login successful",
-      accessToken: accessToken
-    });
+    res.json(responseBody);
 
   }catch(error) {
     console.log("Error lagi at login employee")
