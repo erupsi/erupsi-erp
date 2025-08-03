@@ -1,0 +1,23 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.main-body{
+  background-color: #E1E6EA;
+  display: flex;
+
+  .main-container{
+    height: 100vh;
+    flex: 1; 
+    padding: 20px 34px;
+
+    .main_content{
+      background-color: #F4F5F6;
+      height: 100%;
+      padding: 1em 3em 10px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      border-radius: 20px;
+    }
+  }
+}
