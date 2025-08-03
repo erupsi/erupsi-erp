@@ -20,6 +20,7 @@ components:
         - name
         - type
         - parentCode
+        - acc_id
       properties:
         code:
           type: string
@@ -30,6 +31,8 @@ components:
         parentCode:
           type: string
           nullable: true
+        acc_id:
+          type: integer
     AccountNode:
       type: object
       properties:
@@ -239,6 +242,7 @@ paths:
               name: "Cash"
               type: "Asset"
               parentCode: null
+              acc_id: "11"
       responses:
         '201':
           description: Akun berhasil ditambahkan
