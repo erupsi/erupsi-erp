@@ -4,7 +4,7 @@ const responseSender = require('../utils/responseSender');
 
 const registerEmployee = async(req, res, next) => {
   try{
-    const {username, password, fullName, email, department, position, roleName } = req.body;
+    const {username, password, fullName, email, department, position, roleName, passwordExpiry } = req.body;
 
     const newEmployeeId = uuidv4();
     const addEmployeeData = await AddEmployeeRequestToUrm(newEmployeeId, fullName, email, department, position, roleName)
@@ -13,7 +13,7 @@ const registerEmployee = async(req, res, next) => {
       // return responseSender(res, 400, addEmployeeData.message || "Gagal menambah data pegawai ke URM")
       return res.status(400).json("Gagal menambahkan data pegawai ke URM")
     }
-    const register = await registerUser(newEmployeeId, username, password)
+    const register = await registerUser(newEmployeeId, username, password, passwordExpiry)
     
     if(!register.success === true){
       return res.status(400).json("Gagal menambahkan data pegawai ke URM")

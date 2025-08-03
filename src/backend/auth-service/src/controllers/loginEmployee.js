@@ -12,6 +12,7 @@ const loginEmployee = async(req, res, next) =>{
       return res.status(401).json("Invalid username or password")
     }
 
+    const employeeId = employeeData.employeeid
     const hashedPass = employeeData.password
     const isPasswordMatch = await comparator(password, hashedPass)
 
@@ -19,8 +20,10 @@ const loginEmployee = async(req, res, next) =>{
       // return responseSender(res, 401, "Invalid username or password")
       return res.status(401).json("Invalid username or password")
     }
-    const employeeRole = await getEmployeeDataFromUrm(employeeData.employeeid)
-    const {refreshToken, accessToken} = await tokenBuilderAssigner(res, employeeData.employeeid, username, employeeRole.roles, {replace_token: true})
+    const employeeFromUrm = await getEmployeeDataFromUrm(employeeData.employeeid)
+    const employeeRole = employeeFromUrm.data.roles
+    console.log(employeeRole)
+    const {refreshToken, accessToken} = await tokenBuilderAssigner(res, employeeId, username, employeeRole, {replace_token: true})
     
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,

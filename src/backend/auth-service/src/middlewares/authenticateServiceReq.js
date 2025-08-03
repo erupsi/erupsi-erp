@@ -23,14 +23,13 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
 
     
       const decoded = jwt.verify(token, PUBLIC_KEY_FROM_REQUEST,{
-        // algorithms: ['RS256'],
+        algorithms: ['RS256'],
         iss: 'auth-service'
       });
 
 
       if(option.useRole){
         if(!decoded || !decoded.roles || !Array.isArray(decoded.roles) || !decoded.roles.includes("SYSTEM_ADMIN")) {
-          // return responseSender(res, 403, "Access denied: Admin privileges required")
            return res.status(401).json("Access denied: Admin privileges required")
         }
       }
@@ -41,7 +40,7 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
         // return responseSender(res,401, "Token expired")
         return res.status(401).json("Token Required: Your Token already expired")
       }
-      console.error(error)
+      // console.error(error)
       return responseSender(res, 401,  "Invalid or malformed token")
     }
   }

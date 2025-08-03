@@ -7,7 +7,7 @@ const { bcryptSalting } = require('../utils/passwordUtils');
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 
-const registerUser = async (employeeInitialUuid, username, password) => {
+const registerUser = async (employeeInitialUuid, username, password, passwordExpiry) => {
   try {
     const isEmployeeExist = await checkEmployeeByUsername(username)
 
@@ -17,8 +17,8 @@ const registerUser = async (employeeInitialUuid, username, password) => {
 
     const hashedPass = await bcryptSalting(password)
 
-    const query = `INSERT INTO auth_employee(employeeId, username, password) VALUES($1, $2, $3)`;
-    await pool.query(query, [employeeInitialUuid, username, hashedPass]);
+    const query = `INSERT INTO auth_employee(employeeId, username, password, password_expiry) VALUES($1, $2, $3)`;
+    await pool.query(query, [employeeInitialUuid, username, hashedPass, passwordExpiry]);
     return {success: true}
   } catch (err) {
       console.error(err)
@@ -72,9 +72,9 @@ const getEmployeeDataFromUrm = async(employeeId) => {
 
 const getEmployeeUsername = async (employeeId) => {
   try {
-    const query = `SELECT * FROM auth_employee WHERE employeeId=$1`;
+    const query = `SELECT username FROM auth_employee WHERE employeeId=$1`;
     const employeeIdFromQuery = await pool.query(query, [employeeId]);
-    return employeeIdFromQuery.rows[0]
+    return employeeIdFromQuery.rows[0].username
   } catch (err) {
     console.error(err)
     return false

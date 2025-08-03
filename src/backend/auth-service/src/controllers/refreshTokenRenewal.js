@@ -35,7 +35,7 @@ const refreshAccessToken = async (req, res, next) => {
     }
 
     const employeeData = await getEmployeeDataFromUrm(tokenDataResult.employee_id)
-    console.log(employeeData)
+    const employeeRole = employeeData.data.roles 
     const employeeUsername = await getEmployeeUsername(tokenDataResult.employee_id)
 
     const newExpiryDate = new Date();
@@ -43,7 +43,7 @@ const refreshAccessToken = async (req, res, next) => {
 
     
 
-    const {accessToken, refreshToken} = await tokenBuilderAssigner(res,tokenDataResult.employee_id, employeeUsername, employeeData.role)
+    const {accessToken, refreshToken} = await tokenBuilderAssigner(res, tokenDataResult.employee_id, employeeUsername, employeeRole)
     //tokenId, refreshToken, employeeId, expiresAt
     await invalidateAndInsertToken(tokenDataResult.id, refreshToken, tokenDataResult.employee_id, newExpiryDate)
     
