@@ -104,13 +104,54 @@ Layanan ini dibangun dengan struktur yang terorganisir untuk memisahkan tanggung
 
 ## 5. Model Data (Struktur Database)
 
-| Tabel | Deskripsi |
-| :--- | :--- |
-| `employees` | Pusat informasi personalia (dikelola oleh *User Service*). |
-| `shifts` | Alokasi jadwal kerja spesifik (tanggal & jam) per karyawan. |
-| `attendances`| Catatan `check-in` & `check-out` aktual. |
-| `leave_requests` | Alur pengajuan dan persetujuan cuti/izin. |
+// Catatan: Tabel 'Employees' ini hanya untuk visualisasi.
+// Data aslinya berasal dari User Service (External).
+Table Employees as E {
+  id uuid [pk, note: 'Primary Key dari User Service']
+  full_name varchar
+  manager_id uuid
+}
 
+Table Shifts {
+  id uuid [pk]
+  employee_id uuid [ref: > E.id]
+  shift_date date
+  start_time time
+  end_time time
+  status varchar [note: "'active' atau 'on_leave'"]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table LeaveRequests {
+  id uuid [pk]
+  employee_id uuid [ref: > E.id]
+  start_date date
+  end_date date
+  reason text
+  status varchar [note: "'pending', 'approved', 'rejected'"]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Attendances {
+  id uuid [pk]
+  employee_id uuid [ref: > E.id]
+  check_in timestamp
+  check_out timestamp
+  status varchar [note: "'on_time', 'late'"]
+  duration_hours decimal(5, 2)
+}
+
+Table IncidentReports {
+  id uuid [pk]
+  employee_id uuid [ref: > E.id, note: 'Karyawan yang terlibat']
+  incident_date timestamp
+  description text
+  reported_by uuid [ref: > E.id, note: 'Manajer yang melaporkan']
+  created_at timestamp
+  updated_at timestamp
+}
 ---
 
 ## 6. Peran dan Hak Akses Pengguna (V1)
@@ -140,8 +181,6 @@ Berikut adalah beberapa implementasi logika bisnis kunci yang sudah ada di dalam
 -   **Kalkulasi Jam Kerja**:
     -   Ketika seorang karyawan melakukan `check-out`, total durasi jam kerja akan dihitung dan disimpan di dalam data absensi.
     -   *Endpoint* `GET /reports/work-hours-summary` menggunakan data ini untuk menyediakan rekapitulasi jam kerja.
-
----
 
 ---
 
