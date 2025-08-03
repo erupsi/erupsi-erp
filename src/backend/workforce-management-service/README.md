@@ -160,8 +160,6 @@ Table IncidentReports {
 - **Karyawan (Employee) 👤**: Baca jadwal pribadi, Buat permintaan cuti, Lakukan `check-in/out`.
 - **Admin / HR ⚙️**: Akses global *read-only*, manajemen konfigurasi, dan intervensi manual.
 
----
-
 ### Alur Kerja & Logika Bisnis Penting
 
 Berikut adalah beberapa implementasi logika bisnis kunci yang sudah ada di dalam layanan:

@@ -4,15 +4,16 @@ const API_URL = 'http://localhost:3003';
 
 function ShiftManagement() {
     const [shifts, setShifts] = useState([]);
+    const [editingShift, setEditingShift] = useState(null); // State untuk menyimpan data shift yang sedang diedit
 
-    // Fungsi untuk mengambil data shifts dari API
+    // --- Fungsi Pengambilan Data ---
     async function fetchShifts() {
         try {
             const response = await fetch(`${API_URL}/shifts`);
             const data = await response.json();
             setShifts(data);
         } catch (e) {
-            console.error("Failed to fetch shifts:", e);
+            console.error("Gagal mengambil data shifts:", e);
         }
     }
 
@@ -20,15 +21,17 @@ function ShiftManagement() {
         fetchShifts();
     }, []);
 
+    // --- Fungsi CRUD ---
+
+    // CREATE: Menambah shift baru
     const handleAddShift = async (event) => {
         event.preventDefault();
-        const { employee_id, shift_date, start_time, end_time } = event.target.elements;
-
+        const form = event.target;
         const newShift = {
-            employee_id: employee_id.value,
-            shift_date: shift_date.value,
-            start_time: start_time.value,
-            end_time: end_time.value,
+            employee_id: form.employee_id.value,
+            shift_date: form.shift_date.value,
+            start_time: form.start_time.value,
+            end_time: form.end_time.value,
         };
 
         await fetch(`${API_URL}/shifts`, {
@@ -37,8 +40,44 @@ function ShiftManagement() {
             body: JSON.stringify(newShift),
         });
 
-        fetchShifts(); // Ambil ulang data untuk memperbarui tabel
-        event.target.reset(); // Kosongkan form
+        fetchShifts();
+        form.reset();
+    };
+
+    // UPDATE: Mengubah shift yang ada
+    const handleUpdateShift = async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const updatedShift = {
+            employee_id: form.employee_id.value,
+            shift_date: form.shift_date.value,
+            start_time: form.start_time.value,
+            end_time: form.end_time.value,
+        };
+
+        await fetch(`${API_URL}/shifts/${editingShift.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedShift),
+        });
+
+        fetchShifts();
+        setEditingShift(null); // Kembali ke mode "Tambah Baru"
+    };
+
+    // DELETE: Menghapus shift
+    const handleDelete = async (id) => {
+        if (window.confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+            await fetch(`${API_URL}/shifts/${id}`, {
+                method: 'DELETE',
+            });
+            fetchShifts();
+        }
+    };
+
+    // Fungsi untuk memulai mode edit
+    const startEdit = (shift) => {
+        setEditingShift(shift);
     };
 
     return (
@@ -46,25 +85,32 @@ function ShiftManagement() {
             <h2 className="page-header">Manajemen Jadwal (Shifts)</h2>
 
             <div className="form-card">
-                <h3>Tambah Jadwal Baru</h3>
-                <form onSubmit={handleAddShift}>
+                <h3>{editingShift ? 'Edit Jadwal' : 'Tambah Jadwal Baru'}</h3>
+                <form onSubmit={editingShift ? handleUpdateShift : handleAddShift}>
                     <div className="form-group">
                         <label>ID Karyawan</label>
-                        <input name="employee_id" type="text" required placeholder="Contoh: c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d" />
+                        <input name="employee_id" type="text" required defaultValue={editingShift?.employee_id || ''} placeholder="Masukkan UUID karyawan" />
                     </div>
                     <div className="form-group">
                         <label>Tanggal</label>
-                        <input name="shift_date" type="date" required />
+                        <input name="shift_date" type="date" required defaultValue={editingShift?.shift_date || ''} />
                     </div>
                     <div className="form-group">
                         <label>Jam Mulai</label>
-                        <input name="start_time" type="time" required />
+                        <input name="start_time" type="time" required defaultValue={editingShift?.start_time || ''} />
                     </div>
                     <div className="form-group">
                         <label>Jam Selesai</label>
-                        <input name="end_time" type="time" required />
+                        <input name="end_time" type="time" required defaultValue={editingShift?.end_time || ''} />
                     </div>
-                    <button type="submit">Simpan Jadwal</button>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button type="submit">{editingShift ? 'Simpan Perubahan' : 'Simpan Jadwal'}</button>
+                        {editingShift && (
+                            <button type="button" onClick={() => setEditingShift(null)} style={{ backgroundColor: '#7f8c8d' }}>
+                                Batal
+                            </button>
+                        )}
+                    </div>
                 </form>
             </div>
 
@@ -77,6 +123,7 @@ function ShiftManagement() {
                         <th>Mulai</th>
                         <th>Selesai</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,6 +134,14 @@ function ShiftManagement() {
                             <td>{shift.start_time}</td>
                             <td>{shift.end_time}</td>
                             <td>{shift.status}</td>
+                            <td>
+                                <button onClick={() => startEdit(shift)} style={{ marginRight: '5px' }}>
+                                    Edit
+                                </button>
+                                <button onClick={() => handleDelete(shift.id)} style={{ backgroundColor: '#e74c3c' }}>
+                                    Hapus
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

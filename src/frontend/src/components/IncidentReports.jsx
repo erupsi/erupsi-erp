@@ -11,7 +11,7 @@ function IncidentReports() {
             const data = await response.json();
             setIncidents(data);
         } catch (e) {
-            console.error("Failed to fetch incidents:", e);
+            console.error("Gagal mengambil data insiden:", e);
         }
     }
 
@@ -21,12 +21,11 @@ function IncidentReports() {
 
     const handleAddIncident = async (event) => {
         event.preventDefault();
-        const { employee_id, incident_date, description } = event.target.elements;
-
+        const form = event.target;
         const newIncident = {
-            employee_id: employee_id.value,
-            incident_date: incident_date.value,
-            description: description.value,
+            employee_id: form.employee_id.value,
+            incident_date: form.incident_date.value,
+            description: form.description.value,
         };
 
         await fetch(`${API_URL}/incidents`, {
@@ -36,8 +35,19 @@ function IncidentReports() {
         });
 
         fetchIncidents();
-        event.target.reset();
+        form.reset();
     };
+    
+    // Fungsi Delete
+    const handleDelete = async (id) => {
+        if(window.confirm('Apakah Anda yakin ingin menghapus laporan insiden ini?')) {
+             await fetch(`${API_URL}/incidents/${id}`, {
+                method: 'DELETE',
+            });
+            fetchIncidents();
+        }
+    };
+
 
     return (
         <div>
@@ -70,15 +80,19 @@ function IncidentReports() {
                         <th>Tanggal Insiden</th>
                         <th>Deskripsi</th>
                         <th>Dilaporkan Oleh</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     {incidents.map((incident) => (
                         <tr key={incident.id}>
                             <td>{incident.employee_id}</td>
-                            <td>{new Date(incident.incident_date).toLocaleString()}</td>
+                            <td>{new Date(incident.incident_date).toLocaleString('id-ID')}</td>
                             <td>{incident.description}</td>
                             <td>{incident.reported_by}</td>
+                            <td>
+                                <button onClick={() => handleDelete(incident.id)} style={{ backgroundColor: '#e74c3c' }}>Hapus</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

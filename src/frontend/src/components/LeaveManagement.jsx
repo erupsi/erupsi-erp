@@ -5,14 +5,9 @@ const API_URL = 'http://localhost:3003';
 function LeaveManagement() {
     const [leaveRequests, setLeaveRequests] = useState([]);
 
-    // Fungsi untuk mengambil data pengajuan cuti dari API
     async function fetchLeaveRequests() {
         try {
-            // Endpoint ini mengambil semua data tim (sesuai mock di backend)
             const response = await fetch(`${API_URL}/leave-requests/team`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
             const data = await response.json();
             setLeaveRequests(data);
         } catch (e) {
@@ -24,23 +19,57 @@ function LeaveManagement() {
         fetchLeaveRequests();
     }, []);
 
+    const handleAddRequest = async (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const newRequest = {
+            start_date: form.start_date.value,
+            end_date: form.end_date.value,
+            reason: form.reason.value,
+        };
+
+        await fetch(`${API_URL}/leave-requests`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newRequest),
+        });
+
+        fetchLeaveRequests();
+        form.reset();
+    };
+
     const handleUpdateStatus = async (id, status) => {
-        try {
-            await fetch(`${API_URL}/leave-requests/${id}/status`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status }),
-            });
-            // Muat ulang data untuk melihat perubahan status
-            fetchLeaveRequests();
-        } catch (e) {
-             console.error("Gagal memperbarui status:", e);
-        }
+        await fetch(`${API_URL}/leave-requests/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status }),
+        });
+        fetchLeaveRequests();
     };
 
     return (
         <div>
             <h2 className="page-header">Manajemen Cuti (Leave Requests)</h2>
+
+            <div className="form-card">
+                <h3>Ajukan Cuti Baru</h3>
+                <form onSubmit={handleAddRequest}>
+                    <div className="form-group">
+                        <label>Tanggal Mulai</label>
+                        <input name="start_date" type="date" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Tanggal Selesai</label>
+                        <input name="end_date" type="date" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Alasan</label>
+                        <input name="reason" type="text" required placeholder="Contoh: Acara keluarga" />
+                    </div>
+                    <button type="submit">Kirim Pengajuan</button>
+                </form>
+            </div>
+
             <h3>Daftar Pengajuan Cuti Tim</h3>
             <table>
                 <thead>
