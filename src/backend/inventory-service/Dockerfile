@@ -16,8 +16,13 @@ RUN npm install --workspace=src/backend/inventory-service --production
 FROM node:20-alpine AS runtime
 
 WORKDIR /app
-COPY package.json ./
-RUN npm install --production
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
+
+# Copy installed node_modules from builder stage
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/src/backend/inventory-service .
+
+# Set Node.js environment (optional)
+ENV NODE_ENV=production
+
+# Set default command
+CMD ["node", "src/index.js"]
