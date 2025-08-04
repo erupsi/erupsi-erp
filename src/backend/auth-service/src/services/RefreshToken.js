@@ -33,7 +33,7 @@ const tokenBuilderAssigner = async (res, employeeId, username, roles, options = 
     return {accessToken, refreshToken}
     // return responseSender(res, 200, "Login Success")
   }catch(error){
-    return res.status(500).json("Internal Server Error");
+    return res.status(500).json({error: "Internal Server Error"});
     // return responseSender(res, 500, "Internal Server Error")
   }
 }

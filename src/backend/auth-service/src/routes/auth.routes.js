@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const {csrfProtection, csrfHandler, handlerErrorCsrf} = require('../middlewares/csrfProtect')
 
 const registerEmployee = require('../controllers/registerEmployee')
 const authenticateServiceReq = require('../middlewares/authenticateServiceReq')
@@ -13,6 +14,7 @@ const validateEmployeeChangePassword = require('../validationator/validateEmploy
 const validateAdminResetPassword = require('../validationator/validateAdminResetPassword');
 const adminResetPassword = require('../controllers/adminResetPassword');
 
+
 router.post("/register", 
   authenticateServiceReq({useRole:true}), 
   validateRegisterReq, 
@@ -20,9 +22,15 @@ router.post("/register",
 );
 
 router.post("/login",
-  // authenticateServiceReq(),
+  csrfProtection,
+  handlerErrorCsrf,
   validateLoginReq(),
   loginEmployee
+);
+
+router.get('/csrf-token', 
+  csrfProtection,
+  csrfHandler
 );
 
 router.post("/refresh-token", 

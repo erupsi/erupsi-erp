@@ -17,7 +17,7 @@ const handlerErrorCsrf = async (err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
         // Kirim respons 403 Forbidden dengan pesan kustom
         return res.status(403).json({
-            message: 'Token CSRF tidak valid. Permintaan diblokir.'
+            error: 'Token CSRF tidak valid. Permintaan diblokir.'
         });
     }
     console.error(err)

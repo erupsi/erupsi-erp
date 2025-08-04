@@ -13,14 +13,14 @@ const adminResetPassword = async(req, res, next) => {
     const resetEmployeePassword = await changeEmployeePassword(username, hashedPassword, expiryDate)
 
     if(!resetEmployeePassword){
-      return res.status(500).json("Internal server error")
+      return res.status(500).json({error: "Internal server error"})
     }
 
-    return res.status(200).json("Password changed successfully")
+    return res.status(200).json({message: "Password changed successfully"})
   
   }catch(error){
     console.error(error)
-    return res.status(500).json("Internal server error")
+    return res.status(500).json({error: "Internal server error"})
   }
 }
 

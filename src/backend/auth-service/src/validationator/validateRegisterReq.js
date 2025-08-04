@@ -66,7 +66,7 @@ const validateRegisterReq = () => {
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
         // return responseSender(res, 400, errorMessages)
-        return res.status(400).json(errorMessages)
+        return res.status(400).json({error: errorMessages})
       }
       next();
     }

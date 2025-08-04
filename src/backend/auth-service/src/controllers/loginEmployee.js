@@ -9,7 +9,7 @@ const loginEmployee = async(req, res, next) =>{
     const employeeData = await checkEmployeeByUsername(username)
 
     if(!employeeData){
-      return res.status(401).json("Invalid username or password")
+      return res.status(401).json({error: "Invalid username or password"})
     }
 
     const employeeId = employeeData.employeeid
@@ -18,7 +18,7 @@ const loginEmployee = async(req, res, next) =>{
 
     if(!isPasswordMatch){
       // return responseSender(res, 401, "Invalid username or password")
-      return res.status(401).json("Invalid username or password")
+      return res.status(401).json({error: "Invalid username or password"})
     }
 
     const employeeFromUrm = await getEmployeeDataFromUrm(employeeData.employeeid)
@@ -59,7 +59,7 @@ const loginEmployee = async(req, res, next) =>{
   }catch(error) {
     console.log("Error lagi at login employee")
     console.error(error)
-    return res.status(500).json("Internal server error At Login Employee");
+    return res.status(500).json({error: "Internal server error At Login Employee"});
   }
 }
 

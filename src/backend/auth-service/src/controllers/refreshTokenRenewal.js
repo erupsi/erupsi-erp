@@ -10,7 +10,7 @@ const refreshAccessToken = async (req, res, next) => {
     const oldRefreshToken = req.cookies.refreshToken;
 
     if(!oldRefreshToken) {
-      return res.status(401).json({message: "Token not found"})
+      return res.status(401).json({error: "Token not found"})
     }
 
     const tokenDataResultArray = await searchRefreshToken(oldRefreshToken)
@@ -18,7 +18,7 @@ const refreshAccessToken = async (req, res, next) => {
 
     if(!tokenDataResult){
       
-      return res.status(403).json({ message: "Invalid token. Please login again." });
+      return res.status(403).json({ error: "Invalid token. Please login again." });
     }
 
     if(!tokenDataResult.is_valid){
@@ -26,12 +26,12 @@ const refreshAccessToken = async (req, res, next) => {
       await deleteTokenByEmpId(tokenDataResult.employee_id);
       const dateTimeNow = new Date()
       console.log(`This employee: [${employeeUsername}] session is compromised at:${dateTimeNow} `)
-      return res.status(403).json({ message: "Invalid token. Please login again." });
+      return res.status(403).json({ Error: "Invalid token. Please login again." });
     }
 
     if (new Date() > new Date(tokenDataResult.expires_at)) {
       await deleteToken(oldRefreshToken)
-      return res.status(403).json({ message: "Token expired. Please login again." });
+      return res.status(403).json({ error: "Token expired. Please login again." });
     }
 
     const employeeData = await getEmployeeDataFromUrm(tokenDataResult.employee_id)
@@ -60,7 +60,7 @@ const refreshAccessToken = async (req, res, next) => {
 
   } catch(error){
     console.error(error)
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
 

@@ -25,7 +25,7 @@ const employeeChangePassword = async (req, res, next) => {
 
   const employeeUsername = decoded.username
   if(!employeeUsername){
-    return res.status(401).json({message: "You are not authorized to send this request."})
+    return res.status(401).json({error: "You are not authorized to send this request."})
   }
 
   const employeeData = await checkEmployeeByUsername(employeeUsername)
@@ -33,12 +33,12 @@ const employeeChangePassword = async (req, res, next) => {
   const isPasswordMatch = await comparator(oldPassword ,employeeData.password)
 
   if(!isPasswordMatch){
-    return res.status(401).json({message: "Password doesn't match it's predecessor"})
+    return res.status(401).json({error: "Password doesn't match it's predecessor"})
   }
   const isPasswordMatchNew = await comparator(newPassword ,employeeData.password)
 
   if(isPasswordMatchNew){
-    return res.status(401).json({message: "You dumbfuck didn't change anything"}) //CHANGE
+    return res.status(401).json({error: "You dumbfuck didn't change anything"}) //CHANGE
   }
 
   const hashedPassword = await bcryptSalting(newPassword)
@@ -48,11 +48,11 @@ const employeeChangePassword = async (req, res, next) => {
   const passwordChangeResult = await changeEmployeePassword(employeeUsername, hashedPassword, passExpiry)
 
   if(!passwordChangeResult.success){
-    return res.status(500).json({message: 'Internal server error. Password change attempt unsuccessful'})
+    return res.status(500).json({error: 'Internal server error. Password change attempt unsuccessful'})
   }
     return res.status(200).json({message: 'Your password changed successfully'})
 }catch(error){
-  return res.status(500).json("Internal server error")
+  return res.status(500).json({error: "Internal server error"})
 }
 }
 

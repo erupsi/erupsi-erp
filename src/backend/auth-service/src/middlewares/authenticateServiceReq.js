@@ -11,13 +11,13 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
     
     if(!authHeader) {
       // return responseSender(res, 401, "Authentication token required!")
-      return res.status(401).json("Authentication token required!")
+      return res.status(401).json({error: "Authentication token required!"})
     }
 
     const token = authHeader.split(" ")[1];
     if(!token) {
       // return responseSender(res, 401, "Token format is 'Bearer <token>")
-      return res.status(401).json("Token format is 'Bearer <token>")
+      return res.status(401).json({error: "Token format is 'Bearer <token>"})
     }
 
     const decoded = jwt.verify(token, PUBLIC_KEY_FROM_REQUEST,{
@@ -27,7 +27,7 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
 
     if(option.useRole){
       if(!decoded || !decoded.roles || !Array.isArray(decoded.roles) || !decoded.roles.includes("SYSTEM_ADMIN")) {
-         return res.status(401).json("Access denied: Admin privileges required")
+         return res.status(401).json({error: "Access denied: Admin privileges required"})
       }
     }
 
@@ -35,10 +35,10 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
     } catch(error){
       if(error.name === 'TokenExpiredError'){
         // return responseSender(res,401, "Token expired")
-        return res.status(401).json("Token Required: Your Token already expired")
+        return res.status(401).json({error: "Token Required: Your Token already expired"})
       }
-      // console.error(error)
-      return responseSender(res, 401,  "Invalid or malformed token")
+      console.error(error)
+      return res.status(401).json({error: "Invalid or malformed token"})
     }
   }
 }
