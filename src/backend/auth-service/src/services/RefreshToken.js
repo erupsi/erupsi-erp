@@ -2,7 +2,6 @@
 const jwt = require('jsonwebtoken');
 const pool = require('./db');
 const crypto = require('crypto');
-const responseSender = require('../utils/responseSender');
 require('dotenv').config({ path: __dirname + '/../../.env' })
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
@@ -22,19 +21,16 @@ const tokenBuilderAssigner = async (res, employeeId, username, roles, options = 
     const refreshToken = crypto.randomBytes(64).toString('hex');
 
     if(options.replace_token == true){
-      const replaceResult = await replaceRefreshTokenFromDB(employeeId, refreshToken, expiryDate)
+      const replaceResult = await module.exports.replaceRefreshTokenFromDB(employeeId, refreshToken, expiryDate)
 
       if(!replaceResult){
         return res.status(500).json("Internal Server Error");
-        // return responseSender(res, 500, "Internal Server Error");
       }
     }
 
     return {accessToken, refreshToken}
-    // return responseSender(res, 200, "Login Success")
   }catch(error){
     return res.status(500).json({error: "Internal Server Error"});
-    // return responseSender(res, 500, "Internal Server Error")
   }
 }
 
@@ -86,8 +82,8 @@ const insertToken = async (refreshToken, employeeId, expiresAt) => {
 const invalidateAndInsertToken = async(tokenId, refreshToken, employeeId, expiresAt) => {
   pool.query("BEGIN")
   try{
-    await invalidateToken(tokenId)
-    await insertToken(refreshToken, employeeId, expiresAt)
+    await module.exports.invalidateToken(tokenId)
+    await module.exports.insertToken(refreshToken, employeeId, expiresAt)
     pool.query("COMMIT")
   }catch(error){
     pool.query("ROLLBACK")

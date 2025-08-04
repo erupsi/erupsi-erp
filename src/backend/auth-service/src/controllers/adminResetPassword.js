@@ -16,7 +16,7 @@ const adminResetPassword = async(req, res, next) => {
       return res.status(500).json({error: "Internal server error"})
     }
 
-    return res.status(200).json({message: "Password changed successfully"})
+    return res.status(201).json({message: "Password changed successfully"})
   
   }catch(error){
     console.error(error)

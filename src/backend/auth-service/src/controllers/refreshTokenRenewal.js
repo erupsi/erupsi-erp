@@ -25,7 +25,6 @@ const refreshAccessToken = async (req, res, next) => {
       // TODO: IMPLEMENT USER LOGOUUT AUTO HERE
       await deleteTokenByEmpId(tokenDataResult.employee_id);
       const dateTimeNow = new Date()
-      console.log(`This employee: [${employeeUsername}] session is compromised at:${dateTimeNow} `)
       return res.status(403).json({ Error: "Invalid token. Please login again." });
     }
 
@@ -54,7 +53,7 @@ const refreshAccessToken = async (req, res, next) => {
       maxAge: 8 * 60 * 60 * 1000
     });
     
-    res.json({
+    res.status(200).json({
       accessToken: accessToken
     });
 

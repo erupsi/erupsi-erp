@@ -1,7 +1,6 @@
 require('dotenv').config({ path: __dirname + '/../../.env' })
 const jwt = require('jsonwebtoken');
 const PUBLIC_KEY_FROM_REQUEST = process.env.PUBLIC_KEY_FROM_REQUEST.replace(/\\n/g, '\n');
-const responseSender = require('../utils/responseSender')
 
 
 const authenticateServiceReq = (option = {useRole: false}) =>  {
@@ -10,13 +9,11 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
     const authHeader = req.headers["authorization"];
     
     if(!authHeader) {
-      // return responseSender(res, 401, "Authentication token required!")
       return res.status(401).json({error: "Authentication token required!"})
     }
 
     const token = authHeader.split(" ")[1];
     if(!token) {
-      // return responseSender(res, 401, "Token format is 'Bearer <token>")
       return res.status(401).json({error: "Token format is 'Bearer <token>"})
     }
 
@@ -34,7 +31,6 @@ const authenticateServiceReq = (option = {useRole: false}) =>  {
     next();
     } catch(error){
       if(error.name === 'TokenExpiredError'){
-        // return responseSender(res,401, "Token expired")
         return res.status(401).json({error: "Token Required: Your Token already expired"})
       }
       console.error(error)

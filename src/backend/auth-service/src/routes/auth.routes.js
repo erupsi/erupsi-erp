@@ -17,7 +17,7 @@ const adminResetPassword = require('../controllers/adminResetPassword');
 
 router.post("/register", 
   authenticateServiceReq({useRole:true}), 
-  validateRegisterReq, 
+  validateRegisterReq,
   registerEmployee
 );
 

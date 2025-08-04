@@ -1,6 +1,5 @@
-const {bcryptSalting, comparator} = require('../utils/passwordUtils')
+const {comparator} = require('../utils/passwordUtils')
 const {checkEmployeeByUsername, getEmployeeDataFromUrm} = require('../services/authService')
-const responseSender = require('../utils/responseSender')
 const { tokenBuilderAssigner } = require('../services/RefreshToken')
 
 const loginEmployee = async(req, res, next) =>{
@@ -17,7 +16,6 @@ const loginEmployee = async(req, res, next) =>{
     const isPasswordMatch = await comparator(password, hashedPass)
 
     if(!isPasswordMatch){
-      // return responseSender(res, 401, "Invalid username or password")
       return res.status(401).json({error: "Invalid username or password"})
     }
 
@@ -54,7 +52,7 @@ const loginEmployee = async(req, res, next) =>{
       maxAge: 8 * 60 * 60 * 1000 
     });
 
-    res.json(responseBody);
+    res.status(200).json(responseBody);
 
   }catch(error) {
     console.log("Error lagi at login employee")
