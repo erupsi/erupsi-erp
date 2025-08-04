@@ -26,7 +26,7 @@ const validateEmployeeIdOnParam = require('../middlewares/validateEmployeeIdOnPa
  */
 router.get(
   "/employee", 
-  authenticateServiceRequest({useRole: true}), 
+  authenticateServiceRequest({AdminRole: true}), 
   getAllEmployee);
 
 
@@ -37,7 +37,7 @@ router.get(
  */ 
 router.post(
   "/employee", 
-  authenticateServiceRequest(), 
+  authenticateServiceRequest({AuthService: true}),
   createEmployee);
 
 
@@ -48,7 +48,7 @@ router.post(
  */
 router.get(
   "/employee/:employeeId", 
-  authenticateServiceRequest(),
+  authenticateServiceRequest({AdminRole: true, AuthService: true}),
   validateEmployeeIdOnParam, 
   getEmployeeDetail)
 
@@ -60,7 +60,7 @@ router.get(
  */
 router.patch(
   "/employee/:employeeId", 
-  authenticateServiceRequest({useRole: true}), 
+  authenticateServiceRequest({AdminRole: true}), 
   patchBodyValidator(), 
   validateEmployeeIdOnParam,
   editEmployeeDetails)
@@ -73,7 +73,7 @@ router.patch(
  */
 router.delete(
   "/employee/:employeeId", 
-  authenticateServiceRequest({useRole: true}), 
+  authenticateServiceRequest({AdminRole: true}), 
   validateEmployeeIdOnParam,
   deleteEmployee)
 
@@ -85,7 +85,7 @@ router.delete(
  */
 router.put(
   "/employee/:employeeId/roles",
-  authenticateServiceRequest({useRole: true}),
+  authenticateServiceRequest({AdminRole: true}),
   patchRoleUpdateValidator(),
   validateEmployeeIdOnParam,
   assignRoleToEmployee)
@@ -98,7 +98,7 @@ router.put(
  */
 router.get(
   "/roles", 
-  authenticateServiceRequest(), 
+  authenticateServiceRequest({AdminRole: true}), 
   getAllRoles)
 
   
@@ -109,7 +109,7 @@ router.get(
  */
 router.post(
   "/roles", 
-  authenticateServiceRequest({useRole: true}), 
+  authenticateServiceRequest({AdminRole: true}), 
   validateRoleCreationReq(),
   addRole)
 

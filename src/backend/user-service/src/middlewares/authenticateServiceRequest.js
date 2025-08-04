@@ -19,8 +19,18 @@ const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
  * } An Express middleware function that authenticates the request.
  */
 
-const authenticateServiceRequest = (options = {useRole: false}) => {
+const authenticateServiceRequest = (options = {AdminRole: false, AuthService: false}) => {
   return async (req, res, next) => {
+    const allowedRoles = []
+
+    if(options.AdminRole == true) {
+      allowedRoles.push("SYSTEM_ADMIN")
+    }
+
+    if(options.AuthService == true) {
+      allowedRoles.push("AUTH_SERVICE")
+    }
+
     const authHeader = req.headers["authorization"];
 
     if(!authHeader) {
@@ -36,21 +46,26 @@ const authenticateServiceRequest = (options = {useRole: false}) => {
     try{
       const decoded = jwt.verify(token, PUBLIC_KEY,{
         algorithms: ['RS256'],
-        issuer: 'auth-service'
+        iss: 'auth-service'
       });
 
-      if(options.useRole == true) {
-        if(!decoded || !decoded.role || !Array.isArray(decoded.role) || !decoded.role.includes('SYSTEM_ADMIN')){
+      if(options.AdminRole == true || options.AuthService == true) {
+        if(!decoded || 
+          !decoded.roles || 
+          !Array.isArray(decoded.roles) 
+          || !decoded.roles.some((role) => allowedRoles.includes(role))
+        ){
           return res.status(403).json({message: "Access denied: Admin privileges required"})
         }
       }
 
       next();
     } catch(error){
+      console.error('error lagi bang')
       if(error.name === 'TokenExpiredError'){
         return res.status(401).json({message: "Token expired"});
       }
-      console.error()
+      console.error(error)
       return res.status(401).json({message: "Invalid or malformed token"});
     }
   }
