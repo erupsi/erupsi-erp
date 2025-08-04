@@ -39,7 +39,7 @@ const loginEmployee = async(req, res, next) =>{
 
     if(daysLeft <= 3){
       responseBody.passwordExpiryWarning = 
-      `Your password will expire in ${timeLeft} days. Please change it soon.`
+      `Your password will expire in ${daysLeft} days. Please change it soon.`
     }
 
     if(daysLeft < 0){
@@ -49,7 +49,7 @@ const loginEmployee = async(req, res, next) =>{
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', 
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 8 * 60 * 60 * 1000 
     });
