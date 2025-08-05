@@ -59,6 +59,9 @@ total BPJS contributions payable, etc. )
 - Records tax liabilities
 - Generates internal tax reports
 
+<img width="771" height="1428" alt="finance service drawio" src="https://github.com/user-attachments/assets/610f2f2a-3db9-4cfd-9b28-8cff92f4da26" />
+
+
 ## 4. Non-Functional Requirements
 - **Scalability:** Supports horizontal scaling via Docker and stateless APIs
 - **Security:** JWT-based authentication, role-based authorization, secure API endpoints
