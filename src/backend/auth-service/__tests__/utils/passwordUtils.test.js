@@ -1,112 +1,113 @@
-const { bcryptSalting, comparator } = require('../../src/utils/passwordUtils'); // Sesuaikan path jika perlu
+const {bcryptSalting, comparator} = require("../../src/utils/passwordUtils");
 
 // __tests__/utils/passwordUtils.test.js
 
 // Impor fungsi yang akan kita uji
 
 // Impor modul 'bcrypt' agar kita bisa mengakses mock-nya
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 // 1. Mock seluruh modul 'bcrypt'
-// Jest akan secara otomatis mengganti semua fungsi (hash, compare) dengan mock function.
-jest.mock('bcrypt');
+jest.mock("bcrypt");
 
-describe('Password Utils', () => {
-  // Membersihkan semua mock sebelum setiap tes untuk memastikan tidak ada sisa dari tes sebelumnya
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  // ===============================================
-  // Tes untuk fungsi bcryptSalting
-  // ===============================================
-  describe('bcryptSalting', () => {
-    const plainPassword = 'password123';
-
-    test('should return a hashed password on successful salting', async () => {
-      // Arrange: Siapkan apa yang akan dikembalikan oleh mock kita
-      const mockedHash = 'hashed_password_from_bcrypt';
-      bcrypt.hash.mockResolvedValue(mockedHash);
-
-      // Act: Panggil fungsi yang sedang diuji
-      const result = await bcryptSalting(plainPassword);
-
-      // Assert: Periksa apakah semuanya berjalan sesuai harapan
-      // 1. Pastikan bcrypt.hash dipanggil dengan benar
-      expect(bcrypt.hash).toHaveBeenCalledTimes(1);
-      expect(bcrypt.hash).toHaveBeenCalledWith(plainPassword, 10); // saltRounds = 10
-
-      // 2. Pastikan fungsi kita mengembalikan hash dari bcrypt
-      expect(result).toBe(mockedHash);
+describe("Password Utils", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    test('should return undefined when bcrypt.hash throws an error', async () => {
-      // Arrange: Atur agar mock bcrypt.hash melempar error
-      const hashingError = new Error('Something went wrong during hashing');
-      bcrypt.hash.mockRejectedValue(hashingError);
+    // ===============================================
+    // Tes untuk fungsi bcryptSalting
+    // ===============================================
+    describe("bcryptSalting", () => {
+        const plainPassword = "password123";
 
-      // Act
-      const result = await bcryptSalting(plainPassword);
+        test("should return a hashed password on successful salting",
+            async () => {
+            // Arrange: Siapkan apa yang akan dikembalikan oleh mock kita
+                const mockedHash = "hashed_password_from_bcrypt";
+                bcrypt.hash.mockResolvedValue(mockedHash);
 
-      // Assert: Sesuai implementasi Anda, fungsi akan masuk ke blok catch dan return undefined
-      expect(bcrypt.hash).toHaveBeenCalledTimes(1);
-      expect(result).toBeUndefined();
-    });
-  });
+                // Act: Panggil fungsi yang sedang diuji
+                const result = await bcryptSalting(plainPassword);
 
-  // ===============================================
-  // Tes untuk fungsi comparator
-  // ===============================================
-  describe('comparator', () => {
-    const plainPassword = 'password123';
-    const hashedPassword = 'hashed_password_from_db';
+                // Assert: Periksa apakah semuanya berjalan sesuai harapan
+                // 1. Pastikan bcrypt.hash dipanggil dengan benar
+                expect(bcrypt.hash).toHaveBeenCalledTimes(1);
+                expect(bcrypt.hash).toHaveBeenCalledWith(plainPassword, 10);
 
-    test('should return true when passwords match', async () => {
-      // Arrange: Atur agar bcrypt.compare mengembalikan true (cocok)
-      bcrypt.compare.mockResolvedValue(true);
+                // 2. Pastikan fungsi kita mengembalikan hash dari bcrypt
+                expect(result).toBe(mockedHash);
+            });
 
-      // Act
-      const isMatch = await comparator(plainPassword, hashedPassword);
+        test("should return undefined when bcrypt.hash throws an error",
+            async () => {
+                // Arrange: Atur agar mock bcrypt.hash melempar error
+                const hashingError = new Error(
+                    "Something went wrong during hashing");
+                bcrypt.hash.mockRejectedValue(hashingError);
 
-      // Assert
-      expect(bcrypt.compare).toHaveBeenCalledTimes(1);
-      expect(bcrypt.compare).toHaveBeenCalledWith(plainPassword, hashedPassword);
-      expect(isMatch).toBe(true);
-    });
+                // Act
+                const result = await bcryptSalting(plainPassword);
 
-    test('should return false when passwords do not match', async () => {
-      // Arrange: Atur agar bcrypt.compare mengembalikan false (tidak cocok)
-      bcrypt.compare.mockResolvedValue(false);
-
-      // Act
-      const isMatch = await comparator(plainPassword, hashedPassword);
-
-      // Assert
-      expect(bcrypt.compare).toHaveBeenCalledTimes(1);
-      expect(isMatch).toBe(false);
+                expect(bcrypt.hash).toHaveBeenCalledTimes(1);
+                expect(result).toBeUndefined();
+            });
     });
 
-    test('should return false and log an error when bcrypt.compare fails', async () => {
-      // Arrange: Atur agar bcrypt.compare melempar error
-      const compareError = new Error('Invalid hash format');
-      bcrypt.compare.mockRejectedValue(compareError);
+    // ===============================================
+    // Tes untuk fungsi comparator
+    // ===============================================
+    describe("comparator", () => {
+        const plainPassword = "password123";
+        const hashedPassword = "hashed_password_from_db";
 
-      // Kita juga bisa memata-matai console.error untuk memastikan error dicatat
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        test("should return true when passwords match", async () => {
+            // Arrange: Atur agar bcrypt.compare mengembalikan true (cocok)
+            bcrypt.compare.mockResolvedValue(true);
 
-      // Act
-      const isMatch = await comparator(plainPassword, hashedPassword);
+            // Act
+            const isMatch = await comparator(plainPassword, hashedPassword);
 
-      // Assert
-      // 1. Hasilnya harus false sesuai blok catch
-      expect(isMatch).toBe(false);
+            // Assert
+            expect(bcrypt.compare).toHaveBeenCalledTimes(1);
+            expect(bcrypt.compare)
+                .toHaveBeenCalledWith(plainPassword, hashedPassword);
+            expect(isMatch).toBe(true);
+        });
 
-      // 2. Pastikan error dicatat ke konsol
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      expect(consoleSpy).toHaveBeenCalledWith(compareError);
+        test("should return false when passwords do not match", async () => {
+            bcrypt.compare.mockResolvedValue(false);
 
-      // 3. Kembalikan fungsi console.error ke kondisi semula
-      consoleSpy.mockRestore();
+            // Act
+            const isMatch = await comparator(plainPassword, hashedPassword);
+
+            // Assert
+            expect(bcrypt.compare).toHaveBeenCalledTimes(1);
+            expect(isMatch).toBe(false);
+        });
+
+        test("should return false and log an error when bcrypt.compare fails",
+            async () => {
+            // Arrange: Atur agar bcrypt.compare melempar error
+                const compareError = new Error("Invalid hash format");
+                bcrypt.compare.mockRejectedValue(compareError);
+
+                const consoleSpy = jest.spyOn(console, "error")
+                    .mockImplementation(() => {});
+
+                // Act
+                const isMatch = await comparator(plainPassword, hashedPassword);
+
+                // Assert
+                // 1. Hasilnya harus false sesuai blok catch
+                expect(isMatch).toBe(false);
+
+                // 2. Pastikan error dicatat ke konsol
+                expect(consoleSpy).toHaveBeenCalledTimes(1);
+                expect(consoleSpy).toHaveBeenCalledWith(compareError);
+
+                // 3. Kembalikan fungsi console.error ke kondisi semula
+                consoleSpy.mockRestore();
+            });
     });
-  });
 });

@@ -1,58 +1,63 @@
-const express = require('express');
+const express = require("express");
+/* eslint-disable new-cap */
 const router = express.Router();
-const {csrfProtection, csrfHandler, handlerErrorCsrf} = require('../middlewares/csrfProtect')
+/* eslint-enable new-cap */
+const {csrfProtection, csrfHandler, handlerErrorCsrf} =
+require("../middlewares/csrfProtect");
 
-const registerEmployee = require('../controllers/registerEmployee')
-const authenticateServiceReq = require('../middlewares/authenticateServiceReq')
-const validateLoginReq = require('../validationator/validateLoginReq')
-const loginEmployee = require('../controllers/loginEmployee');
-const refreshTokenRenewal = require('../controllers/refreshTokenRenewal');
-const logoutHandler = require('../controllers/logoutHandler');
-const validateRegisterReq = require('../validationator/validateRegisterReq');
-const employeeChangePassword = require('../controllers/employeeChangePassword');
-const validateEmployeeChangePassword = require('../validationator/validateEmployeeChangePassword');
-const validateAdminResetPassword = require('../validationator/validateAdminResetPassword');
-const adminResetPassword = require('../controllers/adminResetPassword');
+const registerEmployee = require("../controllers/registerEmployee");
+const authenticateServiceReq = require("../middlewares/authenticateServiceReq");
+const validateLoginReq = require("../validationator/validateLoginReq");
+const loginEmployee = require("../controllers/loginEmployee");
+const refreshTokenRenewal = require("../controllers/refreshTokenRenewal");
+const logoutHandler = require("../controllers/logoutHandler");
+const validateRegisterReq = require("../validationator/validateRegisterReq");
+const employeeChangePassword = require("../controllers/employeeChangePassword");
+const validateEmployeeChangePassword =
+require("../validationator/validateEmployeeChangePassword");
+const validateAdminResetPassword =
+require("../validationator/validateAdminResetPassword");
+const adminResetPassword = require("../controllers/adminResetPassword");
 
 
-router.post("/register", 
-  authenticateServiceReq({useRole:true}), 
-  validateRegisterReq,
-  registerEmployee
+router.post("/register",
+    authenticateServiceReq({useRole: true}),
+    validateRegisterReq,
+    registerEmployee,
 );
 
 router.post("/login",
-  csrfProtection,
-  handlerErrorCsrf,
-  validateLoginReq(),
-  loginEmployee
+    csrfProtection,
+    handlerErrorCsrf,
+    validateLoginReq(),
+    loginEmployee,
 );
 
-router.get('/csrf-token', 
-  csrfProtection,
-  csrfHandler
+router.get("/csrf-token",
+    csrfProtection,
+    csrfHandler,
 );
 
-router.post("/refresh-token", 
-  authenticateServiceReq(),
-  refreshTokenRenewal
+router.post("/refresh-token",
+    authenticateServiceReq(),
+    refreshTokenRenewal,
 );
 
 router.post("/logout",
-  authenticateServiceReq(),
-  logoutHandler
+    authenticateServiceReq(),
+    logoutHandler,
 );
 
 router.post("/change-password",
-  authenticateServiceReq(),
-  validateEmployeeChangePassword(),
-  employeeChangePassword
+    authenticateServiceReq(),
+    validateEmployeeChangePassword(),
+    employeeChangePassword,
 );
 
 router.post("/reset-password",
-  authenticateServiceReq({useRole: true}),
-  validateAdminResetPassword(),
-  adminResetPassword
+    authenticateServiceReq({useRole: true}),
+    validateAdminResetPassword(),
+    adminResetPassword,
 );
 
-module.exports = router
+module.exports = router;
