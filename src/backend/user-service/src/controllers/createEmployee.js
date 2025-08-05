@@ -1,4 +1,4 @@
-const {insertEmployeeDetailsToDb} = require('../services/urmService');
+const {insertEmployeeDetailsToDb} = require("../services/urmService");
 
 /**
  * Handles the creation of a new employee.
@@ -17,33 +17,32 @@ const {insertEmployeeDetailsToDb} = require('../services/urmService');
  * @returns {Promise<void>} Sends a JSON response indicating the result of the creation operation.
  */
 
-const createEmployee = async(req, res) => {
-
-  if(req.body === undefined) {
-    return res.status(400).json({message: 'Input tidak valid.'})
-  }
-
-  const { employeeId, fullName, email, department, position, roleName } = req.body;
-  
-  if (!employeeId || !fullName || !email || !department || !position || !roleName) {
-    console.log("Datanya kurang")
-    return res.status(400).json({ error: 'Missing employee data' });
-  }
-
-  try{
-    const result = await insertEmployeeDetailsToDb(employeeId, fullName, email, department, position, roleName)
-    
-    if(result.success){
-      console.log("sukses")
-      res.status(201).json({success: true, message: "Pegawai berhasil didaftarkan"})
-    }else{
-      console.log("gagal nambahin di result hasil")
-      res.status(400).json({success: false, message: result.message || "Gagal mendaftarkan pegawai"})
+const createEmployee = async (req, res) => {
+    if (req.body === undefined) {
+        return res.status(400).json({message: "Input tidak valid."});
     }
-  } catch(error) {
-      console.log("ada error")
-    res.status(500).json({success: false, message: "Terjadi kesalahan internal server."})
-  }
-}
 
-module.exports = createEmployee
+    const {employeeId, fullName, email, department, position, roleName} = req.body;
+
+    if (!employeeId || !fullName || !email || !department || !position || !roleName) {
+        console.log("Datanya kurang");
+        return res.status(400).json({error: "Missing employee data"});
+    }
+
+    try {
+        const result = await insertEmployeeDetailsToDb(employeeId, fullName, email, department, position, roleName);
+
+        if (result.success) {
+            console.log("sukses");
+            res.status(201).json({success: true, message: "Pegawai berhasil didaftarkan"});
+        } else {
+            console.log("gagal nambahin di result hasil");
+            res.status(400).json({success: false, message: result.message || "Gagal mendaftarkan pegawai"});
+        }
+    } catch (error) {
+        console.log("ada error");
+        res.status(500).json({success: false, message: "Terjadi kesalahan internal server."});
+    }
+};
+
+module.exports = createEmployee;

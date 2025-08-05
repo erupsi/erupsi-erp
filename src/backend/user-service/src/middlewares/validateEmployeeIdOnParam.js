@@ -1,4 +1,4 @@
-const { param, validationResult } = require('express-validator');
+const {param, validationResult} = require("express-validator");
 
 /**
  * An array of Express-validator middleware functions.
@@ -11,22 +11,22 @@ const { param, validationResult } = require('express-validator');
 
 
 const validateEmployeeIdOnParam = [
-  // 1. Aturan: Cek 'employeeId' di parameter URL dan pastikan itu adalah UUID.
-  param('employeeId')
-    .isUUID(4) // Tentukan versi UUID jika perlu, versi 4 adalah yang paling umum.
-    .withMessage('Format Employee ID tidak valid. Harap gunakan format UUID.'),
+    // 1. Aturan: Cek 'employeeId' di parameter URL dan pastikan itu adalah UUID.
+    param("employeeId")
+        .isUUID(4) // Tentukan versi UUID jika perlu, versi 4 adalah yang paling umum.
+        .withMessage("Format Employee ID tidak valid. Harap gunakan format UUID."),
 
-  // 2. Handler: Tangani hasil validasi.
-  (req, res, next) => {
-    const errors = validationResult(req);
-    // Jika ada error validasi, kirim respons 400.
-    if (!errors.isEmpty()) {
-      const errorMessages = errors.array().map(error => error.msg);
-      return res.status(400).json({ errors: errorMessages });
-    }
-    // Jika tidak ada error, lanjutkan ke handler berikutnya.
-    next();
-  },
+    // 2. Handler: Tangani hasil validasi.
+    (req, res, next) => {
+        const errors = validationResult(req);
+        // Jika ada error validasi, kirim respons 400.
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map((error) => error.msg);
+            return res.status(400).json({errors: errorMessages});
+        }
+        // Jika tidak ada error, lanjutkan ke handler berikutnya.
+        next();
+    },
 ];
 
 module.exports = validateEmployeeIdOnParam;

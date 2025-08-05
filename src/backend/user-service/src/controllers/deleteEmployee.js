@@ -1,4 +1,4 @@
-const { findEmployeeById, deleteEmployeeBasedOnId} = require('../services/urmService');
+const {findEmployeeById, deleteEmployeeBasedOnId} = require("../services/urmService");
 
 /**
  * Deletes an employee based on the employee ID provided in the request parameters.
@@ -12,25 +12,24 @@ const { findEmployeeById, deleteEmployeeBasedOnId} = require('../services/urmSer
  * @returns {Promise<void>} Sends a JSON response to confirm deletion or report an error.
  */
 
-const deleteEmployee = async(req, res) => {
-  const {employeeId} = req.params;
-    
-  try{
-    const checkUserResult = await findEmployeeById(employeeId);
-    if(!checkUserResult.success){
-      return res.status(404).json({ message: 'Pegawai tidak ditemukan.' });
+const deleteEmployee = async (req, res) => {
+    const {employeeId} = req.params;
+
+    try {
+        const checkUserResult = await findEmployeeById(employeeId);
+        if (!checkUserResult.success) {
+            return res.status(404).json({message: "Pegawai tidak ditemukan."});
+        }
+
+        const deletedUser = await deleteEmployeeBasedOnId(employeeId);
+        if (!deletedUser.success) {
+            return res.status(400).json({message: "Pegawai tidak dapat dihapus"});
+        }
+        return res.status(200).json({message: "Pegawai berhasil dihapus"});
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({error: "Terjadi kesalahan server internal"});
     }
+};
 
-    const deletedUser = await deleteEmployeeBasedOnId(employeeId)
-    if(!deletedUser.success) {
-      return res.status(400).json({message: "Pegawai tidak dapat dihapus"})
-    }
-    return res.status(200).json({message: "Pegawai berhasil dihapus"})
-
-  } catch(error){
-    console.error(error)
-    return res.status(500).json({error: "Terjadi kesalahan server internal"})
-  }
-}
-
-module.exports = deleteEmployee
+module.exports = deleteEmployee;
