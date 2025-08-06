@@ -1,12 +1,6 @@
 const csrf = require("csurf");
 
-const csrfProtection = csrf({
-    cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax",
-    },
-});
+const csrfProtection = csrf();
 
 const csrfHandler = async (req, res) => {
     res.json({csrfToken: req.csrfToken()});
@@ -19,7 +13,7 @@ const handlerErrorCsrf = async (err, req, res, next) => {
         });
     }
     console.error(err);
-    next(err);
+    // next(err);
 };
 
 module.exports = {csrfProtection, csrfHandler, handlerErrorCsrf};

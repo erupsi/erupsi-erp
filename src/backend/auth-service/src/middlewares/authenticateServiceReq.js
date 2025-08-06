@@ -5,7 +5,7 @@
 
 require("dotenv").config({path: __dirname + "/../../.env"});
 const jwt = require("jsonwebtoken");
-const PUBLIC_KEY_FROM_REQUEST =process.env.PUBLIC_KEY_FROM_REQUEST
+const PUBLIC_KEY_FROM_REQUEST=process.env.PUBLIC_KEY_FROM_REQUEST
     .replace(/\\n/g, "\n");
 
 /**

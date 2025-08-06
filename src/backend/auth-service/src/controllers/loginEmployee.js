@@ -77,24 +77,25 @@ const loginEmployee = async (req, res, next) =>{
         const timeLeft = passwordExpiry - currentDate;
         const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
 
-        if (daysLeft <= 3) {
+        if (daysLeft <= 3 && daysLeft > 0) {
             responseBody.passwordExpiryWarning =
       `Your password will expire in ${daysLeft} days. Please change it soon.`;
         }
 
-        if (daysLeft < 0) {
+        if (daysLeft <= 0) {
             responseBody.passwordExpired =
-      "Password is expired. Change it now";
+      "Password expired. Change it now";
         }
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 8 * 60 * 60 * 1000,
-        });
-
-        res.status(200).json(responseBody);
+        return res
+            .status(200)
+            .cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 8 * 60 * 60 * 1000,
+            })
+            .json(responseBody);
     } catch (error) {
         console.error(error);
         return res.status(500).json({

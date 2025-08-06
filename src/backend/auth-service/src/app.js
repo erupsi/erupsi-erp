@@ -6,14 +6,17 @@
  * @module app
  * @version 1.0.0
  */
-
+require("dotenv").config({path: "../.env"});
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const session = require("express-session"); // TOBE DETERMINED
-const cors = require("cors"); // TOBE DETERMINED
+const session = require("express-session");
+const cors = require("cors");
+
+const {
+    handlerErrorCsrf,
+} = require("./middlewares/csrfProtect.js");
 
 const authRoutes = require("./routes/auth.routes");
-require("dotenv").config({path: "../.env"});
 
 const app = express();
 const PORT = process.env.PORT;
@@ -33,10 +36,10 @@ const sessionOption = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        secure: false,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "Lax",
     },
-}; // TOBE DETERMINED
+};
 
 // CORS configuration for cross-origin requests
 app.use(cors({
@@ -61,9 +64,10 @@ app.get("/", (req, res) => {
     res.send("Welcome to the Auth Service");
 });
 
+app.use(handlerErrorCsrf);
+
 /**
  * Start the Express server
  * @listens {number} PORT - The port number from environment variables
  */
-app.listen(PORT, () => {
-});
+app.listen(PORT, () => {});

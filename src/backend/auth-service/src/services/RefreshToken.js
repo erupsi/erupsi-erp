@@ -8,7 +8,7 @@ const pool = require("./db");
 const crypto = require("crypto");
 require("dotenv").config({path: __dirname + "/../../.env"});
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\n/g, "\n");
+const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
 
 /**
  * Generates access and refresh tokens for employee authentication
@@ -65,13 +65,13 @@ const tokenBuilderAssigner = async (
                 );
 
             if (!replaceResult) {
-                return res.status(500).json("Internal Server Error");
+                throw new Error("Failed to replace refresh token in DB");
             }
         }
 
         return {accessToken, refreshToken};
     } catch (error) {
-        return res.status(500).json({error: "Internal Server Error"});
+        throw new Error(`Error in tokenBuilderAssigner: ${error.message}`);
     }
 };
 

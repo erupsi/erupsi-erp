@@ -2,7 +2,10 @@ const express = require("express");
 /* eslint-disable new-cap */
 const router = express.Router();
 /* eslint-enable new-cap */
-const {csrfProtection, csrfHandler, handlerErrorCsrf} =
+const {
+    csrfHandler,
+    csrfProtection,
+} =
 require("../middlewares/csrfProtect");
 
 const registerEmployee = require("../controllers/registerEmployee");
@@ -28,7 +31,6 @@ router.post("/register",
 
 router.post("/login",
     csrfProtection,
-    handlerErrorCsrf,
     validateLoginReq(),
     loginEmployee,
 );
