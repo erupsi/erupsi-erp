@@ -11,6 +11,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
 const {
     handlerErrorCsrf,
@@ -41,7 +42,18 @@ const sessionOption = {
     },
 };
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 menit
+    max: 100, // Maksimal 100 permintaan per IP dalam 15 menit
+    message: {
+        error: "Too many requests, please try again later.",
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // CORS configuration for cross-origin requests
+app.use(limiter);
 app.use(cors({
     origin: CORS_ORIGIN, // Ganti dengan URL frontend Anda
     credentials: true, // Memungkinkan pengiriman cookie antar domain

@@ -9,10 +9,22 @@
 const express = require("express");
 const urmRoutes = require("./routes/urm.routes");
 require("dotenv").config({path: "../.env"});
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 const PORT = process.env.PORT;
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 menit
+    max: 100, // Maksimal 100 permintaan per IP dalam 15 menit
+    message: {
+        error: "Too many requests, please try again later.",
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+app.use(limiter);
 app.use(express.json());
 app.use("/urm", urmRoutes);
 
