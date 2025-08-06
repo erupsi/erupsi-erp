@@ -11,5 +11,14 @@
   "rules": {
     "indent": ["error", 4],
     "quotes": ["error", "double"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.js"],
+      "plugins": ["jest"],
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ]
 }

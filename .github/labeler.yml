@@ -1,0 +1,38 @@
+# actions/labeler config file
+# The corresponding workflow file is in '.github/workflows/labeler.yml'
+# Set label by looking at what files were changed
+
+deployment:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['docker-compose.yml', 'src/backend/**/Dockerfile', 'src/frontend/Dockerfile', '**/.dockerignore']
+
+backend:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['src/backend/**']
+
+frontend:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['src/frontend/**']
+
+source:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['src/backend/*/src/**', 'src/frontend/src/**']
+
+package:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['**/package.json', '**/package-lock.json']
+
+docs:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['docs/**', '**/*.md', '**/*.markdown', '**/openapi.*', '**/swagger.*', 'LICENSE']
+
+workflow:
+  - any:
+    - changed-files:
+      - any-glob-to-any-file: ['.github/**']
