@@ -17,7 +17,7 @@
     "lint:es": "eslint . --ext .js,.ts",
     "lint:fix-es": "eslint . --ext .js,.ts --fix",
     "lint:md": "remark . --quiet --frail",
-    "lint:fix-md": "remark . --quiet --frail --output" 
+    "lint:fix-md": "remark . --quiet --frail --output"
   },
   "repository": {
     "type": "git",
