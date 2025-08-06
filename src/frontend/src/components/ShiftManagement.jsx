@@ -22,6 +22,10 @@ function ShiftManagement() {
 
     const handleAddShift = async (event) => {
         event.preventDefault();
+        // --- POP-UP KONFIRMASI ---
+        if (!window.confirm('Apakah Anda yakin ingin menyimpan jadwal baru ini?')) {
+            return; // Batalkan jika pengguna menekan "Cancel"
+        }
         const form = event.target;
         const newShift = {
             employee_id: form.employee_id.value,
@@ -42,6 +46,10 @@ function ShiftManagement() {
 
     const handleUpdateShift = async (event) => {
         event.preventDefault();
+        // --- POP-UP KONFIRMASI ---
+        if (!window.confirm('Simpan perubahan pada jadwal ini?')) {
+            return;
+        }
         const form = event.target;
         const updatedShift = {
             employee_id: form.employee_id.value,

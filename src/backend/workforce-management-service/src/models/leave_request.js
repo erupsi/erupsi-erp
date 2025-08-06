@@ -28,6 +28,10 @@ const LeaveRequest = sequelize.define('LeaveRequest', {
         defaultValue: 'pending',
         allowNull: false,
     },
+    rejection_reason: {
+        type: DataTypes.TEXT,
+        allowNull: true, // Alasan hanya ada jika ditolak
+    },
 }, {
     tableName: 'leave_requests',
     timestamps: true,

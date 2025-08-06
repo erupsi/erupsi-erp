@@ -12,12 +12,12 @@ const Attendance = sequelize.define('Attendance', {
         allowNull: false,
     },
     check_in: {
-        type: DataTypes.DATE, 
+        type: DataTypes.DATE,
         allowNull: false,
     },
     check_out: {
         type: DataTypes.DATE,
-        allowNull: true, 
+        allowNull: true,
     },
     status: {
         type: DataTypes.ENUM('on_time', 'late', 'absent'),
@@ -29,7 +29,7 @@ const Attendance = sequelize.define('Attendance', {
     },
 }, {
     tableName: 'attendances',
-    timestamps: false, 
+    timestamps: false,
 });
 
 module.exports = Attendance;

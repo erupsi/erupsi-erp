@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken, authorizeManager } = require('../middleware/auth');
-const { Shift } = require('../models'); 
+const { Shift } = require('../models');
 
 const shiftController = {
     createShift: async (req, res) => {
@@ -10,6 +10,12 @@ const shiftController = {
             if (!employee_id || !shift_date || !start_time || !end_time) {
                 return res.status(400).json({ error: 'Input tidak lengkap.' });
             }
+
+            if (end_time <= start_time) {
+                return res.status(400)
+                    .json({ error: 'Jam selesai harus setelah jam mulai.' });
+            }
+
             const newShift = await Shift.create({
                 employee_id,
                 shift_date,

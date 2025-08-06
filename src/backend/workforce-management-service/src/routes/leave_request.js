@@ -22,6 +22,11 @@ const leaveRequestController = {
                     .json({ error: 'Input tidak lengkap.' });
             }
 
+            if (new Date(end_date) < new Date(start_date)) {
+                return res.status(400)
+                    .json({ error: 'Tanggal selesai tidak boleh sebelum tanggal mulai.' });
+            }
+
             const newRequest = await LeaveRequest.create({
                 employee_id: employeeIdForTesting,
                 start_date,
@@ -73,8 +78,8 @@ const leaveRequestController = {
     updateLeaveRequestStatus: async (req, res) => {
         try {
             const { id } = req.params;
-            const { status } = req.body;
-            // Untuk pengujian lokal, kita asumsikan ID manajer statis
+            // Ambil rejection_reason dari body
+            const { status, rejection_reason } = req.body;
             const managerIdForTesting = '4a7c6c4a-8d4e-4b9f-9c7e-2a1b3d5f6a7b';
 
             if (!status || !['approved', 'rejected'].includes(status)) {
@@ -96,6 +101,11 @@ const leaveRequestController = {
             // --- AKHIR LOGIKA VALIDASI ---
 
             requestToUpdate.status = status;
+            // Jika ditolak, simpan alasannya
+            if (status === 'rejected') {
+                requestToUpdate.rejection_reason = rejection_reason || null;
+            }
+
             await requestToUpdate.save();
 
             if (status === 'approved') {

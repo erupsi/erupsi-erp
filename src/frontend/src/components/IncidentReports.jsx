@@ -21,6 +21,10 @@ function IncidentReports() {
 
     const handleAddIncident = async (event) => {
         event.preventDefault();
+        // --- POP-UP KONFIRMASI ---
+        if (!window.confirm('Kirim laporan insiden ini?')) {
+            return;
+        }
         const form = event.target;
         const newIncident = {
             employee_id: form.employee_id.value,

@@ -13,11 +13,11 @@ const Shift = sequelize.define('Shift', {
         allowNull: false,
     },
     shift_date: {
-        type: DataTypes.DATEONLY, 
+        type: DataTypes.DATEONLY,
         allowNull: false,
     },
     start_time: {
-        type: DataTypes.TIME, 
+        type: DataTypes.TIME,
         allowNull: false,
     },
     end_time: {

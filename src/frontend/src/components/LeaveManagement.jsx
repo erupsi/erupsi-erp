@@ -21,6 +21,10 @@ function LeaveManagement() {
 
     const handleAddRequest = async (event) => {
         event.preventDefault();
+        // --- POP-UP KONFIRMASI ---
+        if (!window.confirm('Apakah Anda yakin ingin mengajukan cuti ini?')) {
+            return;
+        }
         const form = event.target;
         const newRequest = {
             start_date: form.start_date.value,
@@ -39,6 +43,11 @@ function LeaveManagement() {
     };
 
     const handleUpdateStatus = async (id, status) => {
+        const action = status === 'approved' ? 'menyetujui' : 'menolak';
+        // --- POP-UP KONFIRMASI ---
+        if (!window.confirm(`Apakah Anda yakin ingin ${action} pengajuan cuti ini?`)) {
+            return;
+        }
         await fetch(`${API_URL}/leave-requests/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
