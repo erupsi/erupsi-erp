@@ -22,7 +22,7 @@ const validateRegisterReq = () => {
             .notEmpty().withMessage("username cannot be empty.")
             .bail()
             .isString().withMessage("username type must be string.")
-            .trim(), // Opsional: Hapus spasi di awal/akhir
+            .trim(),
 
         body("password")
             .notEmpty().withMessage("password cannot be empty.")

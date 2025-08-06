@@ -20,7 +20,7 @@ const validateAdminResetPassword = () => {
             .notEmpty().withMessage("username cannot be empty.")
             .bail()
             .isString().withMessage("username type must be string.")
-            .trim(), // Opsional: Hapus spasi di awal/akhir
+            .trim(),
 
         body("password")
             .notEmpty().withMessage("password cannot be empty.")
@@ -28,9 +28,11 @@ const validateAdminResetPassword = () => {
             .isString().withMessage("password type must be string.")
             .bail()
             .isLength({min: 8})
-            .withMessage("Passwordnya kurang panjang anjing!!!")
+            .withMessage("Passwordnya length doesn't suffice.")
             .bail()
-            .isLength({max: 20}).withMessage("Yang ini kepanjangan tolol!!!")
+            .isLength({max: 20}).withMessage(
+                "Passwordnya length is too long.",
+            )
             .bail()
             .matches(/\d/)
             .withMessage("password must contain at least one number.")

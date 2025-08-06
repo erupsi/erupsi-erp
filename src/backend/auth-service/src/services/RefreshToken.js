@@ -3,7 +3,6 @@
  * @module services/RefreshToken
  */
 
-// const {replaceRefreshTokenFromDB} = require('../services/authService')
 const jwt = require("jsonwebtoken");
 const pool = require("./db");
 const crypto = require("crypto");

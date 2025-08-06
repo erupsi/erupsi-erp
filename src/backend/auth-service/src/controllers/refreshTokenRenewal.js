@@ -26,7 +26,6 @@ const refreshAccessToken = async (req, res, next) => {
         }
 
         if (!tokenDataResult.is_valid) {
-            // TODO: IMPLEMENT USER LOGOUUT AUTO HERE
             await deleteTokenByEmpId(tokenDataResult.employee_id);
             return res.status(403).json({
                 error: "Invalid token. Please login again."});
@@ -50,7 +49,6 @@ const refreshAccessToken = async (req, res, next) => {
 
         const {accessToken, refreshToken} = await tokenBuilderAssigner(
             res, tokenDataResult.employee_id, employeeUsername, employeeRole);
-        // tokenId, refreshToken, employeeId, expiresAt
         await invalidateAndInsertToken(
             tokenDataResult.id, refreshToken,
             tokenDataResult.employee_id, newExpiryDate);

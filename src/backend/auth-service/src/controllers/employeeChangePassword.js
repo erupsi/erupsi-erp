@@ -1,7 +1,3 @@
-// validate token
-// check if the username exist in db
-// check if the entered oldPassword is the same
-// change new password to db
 const jwt = require("jsonwebtoken");
 require("dotenv").config({path: __dirname + "/../../.env"});
 
@@ -11,7 +7,6 @@ const {comparator, bcryptSalting} = require("../utils/passwordUtils");
 
 
 const PUBLIC_KEY_FROM_REQUEST = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
-// enforce password expiry 60 hari
 const employeeChangePassword = async (req, res, next) => {
     try {
         const {oldPassword, newPassword} = req.body;
@@ -43,7 +38,7 @@ const employeeChangePassword = async (req, res, next) => {
 
         if (isPasswordMatchNew) {
             return res.status(401).json({
-                error: "You dumbfuck didn't change anything"}); // CHANGE
+                error: "Password is the same."}); // CHANGE
         }
 
         const hashedPassword = await bcryptSalting(newPassword);

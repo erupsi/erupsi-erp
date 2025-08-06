@@ -17,7 +17,8 @@ require("dotenv").config({path: "../.env"});
 
 const app = express();
 const PORT = process.env.PORT;
-
+const SECRET_KEY_CSURF = process.env.SECRET_KEY_CSURF;
+const CORS_ORIGIN = process.env.CORS_ORIGIN;
 /**
  * Session configuration options
  * @type {Object}
@@ -27,19 +28,19 @@ const PORT = process.env.PORT;
  * @property {Object} cookie - Cookie configuration
  */
 const sessionOption = {
-    secret: "secret-key-anda-123@#$#32", // Ganti dengan secret key yang kuat
+    secret: SECRET_KEY_CSURF,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
         secure: false,
-        sameSite: "Lax", // Penting untuk penanganan CSRF antar domain
+        sameSite: "Lax",
     },
 }; // TOBE DETERMINED
 
 // CORS configuration for cross-origin requests
 app.use(cors({
-    origin: "http://yamym.com", // Ganti dengan URL frontend Anda
+    origin: CORS_ORIGIN, // Ganti dengan URL frontend Anda
     credentials: true, // Memungkinkan pengiriman cookie antar domain
 }));
 
