@@ -5,8 +5,7 @@
   "main": "./src/index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint . --ext .js,.ts"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
