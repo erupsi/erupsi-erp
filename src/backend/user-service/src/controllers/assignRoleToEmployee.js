@@ -1,5 +1,5 @@
 
-const {checkEmployeeById, insertRolesToEmployee} = require("../services/urmService");
+const {findEmployeeById, insertRolesToEmployee} = require("../services/urmService");
 const validator = require("validator");
 
 /**
@@ -26,7 +26,7 @@ const assignRoleToEmployee = async (req, res) => {
             return res.status(400).json({error: "Invalid employee ID format"});
         }
 
-        const checkUserResult = await checkEmployeeById(employeeId);
+        const checkUserResult = await findEmployeeById(employeeId);
         if (!checkUserResult.success) {
             return res.status(404).json({message: "Pegawai tidak ditemukan."});
         }

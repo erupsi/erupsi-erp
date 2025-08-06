@@ -61,7 +61,7 @@ const authenticateServiceRequest = (options = {AdminRole: false, AuthService: fa
 
             next();
         } catch (error) {
-            console.error("error lagi bang");
+            console.error("Error verifying authentication token");
             if (error.name === "TokenExpiredError") {
                 return res.status(401).json({message: "Token expired"});
             }

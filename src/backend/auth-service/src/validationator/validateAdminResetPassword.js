@@ -28,10 +28,10 @@ const validateAdminResetPassword = () => {
             .isString().withMessage("password type must be string.")
             .bail()
             .isLength({min: 8})
-            .withMessage("Passwordnya length doesn't suffice.")
+            .withMessage("Password length doesn't suffice.")
             .bail()
             .isLength({max: 20}).withMessage(
-                "Passwordnya length is too long.",
+                "Password length is too long.",
             )
             .bail()
             .matches(/\d/)

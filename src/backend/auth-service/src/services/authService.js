@@ -42,7 +42,7 @@ const registerUser = async (
 
         const query =
           `INSERT INTO auth_employee(employeeId, username,
-          password, password_expiry) VALUES($1, $2, $3)`;
+          password, password_expiry) VALUES($1, $2, $3, $4)`;
         await pool.query(query,
             [employeeInitialUuid, username, hashedPass, passwordExpiry]);
         return {success: true};

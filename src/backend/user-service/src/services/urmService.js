@@ -127,7 +127,7 @@ const findEmployeeDetailByEmployeeId = async (employeeId) => {
 
         return result.rows[0];
     } catch (err) {
-        console.error();
+        console.error(err);
         return undefined;
     }
 };
