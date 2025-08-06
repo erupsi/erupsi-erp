@@ -66,5 +66,4 @@ app.get("/", (req, res) => {
  * @listens {number} PORT - The port number from environment variables
  */
 app.listen(PORT, () => {
-    console.log(`auth app listening on port ${PORT}`);
 });

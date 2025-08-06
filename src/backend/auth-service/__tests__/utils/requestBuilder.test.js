@@ -63,7 +63,6 @@ describe("requestBuilder", () => {
 
     test("should build and send a POST request with a body", async () => {
         // Mock a successful fetch response
-        console.log(mockEmployeeData);
         fetch.mockResponseOnce(JSON.stringify(mockEmployeeData));
 
         const response = await requestBuilder(

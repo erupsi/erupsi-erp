@@ -29,7 +29,6 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
  * );
  */
 const requestBuilder = async (url, method, employeeData = {}) => {
-    console.log(employeeData);
     const token = jwt.sign({roles: ["AUTH_SERVICE"]}, PRIVATE_KEY, {
         algorithm: "RS256",
         expiresIn: "1m",

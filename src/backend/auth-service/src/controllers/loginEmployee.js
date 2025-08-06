@@ -96,7 +96,6 @@ const loginEmployee = async (req, res, next) =>{
 
         res.status(200).json(responseBody);
     } catch (error) {
-        console.log("Error lagi at login employee");
         console.error(error);
         return res.status(500).json({
             error: "Internal server error At Login Employee"});
