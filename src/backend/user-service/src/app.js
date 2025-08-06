@@ -21,5 +21,4 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`urm app listening on port ${PORT}`);
 });
