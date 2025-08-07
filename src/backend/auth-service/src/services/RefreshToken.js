@@ -6,7 +6,7 @@
 const jwt = require("jsonwebtoken");
 const pool = require("./db");
 const crypto = require("crypto");
-require("dotenv").config({path: __dirname + "/../../.env"});
+require("dotenv").config({path: __dirname + "/../../../../../.env"});
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY_AUTH_SERVICE.replace(/\\n/g, "\n");
 

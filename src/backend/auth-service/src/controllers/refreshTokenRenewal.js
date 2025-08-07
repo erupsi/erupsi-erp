@@ -6,7 +6,7 @@ const {invalidateAndInsertToken,
 
 const {getEmployeeDataFromUrm,
     getEmployeeUsername} = require("../services/authService");
-require("dotenv").config({path: __dirname + "/../../.env"});
+require("dotenv").config({path: __dirname + "/../../../../../.env"});
 
 
 const refreshAccessToken = async (req, res, next) => {

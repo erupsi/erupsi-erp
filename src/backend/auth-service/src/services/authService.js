@@ -4,7 +4,7 @@
  */
 
 const pool = require("./db");
-require("dotenv").config({path: __dirname + "/../../.env"});
+require("dotenv").config({path: __dirname + "/../../../../../.env"});
 const requestBuilder = require("../utils/requestBuilder");
 const {bcryptSalting} = require("../utils/passwordUtils");
 

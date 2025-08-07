@@ -6,7 +6,7 @@
  * @module app
  * @version 1.0.0
  */
-require("dotenv").config({path: "../.env"});
+require("dotenv").config({path: __dirname + "../../../../.env"});
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");

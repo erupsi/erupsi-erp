@@ -1,12 +1,11 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config({path: __dirname + "/../../.env"});
-
+require("dotenv").config({path: __dirname + "/../../../../../.env"});
 const {checkEmployeeByUsername,
     changeEmployeePassword} = require("../services/authService");
 const {comparator, bcryptSalting} = require("../utils/passwordUtils");
 
 
-const PUBLIC_KEY_FROM_REQUEST = process.env.PUBLIC_KEY_AUTH_SERVICE.replace(/\\n/g, "\n");
+const PUBLIC_KEY_FROM_REQUEST = process.env.PUBLIC_KEY.replace(/\\n/g, "\n");
 const employeeChangePassword = async (req, res, next) => {
     try {
         const {oldPassword, newPassword} = req.body;

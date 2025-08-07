@@ -3,9 +3,9 @@
  * @module middlewares/authenticateServiceReq
  */
 
-require("dotenv").config({path: __dirname + "/../../.env"});
+require("dotenv").config({path: __dirname + "/../../../../../.env"});
 const jwt = require("jsonwebtoken");
-const PUBLIC_KEY_FROM_REQUEST=process.env.PUBLIC_KEY_AUTH_SERVICE.replace(/\\n/g, "\n");
+const PUBLIC_KEY_FROM_REQUEST=process.env.PUBLIC_KEY.replace(/\\n/g, "\n");
 
 /**
  * Creates authentication middleware for service requests
