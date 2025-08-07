@@ -42,3 +42,32 @@ coverage/
 # CI/CD
 *.swp
 .nyc_output/
+
+# Private keys
+*.pem
+*.key
+*.pfx
+*.p12
+*.crt
+*.cer
+*.der
+
+# SSH keys
+id_rsa
+id_rsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+.ssh/
+
+# Vaults and secrets
+*.jks
+*.keystore
+*.secrets
+*.enc
+*.gpg
+secrets/
+vault/
+certs/
+keys/
