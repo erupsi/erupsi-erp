@@ -6,7 +6,7 @@ const {findEmployeeDetailByEmployeeId} = require("../../src/services/urmService"
 jest.mock("pg");
 
 // Impor mock Pool untuk kita kontrol dalam tes
-const {Pool} = require("pg");
+const {Pool} = require("../../__mocks__/pg.js");
 
 // Dapatkan instance dari mock pool
 const pool = new Pool();

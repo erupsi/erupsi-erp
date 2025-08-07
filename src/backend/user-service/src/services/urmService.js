@@ -133,8 +133,9 @@ const findEmployeeDetailByEmployeeId = async (employeeId) => {
 };
 
 const insertEmployeeDetailsToDb = async (employeeId, fullName, email, department, position, roleName) => {
-    const client = await pool.connect(); // Get a client from the pool
+    let client; // Get a client from the pool
     try {
+        client = await pool.connect();
         await client.query("BEGIN"); // Start transaction
 
         // Insert into the `employees` table

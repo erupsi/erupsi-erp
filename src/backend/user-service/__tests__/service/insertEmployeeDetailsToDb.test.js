@@ -5,7 +5,7 @@ const {insertEmployeeDetailsToDb} = require("../../src/services/urmService"); //
 jest.mock("pg");
 
 // Impor mock Pool dan dapatkan instance mock client
-const {Pool} = require("pg");
+const {Pool} = require("../../__mocks__/pg.js");
 const pool = new Pool(); // Ini adalah mock pool
 
 // Kelompokkan tes untuk fungsi insertEmployeeDetailsToDb

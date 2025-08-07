@@ -3,7 +3,7 @@ const {insertRolesToEmployee} = require("../../src/services/urmService"); // Ses
 
 // Setup mock untuk modul 'pg'
 jest.mock("pg");
-const {Pool} = require("pg");
+const {Pool} = require("../../__mocks__/pg.js");
 const pool = new Pool();
 
 // Kelompokkan tes untuk fungsi insertRolesToEmployee
