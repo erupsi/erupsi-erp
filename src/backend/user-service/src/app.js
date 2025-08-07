@@ -8,7 +8,7 @@
 
 const express = require("express");
 const urmRoutes = require("./routes/urm.routes");
-require("dotenv").config({path: "../.env"});
+require("dotenv").config({path: __dirname + "/../../../../.env"});
 const rateLimit = require("express-rate-limit");
 
 const app = express();
