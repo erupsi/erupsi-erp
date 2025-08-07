@@ -95,41 +95,42 @@ describe("Refresh Token Service", () => {
                 });
             });
 
-        test("should return 500 status if replaceRefreshTokenFromDB fails",
-            async () => {
-            // Buat spy dan mock implementasinya agar gagal
-                const replaceSpy = jest
-                    .spyOn(refreshTokenService, "replaceRefreshTokenFromDB")
-                    .mockResolvedValue(false);
+        test("should throw error replaceRefreshTokenFromDB fails", async () => {
+            // Arrange: Mock service agar gagal
+            jest.spyOn(refreshTokenService, "replaceRefreshTokenFromDB")
+                .mockResolvedValue(false);
 
-                await refreshTokenService
-                    .tokenBuilderAssigner(mockResponse,
-                        mockEmployeeId, mockUsername, mockRoles,
-                        {replace_token: true});
-
-                // Sekarang assertion ini akan BENAR
-                expect(replaceSpy).toHaveBeenCalledTimes(1);
-                expect(mockResponse.status).toHaveBeenCalledWith(500);
-            });
-        test("should return 500 status if jwt.sign throws an error",
-            async () => {
-            // Atur agar jwt.sign melempar error
-                const signError = new Error("JWT signing failed");
-                jwt.sign.mockImplementation(() => {
-                    throw signError;
-                });
-
-                await refreshTokenService
-                    .tokenBuilderAssigner(mockResponse,
-                        mockEmployeeId, mockUsername, mockRoles);
-
-                // Pastikan blok catch terpanggil dan mengirim status 500
-                expect(mockResponse.status).toHaveBeenCalledWith(500);
-                expect(mockResponse.json)
-                    .toHaveBeenCalledWith({error: "Internal Server Error"});
-            });
+            await expect(
+                refreshTokenService.tokenBuilderAssigner(
+                    mockResponse,
+                    mockEmployeeId,
+                    mockUsername,
+                    mockRoles,
+                    { replace_token: true }
+                )
+            ).rejects.toThrow(
+                "Error in tokenBuilderAssigner: Failed to replace refresh token in DB"
+            );
+});
+    test("should throw an error if jwt.sign throws an error", async () => {
+        // Arrange: Atur agar jwt.sign melempar error
+        const signError = new Error("JWT signing failed");
+        jwt.sign.mockImplementation(() => {
+            throw signError;
+        });
+    
+        // Act & Assert:
+        // Verifikasi bahwa promise ditolak dan error yang dilempar mengandung pesan dari jwt.sign
+        await expect(
+            refreshTokenService.tokenBuilderAssigner(
+                mockResponse,
+                mockEmployeeId,
+                mockUsername,
+                mockRoles
+            )
+        ).rejects.toThrow("Error in tokenBuilderAssigner: JWT signing failed");
     });
-
+});
 
     describe("replaceRefreshTokenFromDB", () => {
         beforeEach(() => {

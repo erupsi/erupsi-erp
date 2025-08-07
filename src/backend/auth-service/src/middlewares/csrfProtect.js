@@ -13,7 +13,7 @@ const handlerErrorCsrf = async (err, req, res, next) => {
         });
     }
     console.error(err);
-    // next(err);
+    next(err);
 };
 
 module.exports = {csrfProtection, csrfHandler, handlerErrorCsrf};

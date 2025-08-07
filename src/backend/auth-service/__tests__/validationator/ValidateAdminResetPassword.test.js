@@ -152,7 +152,7 @@ describe("validateAdminResetPassword", () => {
         expect(next).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
-            error: ["Passwordnya kurang panjang anjing!!!"],
+            error: ["Password length doesn't suffice."],
         });
     });
 
@@ -168,7 +168,7 @@ describe("validateAdminResetPassword", () => {
         expect(next).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(400);
         expect(res.json).toHaveBeenCalledWith({
-            error: ["Yang ini kepanjangan tolol!!!"],
+            error: ["Password length is too long."],
         });
     });
 

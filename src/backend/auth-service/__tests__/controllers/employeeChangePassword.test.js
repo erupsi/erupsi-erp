@@ -103,7 +103,7 @@ describe("employeeChangePassword Controller", () => {
             expect(mockResponse.status).toHaveBeenCalledWith(401);
             expect(mockResponse.json)
                 .toHaveBeenCalledWith({
-                    error: "You dumbfuck didn't change anything"});
+                    error: "Password is the same."});
         });
 
     // --- Skenario Gagal: Token Tidak Valid ---

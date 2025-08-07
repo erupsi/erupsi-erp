@@ -18,7 +18,7 @@ describe("loginEmployee Controller", () => {
     const mockResponse = {
         status: jest.fn(() => mockResponse),
         json: jest.fn(),
-        cookie: jest.fn(),
+        cookie: jest.fn(() => mockResponse),
     };
     const mockNext = jest.fn();
 
@@ -72,7 +72,7 @@ describe("loginEmployee Controller", () => {
         const expiringEmployeeData = {
             ...employeeData,
             password_expiry: new Date(new Date()
-                .getTime() + 2 * 24 * 60 * 60), // 2 days from now
+                .getTime() + 1 * 25 * 60 * 60 * 1000), // 2 days from now
         };
         authService.checkEmployeeByUsername
             .mockResolvedValue(expiringEmployeeData);
@@ -86,7 +86,7 @@ describe("loginEmployee Controller", () => {
         expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
             message: "Login successful",
             passwordExpiryWarning:
-            "Your password will expire in 0 days. Please change it soon.",
+            "Your password will expire in 1 days. Please change it soon.",
         }));
     });
 
@@ -109,7 +109,7 @@ describe("loginEmployee Controller", () => {
         expect(mockResponse.status).toHaveBeenCalledWith(200);
         expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
             message: "Login successful",
-            passwordExpired: "Password is expired. Change it now",
+            passwordExpired: "Password expired. Change it now",
         }));
     });
 
