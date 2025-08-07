@@ -20,8 +20,8 @@ const {
 const authRoutes = require("./routes/auth.routes");
 
 const app = express();
-const PORT = process.env.PORT;
-const SECRET_KEY_CSURF = process.env.SECRET_KEY_CSURF;
+const PORT = process.env.PORT_AUTH_SERVICE;
+const SECRET_KEY_CSURF = process.env.SECRET_KEY_CSURF_AUTH_SERVICE;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
 /**
  * Session configuration options

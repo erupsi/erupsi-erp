@@ -12,7 +12,7 @@ require("dotenv").config({path: "../.env"});
 const rateLimit = require("express-rate-limit");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT_URM_SERVICE;
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 menit

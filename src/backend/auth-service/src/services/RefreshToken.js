@@ -8,7 +8,7 @@ const pool = require("./db");
 const crypto = require("crypto");
 require("dotenv").config({path: __dirname + "/../../.env"});
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+const PRIVATE_KEY = process.env.PRIVATE_KEY_AUTH_SERVICE.replace(/\\n/g, "\n");
 
 /**
  * Generates access and refresh tokens for employee authentication

@@ -1,6 +1,6 @@
 require("dotenv").config({path: __dirname + "/../../.env"});
 const jwt = require("jsonwebtoken");
-const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, "\n");
+const PUBLIC_KEY = process.env.PUBLIC_KEY_URM_SERVICE.replace(/\\n/g, "\n");
 
 /**
  * A factory function that creates an Express middleware for authenticating service requests using a JWT.

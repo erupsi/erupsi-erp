@@ -1,0 +1,658 @@
+FAIL src/backend/user-service/__tests__/service/deleteEmployeeBasedOnId.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  override existing env vars with { override: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● deleteEmployeeBasedOnId › should successfully delete an employee and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+--
+  ● deleteEmployeeBasedOnId › should rollback the transaction if the database delete fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      49 |
+      50 |         // Atur mock untuk gagal hanya pada saat query DELETE dijalankan
+    > 51 |         client.query.mockImplementation((query) => {
+         |                ^
+      52 |             if (query.startsWith("DELETE")) {
+      53 |                 return Promise.reject(databaseError);
+      54 |             }
+--
+FAIL src/backend/user-service/__tests__/service/findAllEmployeeDetails.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● findAllEmployeeDetails › should return the full database result object when employees are found
+
+    expect(received).toEqual(expected) // deep equality
+--
+  ● findAllEmployeeDetails › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: undefined
+
+      70 |
+      71 |         // Act & Assert: Verifikasi bahwa fungsi akan melempar error yang sama
+    > 72 |         await expect(findAllEmployeeDetails()).rejects.toThrow("Query failed");
+         |               ^
+      73 |     });
+      74 | });
+      75 |
+
+      at expect (node_modules/expect/build/index.js:2116:15)
+      at Object.expect (src/backend/user-service/__tests__/service/findAllEmployeeDetails.test.js:72:15)
+
+PASS src/backend/auth-service/__tests__/validationator/ValidateEmployeeChangePassword.test.js
+FAIL src/backend/user-service/__tests__/service/findAllRoles.test.js.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  override existing env vars with { override: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● findAllRoles › should return an array of role objects when roles are found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+--
+  ● findAllRoles › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Connection timeout"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          330 |
+          331 |     const result = await pool.query(sql);
+        > 332 |     return result.rows;
+              |                   ^
+--
+FAIL src/backend/user-service/__tests__/service/insertRolesToEmployee.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● insertRolesToEmployee › should successfully assign new roles to an employee
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+--
+  ● insertRolesToEmployee › should rollback and return failure if payload is not a valid array
+
+    TypeError: Cannot read properties of undefined (reading 'release')
+
+      315 |         return {success: false, message: "Gagal mengubah roles ke pegawai."};
+      316 |     } finally {
+    > 317 |         client.release(); // Release the client back to the pool
+          |                ^
+      318 |     }
+      319 | };
+      320 |
+--
+  ● insertRolesToEmployee › should return a specific failure message if some roles are not found
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+       95 |         // Simulasikan DB hanya menemukan satu dari dua role
+       96 |         const mockRolesFromDb = [{roleid: "role-01", name: "admin"}];
+    >  97 |         client.query.mockResolvedValue({rows: mockRolesFromDb});
+          |                ^
+       98 |
+       99 |         // Act
+      100 |         const result = await insertRolesToEmployee(employeeId, rolesPayload);
+--
+  ● insertRolesToEmployee › should rollback if the DELETE query fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      119 |         const databaseError = new Error("DELETE statement failed");
+      120 |
+    > 121 |         client.query.mockImplementation((query) => {
+          |                ^
+      122 |             // Simulasikan DB menemukan role
+      123 |             if (query.includes("SELECT roleid, name FROM roles")) {
+      124 |                 return Promise.resolve({rows: [{roleid: "role-01", name: "admin"}]});
+
+      at Object.query (src/backend/user-service/__tests__/service/insertRolesToEmployee.test.js:121:16)
+
+PASS src/backend/user-service/__tests__/middleware/patchBodyValidator.test.js
+--
+FAIL src/backend/user-service/__tests__/service/updateEmployeePartially.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  enable debug logging with { debug: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● updateEmployeePartially › should successfully update employee data and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+--
+  ● updateEmployeePartially › should rollback the transaction if the database update fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      78 |
+      79 |         // Atur mock untuk gagal hanya pada query UPDATE
+    > 80 |         client.query.mockImplementation((query) => {
+         |                ^
+      81 |             if (query.trim().startsWith("UPDATE")) {
+      82 |                 // Lemparkan error untuk query UPDATE
+      83 |                 return Promise.reject(databaseError);
+--
+FAIL src/backend/user-service/__tests__/service/findRoleByName.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  suppress all logs with { quiet: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● findRoleByName › should return an array containing the role object when found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+--
+  ● findRoleByName › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Connection failed"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          338 |     const result = await pool.query(sql, [name]);
+          339 |
+        > 340 |     return result.rows;
+              |                   ^
+          341 | };
+          342 |
+          343 | const insertRoleToDb = async (newRoleId, name, display_name, description) => {
+
+--
+FAIL src/backend/user-service/__tests__/service/findEmployeeDetailByEmployeeId.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: ⚙️  override existing env vars with { override: true })
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+    console.error
+      TypeError: Cannot read properties of undefined (reading 'rows')
+          at rows (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/user-service/src/services/urmService.js:124:20)
+--
+FAIL src/backend/user-service/__tests__/service/findEmployeeById.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● findEmployeeById › should return { success: true } when an employee is found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+--
+  ● findEmployeeById › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Koneksi database gagal"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          177 | const findEmployeeById = async (employeeId) => {
+          178 |     const checkUserResult = await pool.query("SELECT * FROM employees WHERE employeeId = $1", [employeeId]);
+        > 179 |     if (checkUserResult.rows.length === 0) {
+              |                         ^
+--
+FAIL src/backend/user-service/__tests__/service/insertRoleToDb.test.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● insertRoleToDb › should successfully insert a new role and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+--
+  ● insertRoleToDb › should rollback the transaction if the database insert fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      51 |
+      52 |         // Atur mock untuk gagal hanya pada saat query INSERT dijalankan
+    > 53 |         client.query.mockImplementation((query) => {
+         |                ^
+      54 |             if (query.startsWith("INSERT")) {
+      55 |                 return Promise.reject(databaseError);
+      56 |             }
+--
+      Error: DB connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/services/refreshToken.test.js:183:42)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+--
+FAIL src/backend/user-service/__tests__/service/insertEmployeeDetailsToDb.test.js
+  ● Console
+
+    console.log
+      [dotenv@17.2.0] injecting env (8) from src/backend/user-service/.env (tip: 🔐 encrypt with dotenvx: https://dotenvx.com)
+
+      at _log (node_modules/dotenv/lib/main.js:136:11)
+
+  ● insertEmployeeDetailsToDb › should insert employee and role details successfully and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+--
+  ● insertEmployeeDetailsToDb › should rollback the transaction if inserting into employees table fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      100 |
+      101 |         // Gunakan mockImplementation untuk mengontrol perilaku query secara dinamis
+    > 102 |         client.query.mockImplementation((query) => {
+          |                ^
+      103 |             if (query.includes("INSERT INTO employees")) {
+      104 |                 return Promise.reject(dbError); // Lemparkan error pada query INSERT employee
+      105 |             }
+--
+      Error: Hashing failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/controllers/adminResetPassword.test.js:75:41)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+--
+      Error: Database connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/controllers/registerEmployee.test.js:110:32)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+--
+      Error: Database connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/controllers/logoutHandler.test.js:77:39)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+--
+      Error: DB connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/services/authService.test.js:73:36)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+--
+      Error: DB connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/services/authService.test.js:209:42)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+--
+      Error: DB connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/services/authService.test.js:231:42)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+--
+      Error: Database connection failed
+          at Object.<anonymous> (/home/perhanjay/Documents/Programming/erupsi-erp/src/backend/auth-service/__tests__/controllers/loginEmployee.test.js:143:32)
+          at Promise.finally.completed (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1559:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1499:10)
+          at _callCircusTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:1009:40)
+          at processTicksAndRejections (node:internal/process/task_queues:95:5)
+          at _runTest (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:949:3)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:839:13)
+          at _runTestsForDescribeBlock (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:829:11)
+          at run (/home/perhanjay/Documents/Programming/erupsi-erp/node_modules/jest-circus/build/jestAdapterInit.js:757:3)
+--
+FAIL src/backend/user-service/__tests__/mocks/pg.js
+  ● Test suite failed to run
+
+    Your test suite must contain at least one test.
+
+      at onResult (node_modules/@jest/core/build/index.js:1052:18)
+      at node_modules/@jest/core/build/index.js:1122:165
+      at node_modules/emittery/index.js:363:13
+          at Array.map (<anonymous>)
+      at Emittery.emit (node_modules/emittery/index.js:361:23)
+
+PASS src/backend/user-service/__tests__/sum.test.js
+--
+Summary of all failing tests
+FAIL src/backend/user-service/__tests__/service/deleteEmployeeBasedOnId.test.js
+  ● deleteEmployeeBasedOnId › should successfully delete an employee and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      26 |         const employeeId = "peg-007";
+      27 |         // Asumsikan semua query (BEGIN, DELETE, COMMIT) berhasil
+    > 28 |         client.query.mockResolvedValue();
+         |                ^
+      29 |
+      30 |         // Act
+--
+  ● deleteEmployeeBasedOnId › should rollback the transaction if the database delete fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      49 |
+      50 |         // Atur mock untuk gagal hanya pada saat query DELETE dijalankan
+    > 51 |         client.query.mockImplementation((query) => {
+         |                ^
+      52 |             if (query.startsWith("DELETE")) {
+      53 |                 return Promise.reject(databaseError);
+      54 |             }
+--
+FAIL src/backend/user-service/__tests__/service/findAllEmployeeDetails.test.js
+  ● findAllEmployeeDetails › should return the full database result object when employees are found
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"rowCount": 2, "rows": [{"department": "Sales", "email": "citra.a@example.com", "employeeId": "peg-001", "full_name": "Citra Amelia", "is_active": true, "position": "Sales Manager", "roles": ["manager", "sales-user"]}, {"department": "IT", "email": "dodi.f@example.com", "employeeId": "peg-002", "full_name": "Dodi Firmansyah", "is_active": true, "position": "System Administrator", "roles": ["admin", "it-support"]}]}
+    Received: undefined
+
+      44 |
+      45 |         // Assert: Pastikan hasilnya adalah objek hasil query yang lengkap
+    > 46 |         expect(result).toEqual(mockDbResult);
+--
+  ● findAllEmployeeDetails › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow()
+
+    Received promise resolved instead of rejected
+    Resolved to value: undefined
+
+      70 |
+      71 |         // Act & Assert: Verifikasi bahwa fungsi akan melempar error yang sama
+    > 72 |         await expect(findAllEmployeeDetails()).rejects.toThrow("Query failed");
+         |               ^
+      73 |     });
+      74 | });
+      75 |
+
+      at expect (node_modules/expect/build/index.js:2116:15)
+      at Object.expect (src/backend/user-service/__tests__/service/findAllEmployeeDetails.test.js:72:15)
+
+FAIL src/backend/user-service/__tests__/service/findAllRoles.test.js.test.js
+  ● findAllRoles › should return an array of role objects when roles are found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+
+      330 |
+      331 |     const result = await pool.query(sql);
+    > 332 |     return result.rows;
+          |                   ^
+      333 | };
+      334 |
+--
+  ● findAllRoles › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Connection timeout"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          330 |
+          331 |     const result = await pool.query(sql);
+        > 332 |     return result.rows;
+              |                   ^
+--
+FAIL src/backend/user-service/__tests__/service/insertRolesToEmployee.test.js
+  ● insertRolesToEmployee › should successfully assign new roles to an employee
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      32 |         ];
+      33 |
+    > 34 |         client.query.mockImplementation((query) => {
+         |                ^
+      35 |             if (query.includes("SELECT roleid, name FROM roles")) {
+      36 |                 return Promise.resolve({rows: mockRolesFromDb});
+--
+  ● insertRolesToEmployee › should rollback and return failure if payload is not a valid array
+
+    TypeError: Cannot read properties of undefined (reading 'release')
+
+      315 |         return {success: false, message: "Gagal mengubah roles ke pegawai."};
+      316 |     } finally {
+    > 317 |         client.release(); // Release the client back to the pool
+          |                ^
+      318 |     }
+      319 | };
+      320 |
+--
+  ● insertRolesToEmployee › should return a specific failure message if some roles are not found
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+       95 |         // Simulasikan DB hanya menemukan satu dari dua role
+       96 |         const mockRolesFromDb = [{roleid: "role-01", name: "admin"}];
+    >  97 |         client.query.mockResolvedValue({rows: mockRolesFromDb});
+          |                ^
+       98 |
+       99 |         // Act
+      100 |         const result = await insertRolesToEmployee(employeeId, rolesPayload);
+--
+  ● insertRolesToEmployee › should rollback if the DELETE query fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      119 |         const databaseError = new Error("DELETE statement failed");
+      120 |
+    > 121 |         client.query.mockImplementation((query) => {
+          |                ^
+      122 |             // Simulasikan DB menemukan role
+      123 |             if (query.includes("SELECT roleid, name FROM roles")) {
+      124 |                 return Promise.resolve({rows: [{roleid: "role-01", name: "admin"}]});
+
+      at Object.query (src/backend/user-service/__tests__/service/insertRolesToEmployee.test.js:121:16)
+
+FAIL src/backend/user-service/__tests__/service/updateEmployeePartially.test.js
+  ● updateEmployeePartially › should successfully update employee data and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      29 |
+      30 |         // Asumsikan semua query berhasil
+    > 31 |         client.query.mockResolvedValue({rowCount: 1});
+         |                ^
+      32 |
+      33 |         // Act
+--
+  ● updateEmployeePartially › should rollback the transaction if the database update fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      78 |
+      79 |         // Atur mock untuk gagal hanya pada query UPDATE
+    > 80 |         client.query.mockImplementation((query) => {
+         |                ^
+      81 |             if (query.trim().startsWith("UPDATE")) {
+      82 |                 // Lemparkan error untuk query UPDATE
+      83 |                 return Promise.reject(databaseError);
+--
+FAIL src/backend/user-service/__tests__/service/findRoleByName.test.js
+  ● findRoleByName › should return an array containing the role object when found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+
+      338 |     const result = await pool.query(sql, [name]);
+      339 |
+    > 340 |     return result.rows;
+          |                   ^
+      341 | };
+      342 |
+--
+  ● findRoleByName › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Connection failed"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          338 |     const result = await pool.query(sql, [name]);
+          339 |
+        > 340 |     return result.rows;
+              |                   ^
+          341 | };
+          342 |
+          343 | const insertRoleToDb = async (newRoleId, name, display_name, description) => {
+
+--
+FAIL src/backend/user-service/__tests__/service/findEmployeeDetailByEmployeeId.test.js
+  ● findEmployeeDetailByEmployeeId › should return employee details for a valid employeeId
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"department": "Technology", "email": "andi.wijaya@example.com", "full_name": "Andi Wijaya", "position": "Lead Engineer", "roles": ["admin", "engineer"]}
+    Received: undefined
+
+      40 |
+      41 |         // Assert: Verifikasi bahwa hasilnya sesuai harapan
+    > 42 |         expect(result).toEqual(mockEmployeeData); // Hasilnya harus sama dengan data mock
+--
+FAIL src/backend/user-service/__tests__/service/findEmployeeById.test.js
+  ● findEmployeeById › should return { success: true } when an employee is found
+
+    TypeError: Cannot read properties of undefined (reading 'rows')
+
+      177 | const findEmployeeById = async (employeeId) => {
+      178 |     const checkUserResult = await pool.query("SELECT * FROM employees WHERE employeeId = $1", [employeeId]);
+    > 179 |     if (checkUserResult.rows.length === 0) {
+          |                         ^
+      180 |         return {success: false, message: "pegawai tidak ditemukan."};
+      181 |     }
+--
+  ● findEmployeeById › should throw an error if the database query fails
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Koneksi database gagal"
+    Received message:   "Cannot read properties of undefined (reading 'rows')"
+
+          177 | const findEmployeeById = async (employeeId) => {
+          178 |     const checkUserResult = await pool.query("SELECT * FROM employees WHERE employeeId = $1", [employeeId]);
+        > 179 |     if (checkUserResult.rows.length === 0) {
+              |                         ^
+--
+FAIL src/backend/user-service/__tests__/service/insertRoleToDb.test.test.js
+  ● insertRoleToDb › should successfully insert a new role and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      26 |         const newRoleData = ["role-finance-01", "finance", "Finance Staff", "Handles financial data"];
+      27 |         // Asumsikan semua query (BEGIN, INSERT, COMMIT) berhasil
+    > 28 |         client.query.mockResolvedValue();
+         |                ^
+      29 |
+      30 |         // Act
+--
+  ● insertRoleToDb › should rollback the transaction if the database insert fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      51 |
+      52 |         // Atur mock untuk gagal hanya pada saat query INSERT dijalankan
+    > 53 |         client.query.mockImplementation((query) => {
+         |                ^
+      54 |             if (query.startsWith("INSERT")) {
+      55 |                 return Promise.reject(databaseError);
+      56 |             }
+--
+FAIL src/backend/user-service/__tests__/service/insertEmployeeDetailsToDb.test.js
+  ● insertEmployeeDetailsToDb › should insert employee and role details successfully and commit the transaction
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      36 |
+      37 |         // Sekarang client sudah terdefinisi, mock ini akan bekerja
+    > 38 |         client.query.mockImplementation((query) => {
+         |                ^
+      39 |             if (query.includes("SELECT roleId FROM roles")) {
+      40 |                 return Promise.resolve({rows: [{roleid: mockRoleId}]});
+--
+  ● insertEmployeeDetailsToDb › should rollback the transaction if inserting into employees table fails
+
+    TypeError: Cannot read properties of undefined (reading 'query')
+
+      100 |
+      101 |         // Gunakan mockImplementation untuk mengontrol perilaku query secara dinamis
+    > 102 |         client.query.mockImplementation((query) => {
+          |                ^
+      103 |             if (query.includes("INSERT INTO employees")) {
+      104 |                 return Promise.reject(dbError); // Lemparkan error pada query INSERT employee
+      105 |             }
+--
+FAIL src/backend/user-service/__tests__/mocks/pg.js
+  ● Test suite failed to run
+
+    Your test suite must contain at least one test.
+
+      at onResult (node_modules/@jest/core/build/index.js:1052:18)
+      at node_modules/@jest/core/build/index.js:1122:165
+      at node_modules/emittery/index.js:363:13
+          at Array.map (<anonymous>)
+      at Emittery.emit (node_modules/emittery/index.js:361:23)
+
+
+Test Suites: 11 failed, 30 passed, 41 total
+Tests:       30 failed, 180 passed, 210 total
+Snapshots:   0 total
+Time:        1.339 s, estimated 2 s
+Ran all test suites.
