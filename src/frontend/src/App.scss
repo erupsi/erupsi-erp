@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.main-body{
+  background-color: #E1E6EA;
+  display: flex;
+
+  .main-container{
+    height: 100vh;
+    flex: 1; 
+    padding: 20px 34px;
+  }
+}
+
+
