@@ -180,13 +180,13 @@ contributing:
 * Ensure your tests cover at least 80% of your code:
   ```bash
   $ npm test
-  
+
   > erupsi-erd@1.0.0 test
   > jest
-  
+
    PASS  src/backend/user-service/__tests__/sum.test.js
     ✓ adds 1 + 2 to equal 3 (4 ms)
-  
+
   ----------|---------|----------|---------|---------|-------------------
   File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
   ----------|---------|----------|---------|---------|-------------------
@@ -208,28 +208,28 @@ contributing:
 
   # Stage 1: Builder
   FROM node:20-alpine AS builder
-  
+
   # Set working directory
   WORKDIR /app
-  
+
   # Copy the entire monorepo (minimized with .dockerignore)
   COPY ../../.. .
-  
+
   # Install only dependencies for this workspace
   RUN npm install --workspace=src/backend/<your-service-dir> --production
-  
+
   # Stage 2: Copy only the built node_modules and source to a clean runtime image
   FROM node:20-alpine AS runtime
-  
+
   WORKDIR /app
-  
+
   # Copy installed node_modules from builder stage
   COPY --from=builder /app/node_modules ./node_modules
   COPY --from=builder /app/src/backend/<your-service-dir> .
-  
+
   # Set Node.js environment (optional)
   ENV NODE_ENV=production
-  
+
   # Set default command
   CMD ["node", "src/index.js"]
 
