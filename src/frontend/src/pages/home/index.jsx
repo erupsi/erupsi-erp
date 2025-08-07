@@ -3,7 +3,7 @@ import "./main.scss";
 import Modal from '../../components/modal';
 
 function Home({setGrandchildItems}){
-    const [open, setOpen] = useState(false);
+    
      useEffect(() => {
             const grandchild = [
                 // { id: 'contoh', label: 'contoh' },
