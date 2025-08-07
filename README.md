@@ -26,7 +26,6 @@ A modular, containerized ERP system built with modern web technologies.
 
 <img width="1443" height="1648" alt="image" src="https://github.com/user-attachments/assets/c1438054-3eb9-4996-8a91-8b7704144af2" />
 
-
 ## 📁 Project Structure
 
 ```bash
