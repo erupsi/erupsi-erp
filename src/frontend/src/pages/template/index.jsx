@@ -22,7 +22,7 @@ function Example({ setGrandchildItems }) {
     const closeModal = () => {
         setOpen(false);
         setModalType('');
-        setSelectedProduct(null);
+        // setSelectedProduct(null);
         
         if (modalType === 'view') {
             window.history.pushState({}, '', window.location.pathname);

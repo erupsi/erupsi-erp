@@ -6,20 +6,12 @@ import Modal from '../../components/modal';
 function Example({ setGrandchildItems }) {
     const [open, setOpen] = useState(false);
     const [modalType, setModalType] = useState('');
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    // const [selectedProduct, setSelectedProduct] = useState(null);
 
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('product');
-        
-        if (productId) {
-            fetchProductById(productId);
-        }
-    }, []);
 
     const openModal = (type, product = null) => {
         setModalType(type);
-        setSelectedProduct(product);
+        // setSelectedProduct(product);
         setOpen(true);
         
         if (type === 'view' && product) {
@@ -31,7 +23,7 @@ function Example({ setGrandchildItems }) {
     const closeModal = () => {
         setOpen(false);
         setModalType('');
-        setSelectedProduct(null);
+        // setSelectedProduct(null);
         
         if (modalType === 'view') {
             window.history.pushState({}, '', window.location.pathname);

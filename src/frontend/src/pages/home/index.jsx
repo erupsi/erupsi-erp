@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react'
 import "./main.scss";
 
 function Home({setGrandchildItems}){
-    const [open, setOpen] = useState(false);
      useEffect(() => {
-            const grandchild = [
-                // { id: 'contoh', label: 'contoh' },
-                // { id: 'contohdua', label: 'contoh dua' }
-            ];
+            const grandchild = [];
             setGrandchildItems(grandchild);
         }, [setGrandchildItems]);
     return(
