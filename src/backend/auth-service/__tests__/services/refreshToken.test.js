@@ -106,31 +106,31 @@ describe("Refresh Token Service", () => {
                     mockEmployeeId,
                     mockUsername,
                     mockRoles,
-                    { replace_token: true }
-                )
+                    {replace_token: true},
+                ),
             ).rejects.toThrow(
-                "Error in tokenBuilderAssigner: Failed to replace refresh token in DB"
+                "Error in tokenBuilderAssigner: Failed to replace refresh token in DB",
             );
-});
-    test("should throw an error if jwt.sign throws an error", async () => {
-        // Arrange: Atur agar jwt.sign melempar error
-        const signError = new Error("JWT signing failed");
-        jwt.sign.mockImplementation(() => {
-            throw signError;
         });
-    
-        // Act & Assert:
-        // Verifikasi bahwa promise ditolak dan error yang dilempar mengandung pesan dari jwt.sign
-        await expect(
-            refreshTokenService.tokenBuilderAssigner(
-                mockResponse,
-                mockEmployeeId,
-                mockUsername,
-                mockRoles
-            )
-        ).rejects.toThrow("Error in tokenBuilderAssigner: JWT signing failed");
+        test("should throw an error if jwt.sign throws an error", async () => {
+            // Arrange: Atur agar jwt.sign melempar error
+            const signError = new Error("JWT signing failed");
+            jwt.sign.mockImplementation(() => {
+                throw signError;
+            });
+
+            // Act & Assert:
+            // Verifikasi bahwa promise ditolak dan error yang dilempar mengandung pesan dari jwt.sign
+            await expect(
+                refreshTokenService.tokenBuilderAssigner(
+                    mockResponse,
+                    mockEmployeeId,
+                    mockUsername,
+                    mockRoles,
+                ),
+            ).rejects.toThrow("Error in tokenBuilderAssigner: JWT signing failed");
+        });
     });
-});
 
     describe("replaceRefreshTokenFromDB", () => {
         beforeEach(() => {
