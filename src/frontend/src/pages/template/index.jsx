@@ -9,7 +9,6 @@ function Example({ setGrandchildItems }) {
     // const [selectedProduct, setSelectedProduct] = useState(null);
 
     const openModal = (type, product = null) => {
-        console.log(type)
         setModalType(type);
         // setSelectedProduct(product);
         setOpen(true);

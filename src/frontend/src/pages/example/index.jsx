@@ -18,7 +18,6 @@ function Example({ setGrandchildItems }) {
     }, []);
 
     const openModal = (type, product = null) => {
-        console.log(type)
         setModalType(type);
         setSelectedProduct(product);
         setOpen(true);

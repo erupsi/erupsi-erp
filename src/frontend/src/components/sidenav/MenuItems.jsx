@@ -73,14 +73,14 @@ function MenuItems({ setCurrentPage, currentPage }) {
     const handleSubmenuClick = (label, parentId, childId, targetPage) => {
         setActiveItem(label);
         setCurrentPage(targetPage || childId);
-        console.log('Submenu clicked:', { label, parentId, childId, targetPage });
+        // console.log('Submenu clicked:', { label, parentId, childId, targetPage });
     };
 
     // Separate function for main menu items without submenus
     const handleMainMenuClick = (item) => {
         setActiveItem(item.id);
         setCurrentPage(item.targetPage);
-        console.log('Main menu clicked:', { id: item.id, targetPage: item.targetPage });
+        // console.log('Main menu clicked:', { id: item.id, targetPage: item.targetPage });
     };
 
     return (

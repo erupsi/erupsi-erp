@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,6 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.7.1",
-    "recharts": "^3.1.2",
     "sass": "^1.89.2",
     "scss": "^0.2.4"
   },
@@ -33,5 +32,17 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "vite": "^7.0.4"
-  }
+  },
+  "description": "Frontend for erupsi-erp",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erupsi/erupsi-erp.git"
+  },
+  "author": "Zharif Aziz Zulkarnain Widodo <clawsrage27@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erupsi/erupsi-erp/issues"
+  },
+  "homepage": "https://github.com/erupsi/erupsi-erp#readme"
 }

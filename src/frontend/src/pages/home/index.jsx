@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import "./main.scss";
-import Modal from '../../components/modal';
 
 function Home({setGrandchildItems}){
     const [open, setOpen] = useState(false);

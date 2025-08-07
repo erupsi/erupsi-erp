@@ -82,8 +82,6 @@ const TopBar = ({ setCurrentPage, currentPage, grandchildItems = [] }) => {
         setCurrentGrandchild(grandchildId); // update state
     };
 
-    console.log("grandchildItems (topBar): ", currentGrandchild)
-    console.log(grandchildItems.length)
 
     const renderBreadcrumb = () => {
         const { parent, current, siblings } = breadcrumbData;
