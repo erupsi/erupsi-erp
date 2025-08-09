@@ -41,22 +41,22 @@ jobs:
       run: npm test
       env:
         # Global
-        NODE_ENV: ${{ envs.NODE_ENV }}
-        PUBLIC_KEY: ${{ envs.PUBLIC_KEY }}
+        NODE_ENV: ${{ vars.NODE_ENV }}
+        PUBLIC_KEY: ${{ vars.PUBLIC_KEY }}
         # Auth Service
         PRIVATE_KEY_AUTH_SERVICE: ${{ secrets.PRIVATE_KEY_AUTH_SERVICE }}
         SECRET_CSURF_AUTH_SERVICE: ${{ secrets.SECRET_CSURF_AUTH_SERVICE }}
-        DB_HOST_AUTH_SERVICE: ${{ envs.DB_HOST_AUTH_SERVICE }}
-        DB_NAME_AUTH_SERVICE: ${{ envs.DB_NAME_AUTH_SERVICE }}
+        DB_HOST_AUTH_SERVICE: ${{ vars.DB_HOST_AUTH_SERVICE }}
+        DB_NAME_AUTH_SERVICE: ${{ vars.DB_NAME_AUTH_SERVICE }}
         DB_USER_AUTH_SERVICE: ${{ secrets.DB_USER_AUTH_SERVICE }}
         DB_PASS_AUTH_SERVICE: ${{ secrets.DB_PASS_AUTH_SERVICE }}
-        DB_PORT_AUTH_SERVICE: ${{ envs.DB_PORT_AUTH_SERVICE }}
-        PORT_AUTH_SERVICE: ${{ envs.PORT_AUTH_SERVICE }}
+        DB_PORT_AUTH_SERVICE: ${{ vars.DB_PORT_AUTH_SERVICE }}
+        PORT_AUTH_SERVICE: ${{ vars.PORT_AUTH_SERVICE }}
         # User Service
-        DB_HOST_URM_SERVICE: ${{ envs.DB_HOST_URM_SERVICE }}
-        DB_NAME_URM_SERVICE: ${{ envs.DB_NAME_URM_SERVICE }}
+        DB_HOST_URM_SERVICE: ${{ vars.DB_HOST_URM_SERVICE }}
+        DB_NAME_URM_SERVICE: ${{ vars.DB_NAME_URM_SERVICE }}
         DB_USER_URM_SERVICE: ${{ secrets.DB_USER_URM_SERVICE }}
         DB_PASS_URM_SERVICE: ${{ secrets.DB_PASS_URM_SERVICE }}
-        DB_PORT_URM_SERVICE: ${{ envs.DB_PORT_URM_SERVICE }}
-        PORT_URM_SERVICE: ${{ envs.PORT_URM_SERVICE }}
+        DB_PORT_URM_SERVICE: ${{ vars.DB_PORT_URM_SERVICE }}
+        PORT_URM_SERVICE: ${{ vars.PORT_URM_SERVICE }}
         
