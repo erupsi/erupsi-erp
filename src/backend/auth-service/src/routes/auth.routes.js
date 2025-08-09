@@ -2,11 +2,22 @@ const express = require("express");
 /* eslint-disable new-cap */
 const router = express.Router();
 /* eslint-enable new-cap */
-const {
-    csrfHandler,
-    csrfProtection,
-} =
-require("../middlewares/csrfProtect");
+// const {
+//     // csrfHandler,
+//     csrfProtection,
+// } =
+// require("../middlewares/csrfProtect");
+const csrf = require("csurf");
+
+const csrfProtection = csrf({
+    cookie: {
+        httpOnly: true,
+        secure: true, // WAJIB karena kita pakai HTTPS dan SameSite=None
+        sameSite: "none", // WAJIB untuk mengizinkan cross-origin
+    },
+});
+
+// router.use(csrfProtection);
 
 const registerEmployee = require("../controllers/registerEmployee");
 const authenticateServiceReq = require("../middlewares/authenticateServiceReq");
@@ -35,10 +46,12 @@ router.post("/login",
     loginEmployee,
 );
 
-router.get("/csrf-token",
-    csrfProtection,
-    csrfHandler,
-);
+router.get("/csrf-token", csrfProtection, (req, res) => {
+    // csrfProtection,
+    // csrfHandler,
+    res.json({csrfToken: req.csrfToken()});
+});
+
 
 router.post("/refresh-token",
     authenticateServiceReq(),

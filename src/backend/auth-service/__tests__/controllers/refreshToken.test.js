@@ -193,7 +193,7 @@ describe("Controller: refreshAccessToken", () => {
                 .toHaveBeenCalledWith("refreshToken", "new-refresh-token-456", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
+                    sameSite: "none",
                     maxAge: 8 * 60 * 60 * 1000,
                 });
             // 7. Mengirimkan respons sukses

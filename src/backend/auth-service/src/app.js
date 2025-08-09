@@ -12,6 +12,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
+const fs = require("fs"); // DELETE LATER
+const https = require("https");
 
 const {
     handlerErrorCsrf,
@@ -22,7 +24,7 @@ const authRoutes = require("./routes/auth.routes");
 const app = express();
 const PORT = process.env.PORT_AUTH_SERVICE;
 const SECRET_KEY_CSURF = process.env.SECRET_KEY_CSURF_AUTH_SERVICE;
-const CORS_ORIGIN = process.env.CORS_ORIGIN;
+// const CORS_ORIGIN = process.env.CORS_ORIGIN;
 /**
  * Session configuration options
  * @type {Object}
@@ -38,7 +40,7 @@ const sessionOption = {
     cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "Lax",
+        sameSite: "none",
     },
 };
 
@@ -52,17 +54,41 @@ const limiter = rateLimit({
     legacyHeaders: false,
 });
 
-// CORS configuration for cross-origin requests
-app.use(limiter);
-app.use(cors({
-    origin: CORS_ORIGIN, // Ganti dengan URL frontend Anda
-    credentials: true, // Memungkinkan pengiriman cookie antar domain
-}));
+const corsOptions = {
+    origin: (origin, callback) => {
+        // 1. Ambil string dari .env dan ubah menjadi array. Beri nilai default array kosong jika tidak ada.
+        const allowedOrigins = process.env.CORS_ORIGINS_AUTH_SERVICE ? process.env.CORS_ORIGINS_AUTH_SERVICE
+            .split(",") : [];
 
-// Middleware setup
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            // Izinkan permintaan, tidak ada error
+            callback(null, true);
+        } else {
+            // Tolak permintaan dengan error CORS
+            callback(new Error("This origin is not allowed by CORS"));
+        }
+    },
+    credentials: true, // Memungkinkan pengiriman cookie antar domain
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Secara eksplisit izinkan metode
+};
+
+app.set("trust proxy", 1);
+// Satu masalah, kemungkinan API Gateway harus mencari cara mengubah header originnya agar bisa diteruskan
+app.use(cors(corsOptions));
+
+// CORS configuration for cross-origin requests
 app.use(express.json());
 app.use(cookieParser());
+app.use(limiter);
+
 app.use(session(sessionOption)); // TOBE DETERMINED
+const fsOptions = {
+    key: fs.readFileSync("/home/perhanjay/.keys/localhost+1-key.pem"), // Path ke file kunci // DELETE LATER
+    cert: fs.readFileSync("/home/perhanjay/.keys/localhost+1.pem"), // DELETE LATER
+};
+
+// Middleware setup
+
 
 // Routes
 app.use("/auth", authRoutes);
@@ -82,4 +108,7 @@ app.use(handlerErrorCsrf);
  * Start the Express server
  * @listens {number} PORT - The port number from environment variables
  */
-app.listen(PORT, () => {});
+// app.listen(PORT, () => {}); // DELETE LATER
+https.createServer(fsOptions, app).listen(PORT, () => {
+    console.log("Running on " + PORT);
+});

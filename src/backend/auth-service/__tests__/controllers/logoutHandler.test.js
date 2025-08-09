@@ -39,7 +39,7 @@ describe("logoutHandler Controller", () => {
                 .toHaveBeenCalledWith("refreshToken", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
-                    sameSite: "strict",
+                    sameSite: "none",
                 });
 
             // Verifikasi respons yang diberikan

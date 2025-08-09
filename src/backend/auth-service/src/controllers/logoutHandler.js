@@ -13,7 +13,7 @@ const logoutHandler = async (req, res, next) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
         });
 
         return res.status(200).json({message: "Logout successful"});
