@@ -7,3 +7,7 @@
 # @global-owner1 and @global-owner2 will be requested for
 # review when someone opens a pull request.
 *       @andinaufal120
+
+src/frontend/**  @ZAZW27
+src/backend/auth-service/**  @perhanjay
+src/backend/user-service/**  @perhanjay

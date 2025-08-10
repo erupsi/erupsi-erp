@@ -1,0 +1,623 @@
+openapi: 3.1.0
+info:
+  title: API User & Role Management Service
+  version: 1.0.0
+  description: Mikroservis untuk mengelola pengguna (pegawai) dan peran dalam sistem ERP.
+servers:
+  - url: https://urm.your-erp.com/v1
+    description: Server produksi Mikroservis URM
+
+paths:
+  /urm/employee:
+    get:
+      summary: Mendapatkan daftar pengguna
+      description: Mengambil daftar semua pengguna (pegawai) yang terdaftar. Membutuhkan otorisasi #(misal: System Admin, HR Manager).
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: department
+          in: query
+          description: Filter pengguna berdasarkan departemen.
+          required: false
+          schema:
+            type: string
+        - name: role
+          in: query
+          description: Filter pengguna berdasarkan peran.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Daftar pengguna berhasil diambil.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk melihat daftar pengguna.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Menambah pegawai baru 
+      description: Menambahkan entri pengguna baru ke dalam sistem. (hanya dipanggil oleh auth-service).
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Detail pengguna baru yang akan ditambahkan.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: Pengguna berhasil ditambahkan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreateSuccessResponse'
+        '400':
+          description: Data pengguna tidak valid #(misal: email bukan domain perusahaan, peran tidak ada).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk menambah pengguna.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email pengguna sudah terdaftar.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /urm/employee/:employeeId:
+    get:
+      summary: Mendapatkan detail pengguna berdasarkan ID
+      description: Mengambil detail lengkap dari sebuah pengguna berdasarkan ID-nya. Membutuhkan otorisasi.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID unik pengguna.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detail pengguna berhasil diambil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailResponse'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk melihat detail pengguna ini.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pengguna tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Memperbarui detail pengguna
+      description: Memperbarui informasi lengkap dari sebuah pengguna berdasarkan ID-nya. Hanya bisa dilakukan oleh System Admin atau Manajer HR (dengan batasan).
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID unik pengguna yang akan diperbarui.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Objek pengguna dengan informasi yang diperbarui.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Pengguna berhasil diperbarui.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Data pengguna tidak valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk memperbarui pengguna ini.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pengguna tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email yang diperbarui sudah digunakan oleh pengguna lain.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Menghapus pengguna
+      description: Menghapus sebuah pengguna dari sistem berdasarkan ID-nya. Hanya bisa dilakukan oleh System Admin.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID unik pengguna yang akan dihapus.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Pengguna berhasil dihapus (No Content).
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk menghapus pengguna.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pengguna tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /urm/roles:
+    get:
+      summary: Mendapatkan daftar semua peran
+      description: Mengambil daftar semua peran yang tersedia dalam sistem.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Daftar peran berhasil diambil.
+              
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk melihat daftar peran.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Membuat peran baru
+      description: Menambahkan peran baru ke dalam sistem. Hanya bisa dilakukan oleh System Admin.
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Detail peran baru yang akan ditambahkan.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateRequest'
+      responses:
+        '201':
+          description: Peran berhasil dibuat.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '400':
+          description: Input tidak valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk membuat peran.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Nama peran sudah ada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /urm/employee/{employeeId}/roles:
+    put:
+      summary: Menugaskan peran kepada pengguna
+      description: Menugaskan satu atau lebih peran kepada pengguna tertentu. Hanya bisa dilakukan oleh System Admin.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: employeeId
+          in: path
+          description: ID unik pengguna.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Daftar ID peran yang akan ditugaskan.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: Daftar ID peran yang akan ditugaskan ke pengguna.
+              required:
+                - roleIds
+      responses:
+        '200':
+          description: Peran berhasil ditugaskan.
+        '400':
+          description: Input tidak valid #(misal: ID peran tidak ditemukan).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Tidak terotentikasi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Tidak memiliki hak akses untuk menugaskan peran.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Pengguna tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Terjadi kesalahan server internal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        employeeId:
+          type: string
+          format: uuid
+          description: ID unik pengguna.
+          readOnly: true
+        full_name:
+          type: string
+          description: Nama lengkap pegawai.
+          example: "Budi Santoso"
+        email:
+          type: string
+          format: email
+          description: Email perusahaan pegawai.
+          example: "budi.santoso@your-erp.com"
+        department:
+          type: string
+          description: Departemen tempat pegawai bekerja.
+          example: "Finance"
+        position:
+          type: string
+          description: Jabatan pegawai.
+          example: "Accountant"
+        isActive:
+          type: boolean
+          description: Status akun pengguna (aktif/tidak aktif).
+          default: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp pembuatan akun.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp terakhir kali akun diperbarui.
+          readOnly: true
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+          description: Daftar peran yang dimiliki pengguna.
+          readOnly: true
+      required:
+        - id
+        - full_name
+        - email
+        - department
+        - position
+        - isActive
+    UserCreateRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: Nama lengkap pegawai.
+          example: "Dewi Lestari"
+        email:
+          type: string
+          format: email
+          description: Email perusahaan pegawai. **Harus menggunakan domain perusahaan yang valid.**
+          example: "dewi.lestari@your-erp.com"
+        department:
+          type: string
+          description: Departemen tempat pegawai bekerja.
+          example: "Marketing"
+        position:
+          type: string
+          description: Jabatan pegawai.
+          example: "Marketing Executive"
+        roleIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: ID peran yang akan ditugaskan pada pengguna baru.
+      required:
+        - fullName
+        - email
+        - department
+        - position
+        - roleIds
+    UserUpdateRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+          description: Nama lengkap pegawai.
+          example: "Budi Santoso (Updated)"
+        email:
+          type: string
+          format: email
+          description: Email perusahaan pegawai. **Harus menggunakan domain perusahaan yang valid.**
+          example: "budi.s@your-erp.com"
+        department:
+          type: string
+          description: Departemen tempat pegawai bekerja.
+          example: "Finance & Accounting"
+        position:
+          type: string
+          description: Jabatan pegawai.
+          example: "Senior Accountant"
+        isActive:
+          type: boolean
+          description: Status akun pengguna (aktif/tidak aktif).
+          example: false
+      # Semua properti bersifat opsional untuk update, karena mungkin hanya ingin mengubah sebagian.
+      # Namun, setidaknya satu properti harus ada di request body.
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID unik peran.
+          readOnly: true
+        name:
+          type: string
+          description: Nama unik peran #(misal: "system_admin", "finance_staff").
+          example: "system_admin"
+        description:
+          type: string
+          description: Deskripsi singkat tentang peran.
+          example: "Akses penuh ke semua modul dan manajemen pengguna."
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp pembuatan peran.
+          readOnly: true
+      required:
+        - id
+        - name
+    RoleCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nama unik peran #(misal: "system_admin", "finance_staff").
+          example: "hr_manager"
+        display_name:
+          type: string
+          description: Nama peran untuk ditampilkan #(misal: "system_admin", "finance_staff").
+          example: "HR Manager"
+        description:
+          type: string
+          description: Deskripsi singkat tentang peran.
+          example: "Mengelola data pegawai dan rekrutmen."
+      required:
+        - name
+        - description
+    UserDetailResponse:
+      type: object
+      properties:
+        full_name:
+          type: string
+          description: Nama lengkap pegawai.
+          example: "Budi Santoso"
+        email:
+          type: string
+          format: email
+          description: Email perusahaan pegawai.
+          example: "budi.santoso@your-erp.com"
+        department:
+          type: string
+          description: Departemen tempat pegawai bekerja.
+          example: "Finance"
+        position:
+          type: string
+          description: Jabatan pegawai.
+          example: "Accountant"
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+          description: Daftar peran yang dimiliki pengguna.
+          readOnly: true
+      required:
+        - id
+        - full_name
+        - email
+        - department
+        - position
+        - isActive
+    EmployeeCreateSuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Boolean value untuk operasi
+          example: true
+        message:
+          type: string
+          description: Success Message
+          example: "Pegawai berhasil didaftarkan"
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Kode error unik.
+          example: "INVALID_EMAIL_DOMAIN"
+        message:
+          type: string
+          description: Pesan error yang menjelaskan masalah.
+          example: "Email harus menggunakan domain '@your-erp.com'."
+      required:
+        - code
+        - message
