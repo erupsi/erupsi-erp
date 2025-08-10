@@ -23,11 +23,11 @@ const authenticateServiceRequest = (options = {AdminRole: false, AuthService: fa
     return async (req, res, next) => {
         const allowedRoles = [];
 
-        if (options.AdminRole == true) {
+        if (options.AdminRole === true) {
             allowedRoles.push("SYSTEM_ADMIN");
         }
 
-        if (options.AuthService == true) {
+        if (options.AuthService === true) {
             allowedRoles.push("AUTH_SERVICE");
         }
 
