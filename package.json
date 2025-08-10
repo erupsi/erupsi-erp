@@ -8,7 +8,8 @@
   },
   "workspaces": [
     "src/backend/auth-service",
-    "src/backend/user-service"
+    "src/backend/user-service",
+    "src/frontend"
   ],
   "scripts": {
     "test": "jest",
