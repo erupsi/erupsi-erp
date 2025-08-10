@@ -49,7 +49,7 @@ const authenticateServiceRequest = (options = {AdminRole: false, AuthService: fa
                 iss: "auth-service",
             });
 
-            if (options.AdminRole == true || options.AuthService == true) {
+            if (options.AdminRole === true || options.AuthService === true) {
                 if (!decoded ||
           !decoded.roles ||
           !Array.isArray(decoded.roles) ||
