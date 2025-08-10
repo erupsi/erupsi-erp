@@ -2,7 +2,7 @@
   "name": "user-service",
   "version": "1.0.0",
   "description": "Service for managing user profiles, roles, and account data.",
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "type": "commonjs",
   "scripts": {
     "test": "jest"
