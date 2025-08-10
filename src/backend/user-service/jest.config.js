@@ -192,7 +192,7 @@ const config = {
     // Whether to use watchman for file crawling
     // watchman: true,
     moduleNameMapper: {
-        "^pg$": "<rootDir>/__tests__/mocks/pg.js",
+        "^pg$": "<rootDir>/__mocks__/pg.js",
     },
 };
 

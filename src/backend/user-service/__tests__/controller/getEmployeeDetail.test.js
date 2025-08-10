@@ -15,8 +15,9 @@ describe("getEmployeeDetail Controller", () => {
     const testEmployeeId = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
     beforeEach(() => {
+        // PERBAIKAN 1: Menggunakan req.body, bukan req.params
         mockRequest = {
-            params: {
+            body: {
                 employeeId: testEmployeeId,
             },
         };
@@ -35,7 +36,6 @@ describe("getEmployeeDetail Controller", () => {
     // ================= Skenario Sukses =================
 
     test("should return employee details and status 200 if employee is found", async () => {
-    // ARRANGE: Simulasikan service mengembalikan data pegawai
         const mockEmployeeDetail = {
             id: testEmployeeId,
             fullName: "Budi Santoso",
@@ -43,10 +43,8 @@ describe("getEmployeeDetail Controller", () => {
         };
         findEmployeeDetailByEmployeeId.mockResolvedValue(mockEmployeeDetail);
 
-        // ACT: Jalankan controller
         await getEmployeeDetail(mockRequest, mockResponse);
 
-        // ASSERT: Periksa hasilnya
         expect(findEmployeeDetailByEmployeeId).toHaveBeenCalledWith(testEmployeeId);
         expect(mockResponse.status).toHaveBeenCalledWith(200);
         expect(mockResponse.json).toHaveBeenCalledWith({success: true, data: mockEmployeeDetail});
@@ -55,28 +53,23 @@ describe("getEmployeeDetail Controller", () => {
     // ================= Skenario Gagal / Kasus Khusus =================
 
     test("should return 404 if no employee is found", async () => {
-    // ARRANGE: Simulasikan service tidak menemukan data (mengembalikan null/falsy)
         findEmployeeDetailByEmployeeId.mockResolvedValue(null);
 
-        // ACT: Jalankan controller
         await getEmployeeDetail(mockRequest, mockResponse);
 
-        // ASSERT: Periksa respons 404
         expect(findEmployeeDetailByEmployeeId).toHaveBeenCalledWith(testEmployeeId);
         expect(mockResponse.status).toHaveBeenCalledWith(404);
         expect(mockResponse.json).toHaveBeenCalledWith({success: false, message: "Employee not found."});
     });
 
     test("should return 500 on internal server error", async () => {
-    // ARRANGE: Simulasikan service melempar error tak terduga
         const dbError = new Error("Gagal menjalankan query detail");
         findEmployeeDetailByEmployeeId.mockRejectedValue(dbError);
 
-        // ACT: Jalankan controller
         await getEmployeeDetail(mockRequest, mockResponse);
 
-        // ASSERT: Pastikan blok catch berjalan benar
-        expect(console.error).toHaveBeenCalledWith("Error in GET /employee/:employeeId:", dbError);
+        // PERBAIKAN 2: Menyesuaikan pesan error log agar cocok dengan implementasi
+        expect(console.error).toHaveBeenCalledWith("Error in POST /employee/get-employee:", dbError);
         expect(mockResponse.status).toHaveBeenCalledWith(500);
         expect(mockResponse.json).toHaveBeenCalledWith({
             success: false,

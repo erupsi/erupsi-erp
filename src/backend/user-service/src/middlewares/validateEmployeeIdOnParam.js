@@ -1,5 +1,4 @@
-const {param, validationResult} = require("express-validator");
-
+const {body, validationResult} = require("express-validator");
 /**
  * An array of Express-validator middleware functions.
  * This middleware chain validates that the 'employeeId' route parameter exists and is a valid UUID (version 4).
@@ -10,23 +9,38 @@ const {param, validationResult} = require("express-validator");
  */
 
 
-const validateEmployeeIdOnParam = [
-    // 1. Aturan: Cek 'employeeId' di parameter URL dan pastikan itu adalah UUID.
-    param("employeeId")
-        .isUUID(4) // Tentukan versi UUID jika perlu, versi 4 adalah yang paling umum.
-        .withMessage("Format Employee ID tidak valid. Harap gunakan format UUID."),
+const validateEmployeeIdOnParam = () => {
+    return [
+        body().custom((value, {req}) => {
+            const allowedKeys = ["employeeId"];
+            const receivedKeys = Object.keys(req.body);
 
-    // 2. Handler: Tangani hasil validasi.
-    (req, res, next) => {
-        const errors = validationResult(req);
-        // Jika ada error validasi, kirim respons 400.
-        if (!errors.isEmpty()) {
-            const errorMessages = errors.array().map((error) => error.msg);
-            return res.status(400).json({errors: errorMessages});
-        }
-        // Jika tidak ada error, lanjutkan ke handler berikutnya.
-        next();
-    },
-];
+            const invalidKeys = receivedKeys.filter((key) =>
+                !allowedKeys.includes(key));
+
+            if (invalidKeys.length > 0) {
+                throw new Error(`Properti yang tidak diizinkan terdeteksi:
+                  ${invalidKeys.join(", ")}. Hanya 
+                  ${allowedKeys.join(", ")} yang diizinkan.`);
+            }
+            return true;
+        }),
+
+        body("employeeId")
+            .notEmpty().withMessage("employeeId cannot be empty.")
+            .bail()
+            .isUUID().withMessage("employeeId type must be UUID.")
+            .trim(),
+
+        (req, res, next) => {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const errorMessages = errors.array().map((error) => error.msg);
+                return res.status(400).json({error: errorMessages});
+            }
+            next();
+        },
+    ];
+};
 
 module.exports = validateEmployeeIdOnParam;

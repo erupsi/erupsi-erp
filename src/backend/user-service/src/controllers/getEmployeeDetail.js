@@ -15,7 +15,7 @@ const {findEmployeeDetailByEmployeeId} = require("../services/urmService");
 
 const getEmployeeDetail = async (req, res)=> {
     try {
-        const {employeeId} = req.params;
+        const {employeeId} = req.body;
 
         const result = await findEmployeeDetailByEmployeeId(employeeId);
         if (!result) {
@@ -24,7 +24,7 @@ const getEmployeeDetail = async (req, res)=> {
 
         return res.status(200).json({success: true, data: result});
     } catch (error) {
-        console.error("Error in GET /employee/:employeeId:", error); // Log the error for debugging
+        console.error("Error in POST /employee/get-employee:", error); // Log the error for debugging
         res.status(500).json({success: false, message: "Internal server error.", error: error.message});
     }
 };

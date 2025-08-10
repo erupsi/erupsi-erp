@@ -43,12 +43,13 @@ router.post(
 
 
 /**
- * @route GET /employee/:employeeId
+ * @route POST /employee/get-employee
  * @description Retrieves details of a specific employee by their ID.
  * @access Protected (requires authentication)
  */
-router.get(
-    "/employee/:employeeId",
+// CHANGES STARTS HERE DELETE LATER
+router.post(
+    "/employee/get-employee",
     authenticateServiceRequest({AdminRole: true, AuthService: true}),
     validateEmployeeIdOnParam,
     getEmployeeDetail);
