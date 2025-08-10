@@ -2,7 +2,7 @@
   "name": "auth-service",
   "version": "1.0.0",
   "description": "Authentication service for login, registration, and token-based auth.",
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint ."
