@@ -47,29 +47,31 @@ router.post("/login",
 );
 
 router.get("/csrf-token", csrfProtection, (req, res) => {
-    // csrfProtection,
-    // csrfHandler,
     res.json({csrfToken: req.csrfToken()});
 });
 
 
 router.post("/refresh-token",
+    csrfProtection,
     authenticateServiceReq(),
     refreshTokenRenewal,
 );
 
 router.post("/logout",
+    csrfProtection,
     authenticateServiceReq(),
     logoutHandler,
 );
 
 router.post("/change-password",
+    csrfProtection,
     authenticateServiceReq(),
     validateEmployeeChangePassword(),
     employeeChangePassword,
 );
 
 router.post("/reset-password",
+    csrfProtection,
     authenticateServiceReq({useRole: true}),
     validateAdminResetPassword(),
     adminResetPassword,
