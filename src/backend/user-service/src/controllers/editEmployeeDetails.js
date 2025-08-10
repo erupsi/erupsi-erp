@@ -24,7 +24,7 @@ const editEmployeeDetails = async (req, res) => {
     try {
     // Cek apakah user ada (opsional, tapi disarankan untuk respons 404 yang akurat)
         const checkUserResult = await findEmployeeById(employeeId);
-        if (checkUserResult.success == false) {
+        if (checkUserResult.success === false) {
             return res.status(404).json({message: "Pegawai tidak ditemukan."});
         }
 
