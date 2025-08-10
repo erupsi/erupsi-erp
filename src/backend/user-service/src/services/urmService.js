@@ -121,7 +121,7 @@ const findEmployeeDetailByEmployeeId = async (employeeId) => {
       GROUP BY employees.full_name, employees.email, employees.department, employees.position;`;
         const result = await pool.query(query, [employeeId]);
 
-        if (result.rows.length == 0) {
+        if (result.rows.length === 0) {
             return undefined;
         }
 
