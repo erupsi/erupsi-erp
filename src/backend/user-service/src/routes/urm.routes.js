@@ -47,7 +47,6 @@ router.post(
  * @description Retrieves details of a specific employee by their ID.
  * @access Protected (requires authentication)
  */
-// CHANGES STARTS HERE DELETE LATER
 router.post(
     "/employee/get-employee",
     authenticateServiceRequest({AdminRole: true, AuthService: true}),
