@@ -83,8 +83,8 @@ app.use(limiter);
 
 app.use(session(sessionOption)); // TOBE DETERMINED
 const fsOptions = {
-    key: fs.readFileSync("/home/perhanjay/.keys/localhost+1-key.pem"), // Path ke file kunci // DELETE LATER
-    cert: fs.readFileSync("/home/perhanjay/.keys/localhost+1.pem"), // DELETE LATER
+    key: fs.readFileSync("../../../../certs/localhost+1-key.pem"),
+    cert: fs.readFileSync("../../../../certs/localhost+1.pem"),
 };
 
 // Middleware setup
