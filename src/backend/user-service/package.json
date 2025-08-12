@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/erupsi/erupsi-erd#readme",
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^9.33.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-jest": "^29.0.1",
     "jest": "^29.7.0",
