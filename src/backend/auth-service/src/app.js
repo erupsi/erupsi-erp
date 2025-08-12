@@ -14,6 +14,7 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const fs = require("fs"); // DELETE LATER
 const https = require("https");
+const path = require("path");
 
 const {
     handlerErrorCsrf,
@@ -83,8 +84,8 @@ app.use(limiter);
 
 app.use(session(sessionOption)); // TOBE DETERMINED
 const fsOptions = {
-    key: fs.readFileSync("/home/perhanjay/.keys/localhost+1-key.pem"), // Path ke file kunci // DELETE LATER
-    cert: fs.readFileSync("/home/perhanjay/.keys/localhost+1.pem"), // DELETE LATER
+    key: fs.readFileSync(path.join(__dirname, "../../../../certs/localhost+1-key.pem")),
+    cert: fs.readFileSync(path.join(__dirname, "../../../../certs/localhost+1.pem")),
 };
 
 // Middleware setup
