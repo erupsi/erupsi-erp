@@ -4,7 +4,7 @@ import './App.scss';
 import Sidenav from './components/sidenav';
 import TopBar from './components/topBar';
 import Template from './pages/template';
-import Example from './pages/example';
+import Ecommerce from './pages/ecommerce';
 import Home from './pages/home';
 
 function AppContent() {
@@ -37,7 +37,7 @@ function AppContent() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home setGrandchildItems={setGrandchildItems} />} />
           <Route path="/ecommerce" element={<Navigate to="/ecommerce/emarket" />} />
-          <Route path="/ecommerce/*" element={<Example setGrandchildItems={setGrandchildItems} />} />
+          <Route path="/ecommerce/*" element={<Ecommerce setGrandchildItems={setGrandchildItems} />} />
           {/* <Route path="/template" element={<Template />} />
           <Route path="/assets" element={<Template />} />
           <Route path="/preferences" element={<Template />} /> */}

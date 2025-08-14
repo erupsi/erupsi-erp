@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model cart {
+  id_cart       String        @id @db.Uuid
+  id_user       String        @db.Uuid
+  id_pos        String        @db.Uuid
+  quantity      Int           @default(0)
+  created_at    DateTime?     @db.Timestamp(6)
+  updated_at    DateTime?     @db.Timestamp(6)
+  productonsale productonsale @relation(fields: [id_pos], references: [id_pos], onDelete: NoAction, onUpdate: NoAction, map: "fk_post")
+}
+
+model checkout {
+  id_checkout  String         @id @db.Uuid
+  id_user      String         @db.Uuid
+  ispayed      Boolean        @default(false)
+  iscancelled  Boolean        @default(false)
+  created_at   DateTime?      @db.Timestamp(6)
+  updated_at   DateTime?      @db.Timestamp(6)
+  checkoutitem checkoutitem[]
+  transaksi    transaksi[]
+}
+
+model checkoutitem {
+  id_coi        String        @id @db.Uuid
+  id_checkout   String        @db.Uuid
+  id_product    String        @db.Uuid
+  id_warehouse  String        @db.Uuid
+  quantity      Int?
+  checkout      checkout      @relation(fields: [id_checkout], references: [id_checkout], onDelete: NoAction, onUpdate: NoAction, map: "fk_checkout")
+  productonsale productonsale @relation(fields: [id_product], references: [id_pos], onDelete: NoAction, onUpdate: NoAction, map: "fk_product")
+}
+
+model log {
+  id_log     String    @id @db.Uuid
+  id_user    String    @db.Uuid
+  activity   String    @db.VarChar(255)
+  act_detail String?
+  timestamp  DateTime? @db.Timestamp(6)
+}
+
+model productonsale {
+  id_pos            String         @id @db.Uuid
+  id_productvariant String         @db.Uuid
+  quantity          Int            @default(0)
+  price             Int            @default(0)
+  created_at        DateTime?      @db.Timestamp(6)
+  updated_at        DateTime?      @db.Timestamp(6)
+  isavailable       Boolean?
+  cart              cart[]
+  checkoutitem      checkoutitem[]
+}
+
+model transaksi {
+  id_transaksi String    @id @db.Uuid
+  id_checkout  String    @db.Uuid
+  iscancelled  Boolean   @default(false)
+  amount       Int       @default(0)
+  created_at   DateTime? @db.Timestamp(6)
+  updated_at   DateTime? @db.Timestamp(6)
+  checkout     checkout  @relation(fields: [id_checkout], references: [id_checkout], onDelete: NoAction, onUpdate: NoAction, map: "fk_checkout")
+}

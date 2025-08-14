@@ -9,7 +9,8 @@
   "workspaces": [
     "src/backend/auth-service",
     "src/backend/user-service",
-    "src/frontend"
+    "src/frontend",
+    "src/backend/ecommerce-service"
   ],
   "scripts": {
     "test": "jest",
