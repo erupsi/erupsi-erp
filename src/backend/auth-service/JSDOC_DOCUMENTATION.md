@@ -7,46 +7,47 @@ This document summarizes the JSDoc documentation that has been added to the auth
 ### ✅ Completed Files
 
 1. **src/utils/passwordUtils.js**
-   - Functions: `bcryptSalting`, `comparator`
-   - Documentation includes parameter types, return values, examples
+   * Functions: `bcryptSalting`, `comparator`
+   * Documentation includes parameter types, return values, examples
 
 2. **src/utils/requestBuilder.js**
-   - Functions: `requestBuilder`
-   - Documentation includes HTTP methods, authentication, error handling
+   * Functions: `requestBuilder`
+   * Documentation includes HTTP methods, authentication, error handling
 
 3. **src/controllers/loginEmployee.js**
-   - Functions: `loginEmployee`
-   - Documentation includes request/response examples, authentication flow
+   * Functions: `loginEmployee`
+   * Documentation includes request/response examples, authentication flow
 
 4. **src/services/authService.js**
-   - Functions: `registerUser`, `checkEmployeeByUsername`, `addEmployeeRequestToUrm`, `getEmployeeDataFromUrm`, `getEmployeeUsername`, `changeEmployeePassword`
-   - Comprehensive documentation for all authentication-related services
+   * Functions: `registerUser`, `checkEmployeeByUsername`, `addEmployeeRequestToUrm`, `getEmployeeDataFromUrm`, `getEmployeeUsername`, `changeEmployeePassword`
+   * Comprehensive documentation for all authentication-related services
 
 5. **src/services/RefreshToken.js**
-   - Functions: `tokenBuilderAssigner`, `replaceRefreshTokenFromDB`, `searchRefreshToken`, `deleteToken`, `updateToken`, `invalidateToken`, `deleteTokenByEmpId`, `insertToken`, `invalidateAndInsertToken`
-   - Complete token management documentation
+   * Functions: `tokenBuilderAssigner`, `replaceRefreshTokenFromDB`, `searchRefreshToken`, `deleteToken`, `updateToken`, `invalidateToken`, `deleteTokenByEmpId`, `insertToken`, `invalidateAndInsertToken`
+   * Complete token management documentation
 
 6. **src/middlewares/authenticateServiceReq.js**
-   - Functions: `authenticateServiceReq`
-   - JWT authentication middleware documentation
+   * Functions: `authenticateServiceReq`
+   * JWT authentication middleware documentation
 
 7. **src/validationator/validateLoginReq.js**
-   - Functions: `validateLoginReq`
-   - Request validation documentation with examples
+   * Functions: `validateLoginReq`
+   * Request validation documentation with examples
 
 8. **src/controllers/registerEmployee.js**
-   - Functions: `registerEmployee`
-   - Employee registration process documentation
+   * Functions: `registerEmployee`
+   * Employee registration process documentation
 
 9. **src/app.js**
-   - Main application entry point
-   - Express server configuration documentation
+   * Main application entry point
+   * Express server configuration documentation
 
 ### 📝 JSDoc Template for Remaining Files
 
 For the remaining controller files, use this template:
 
 #### Controller Template
+
 ```javascript
 /**
  * @fileoverview [Brief description of controller purpose]
@@ -85,6 +86,7 @@ For the remaining controller files, use this template:
 ```
 
 #### Validation Template
+
 ```javascript
 /**
  * @fileoverview [Description] validation middleware using express-validator
@@ -157,10 +159,11 @@ This will create a `docs/` folder with browsable HTML documentation.
 ### 📖 VSCode IntelliSense
 
 The JSDoc comments will provide:
-- Auto-completion for function parameters
-- Type checking assistance
-- Hover documentation
-- Better IDE integration
+
+* Auto-completion for function parameters
+* Type checking assistance
+* Hover documentation
+* Better IDE integration
 
 ## Next Steps
 

@@ -2,6 +2,7 @@
   "name": "ecommerce-service",
   "version": "1.0.0",
   "description": "Ecomerce is a feature to abduct andi naufal",
+  "type": "module",
   "main": "./src/index.js",
   "scripts": {
     "test": "jest"

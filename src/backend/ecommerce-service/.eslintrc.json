@@ -1,0 +1,22 @@
+{
+  "env": {
+    "node": true,
+    "es2020": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2023,
+    "sourceType": "module"
+  },
+  "extends": ["eslint:recommended", "google"],
+  "rules": {
+    "indent": ["error", 4],
+    "quotes": ["error", "double"],
+    "max-len": ["error", { "code": 120 }]
+  }, 
+  "ignorePatterns": [
+    "src/generated/",
+    "prisma/"
+  ]
+
+}

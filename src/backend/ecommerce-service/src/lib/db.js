@@ -10,8 +10,10 @@
 
 // module.exports = pool;
 // src/lib/db.js (Versi Baru dengan Prisma)
-const {PrismaClient} = require("@prisma/client");
+// src/lib/db.js
+import {PrismaClient} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-module.exports = prisma;
+// Gunakan 'export default' untuk menjadikannya ekspor utama
+export default prisma;

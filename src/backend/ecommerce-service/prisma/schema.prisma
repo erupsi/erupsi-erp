@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -55,8 +54,10 @@ model productonsale {
   created_at        DateTime?      @db.Timestamp(6)
   updated_at        DateTime?      @db.Timestamp(6)
   isavailable       Boolean?
+  productimage      String?
   cart              cart[]
   checkoutitem      checkoutitem[]
+  review            review[]
 }
 
 model transaksi {
@@ -67,4 +68,16 @@ model transaksi {
   created_at   DateTime? @db.Timestamp(6)
   updated_at   DateTime? @db.Timestamp(6)
   checkout     checkout  @relation(fields: [id_checkout], references: [id_checkout], onDelete: NoAction, onUpdate: NoAction, map: "fk_checkout")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  id_review     String        @id @db.Uuid
+  id_pos        String        @db.Uuid
+  id_user       String        @db.Uuid
+  rating        Int           @db.SmallInt
+  comment       String?
+  created_at    DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?     @default(now()) @db.Timestamp(6)
+  productonsale productonsale @relation(fields: [id_pos], references: [id_pos], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_productonsale")
 }

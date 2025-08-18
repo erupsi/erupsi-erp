@@ -1,5 +1,10 @@
 // src/modules/product/product.service.js
-import {findProducts, findProductById} from "./product.repository.js";
+import {
+    findProducts,
+    findProductById,
+    createProducts,
+    updateProduct,
+} from "./product.repository.js";
 
 /**
  * Service untuk mengambil semua produk.
@@ -27,7 +32,36 @@ const getProductById = async (id) => {
     return product;
 };
 
+/**
+ * Service untuk mendaftarkan produk baru untuk dijual.
+ * @param {Array<object>} productData - Array berisi data produk dari request body.
+ * @return {Promise<object>} Hasil operasi batch dari repository.
+ */
+const listProductsForSale = async (productData) => {
+    // Di sini Anda bisa menambahkan validasi, misalnya:
+    // - Cek apakah variantId sudah ada di database
+    // - Pastikan harga tidak negatif
+    const products = await createProducts(productData);
+    return products;
+};
+
+/**
+ * Service untuk memperbarui data produk.
+ * @param {string} variantId - ID varian produk.
+ * @param {object} productData - Data baru untuk produk.
+ * @return {Promise<object>} Objek produk yang telah diperbarui.
+ */
+const updateProductById = async (variantId, productData) => {
+    // Pertama, cek apakah produknya ada
+    await getProductById(variantId);
+
+    const updatedProduct = await updateProduct(variantId, productData);
+    return updatedProduct;
+};
+
 export {
     getAllProducts,
     getProductById,
+    listProductsForSale,
+    updateProductById,
 };

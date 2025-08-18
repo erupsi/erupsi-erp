@@ -1,22 +1,26 @@
-const express = require("express");
-const cors = require("cors");
+// src/app.js
+import express from "express";
+import cors from "cors"; // 1. Impor paket cors
+import productRoutes from "./modules/product/product.routes.js";
 
+// --- Inisialisasi Aplikasi ---
 const app = express();
-const productOnSale_Router = require("./routes/productOnSale");
+const PORT = 4000;
 
-// Middleware
+// --- Middleware ---
+app.use(cors()); // 2. Gunakan middleware cors SEBELUM rute Anda
 app.use(express.json());
-app.use(cors());
-// Routes
-// app.use("/", (req, res) => {
-//     res.send("Welcome to the E-commerce Service API");
-// });
-app.use("/products", productOnSale_Router);
-// app.use("/consumers", consumersRouter);
-app.use("/statistic", statisticRouter);
 
+// --- Rute Dasar ---
+app.get("/", (req, res) => {
+    res.send("🎉 API E-commerce Internal Berjalan!");
+});
 
-const PORT = process.env.PORT || 3000;
+// --- Rute Fitur ---
+app.use("/internal/products", productRoutes);
+
+// --- Menjalankan Server ---
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    // eslint-disable-next-line no-console
+    console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
 });
