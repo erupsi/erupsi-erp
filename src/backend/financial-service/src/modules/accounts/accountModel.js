@@ -19,6 +19,18 @@ class AccountModel {
         );
         return res.rows[0];
     }
-}
 
-module.exports = new AccountModel.createAccount("0", "Sulthan", "Asset", " 333 " );
+    /**
+     * Get all accounts from database.
+     * @returns {Promise<Array<object>>} Array objek akun.
+     */
+    async findAllAccounts() {
+        const res = await query('SELECT account_id, account_code, account_name, account_type, parent_account_id, is_active, created_at, updated_at FROM accounts ORDER BY account_code ASC');
+        return res.rows;
+    }
+
+    /**
+     * 
+     */
+
+}
